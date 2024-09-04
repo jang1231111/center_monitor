@@ -1,21 +1,21 @@
 class LoginNumberState {
-  String phontNumber;
+  String phoneNumber;
   LoginNumberState({
-    required this.phontNumber,
+    required this.phoneNumber,
   });
 
   factory LoginNumberState.intitial() {
-    return LoginNumberState(phontNumber: '010-8070-9033');
+    return LoginNumberState(phoneNumber: '010-8070-9033');
   }
 
   @override
-  String toString() => 'LoginNumberState(phontNumber: $phontNumber)';
+  String toString() => 'LoginNumberState(phontNumber: $phoneNumber)';
 
   LoginNumberState copyWith({
     String? phontNumber,
   }) {
     return LoginNumberState(
-      phontNumber: phontNumber ?? this.phontNumber,
+      phoneNumber: phontNumber ?? this.phoneNumber,
     );
   }
 }

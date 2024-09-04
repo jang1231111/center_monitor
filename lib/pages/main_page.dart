@@ -8,6 +8,7 @@ import 'package:center_monitor/providers/center_filter/center_filter_provider.da
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/providers/filtered_center/filtered_center_provider.dart';
+import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -83,6 +84,7 @@ class CenterPlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     // final devices =
     //     context.read<CenterListProvider>().state.centerListInfo.devices;
 
@@ -96,12 +98,16 @@ class CenterPlan extends StatelessWidget {
               child: Container(
                 color: Colors.white,
                 // child: Image.asset('assets/images/center.png'),
-                child: Image.network(
-                  // fit: BoxFit.fill,
-                  'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
-                  // width: 400,
-                  // height: 300,
-                ),
+                child: loginNumber == ''
+                    ? Image.network(
+                        'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
+                        // fit: BoxFit.fill,
+                        // width: 400,
+                        // height: 300,
+                      )
+                    : Image.network(
+                        'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
+                      ),
                 padding: const EdgeInsets.all(2),
               ),
             ),
@@ -202,17 +208,23 @@ class ScanHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     final filteredCenterList =
         context.watch<FilteredCenterProvider>().state.filtereCenterList;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          // 로그인 화면 구현 시, 사용자 정보 받아들여와 센터 이름으로 표시 처리
-          '인성 창고',
-          style: TextStyle(fontSize: 25.0),
-        ),
+        loginNumber == '010-9999-9999'
+            ? Text(
+                // 로그인 화면 구현 시, 사용자 정보 받아들여와 센터 이름으로 표시 처리
+                '인성 창고',
+                style: TextStyle(fontSize: 25.0),
+              )
+            : Text(
+                'MNB',
+                style: TextStyle(fontSize: 25.0),
+              ),
         Text(
           '센터 개수 : ${filteredCenterList.length}',
           style: TextStyle(

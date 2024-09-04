@@ -1,5 +1,7 @@
+import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 
 class CenterPlanPage extends StatefulWidget {
   static const String routeName = '/picture';
@@ -12,6 +14,8 @@ class CenterPlanPage extends StatefulWidget {
 class _CenterPlanPageState extends State<CenterPlanPage> {
   @override
   Widget build(BuildContext context) {
+    final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
+
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -19,9 +23,13 @@ class _CenterPlanPageState extends State<CenterPlanPage> {
             body: Stack(
           children: [
             PhotoView(
-              imageProvider: Image.network(
-                      'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg')
-                  .image,
+              imageProvider: loginNumber == '010-9999-9999'
+                  ? Image.network(
+                          'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg')
+                      .image
+                  : Image.network(
+                          'http://175.126.232.236:9092/upload/center/175/MNB.jpg')
+                      .image,
               minScale: PhotoViewComputedScale.contained,
             ),
             Align(
