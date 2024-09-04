@@ -27,7 +27,7 @@ class ApiServices {
     for (final row in result.rows) {
       // print(row.assoc());
 
-      a10 = A10.fromJson(row.assoc());
+      a10 = A10.fromJsonLocal(row.assoc());
       deviceList.add(a10);
     }
 
@@ -61,7 +61,7 @@ class ApiServices {
     for (final row in result.rows) {
       print(row.assoc());
 
-      a10 = A10.fromJson(row.assoc());
+      a10 = A10.fromJsonUTC(row.assoc());
       deviceList.add(a10);
     }
 
@@ -94,7 +94,7 @@ class ApiServices {
     for (final row in result.rows) {
       // print(row.assoc());
 
-      logData = LogData.fromJson(row.assoc());
+      logData = LogData.fromJsonLocal(row.assoc());
       logDatas.add(logData);
     }
 
@@ -121,14 +121,14 @@ class ApiServices {
     await conn.connect();
 
     var result = await conn.execute(
-        "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime}') AND DATE('${device.endTime}') AND a.datetime BETWEEN '${device.startTime}' AND '${device.endTime}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
+        "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime.toUtc()}') AND DATE('${device.endTime.toUtc()}') AND a.datetime BETWEEN '${device.startTime.toUtc()}' AND '${device.endTime.toUtc()}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
 
     final List<LogData> logDatas = [];
     LogData logData;
     for (final row in result.rows) {
       // print(row.assoc());
 
-      logData = LogData.fromJson(row.assoc());
+      logData = LogData.fromJsonUTC(row.assoc());
       logDatas.add(logData);
     }
 

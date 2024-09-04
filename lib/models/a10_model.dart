@@ -25,7 +25,7 @@ class A10 {
   final double positionX;
   final double positionY;
 
-  factory A10.fromJson(Map<String, dynamic> json) {
+  factory A10.fromJsonLocal(Map<String, dynamic> json) {
     return A10(
       deNumber: json['de_number'],
       centerSn: json['center_sn'],
@@ -41,6 +41,27 @@ class A10 {
       datetime: DateTime.parse(json['datetime']),
       startTime: DateTime.parse(json['start_time']),
       endTime: DateTime.parse(json['end_time']),
+      positionX: double.parse(json['position_x']),
+      positionY: double.parse(json['position_y']),
+    );
+  }
+
+  factory A10.fromJsonUTC(Map<String, dynamic> json) {
+    return A10(
+      deNumber: json['de_number'],
+      centerSn: json['center_sn'],
+      deName: json['de_name'],
+      temp: json['temp'],
+      hum: json['hum'],
+      battery: json['battery'],
+      deLocation: json['de_location'],
+      tempLow: json['temp_low'],
+      tempHigh: json['temp_high'],
+      humLow: json['hum_low'],
+      humHigh: json['hum_high'],
+      datetime: DateTime.parse(json['datetime'] + 'Z').toLocal(),
+      startTime: DateTime.parse(json['start_time'] + 'Z').toLocal(),
+      endTime: DateTime.parse(json['end_time'] + 'Z').toLocal(),
       positionX: double.parse(json['position_x']),
       positionY: double.parse(json['position_y']),
     );
