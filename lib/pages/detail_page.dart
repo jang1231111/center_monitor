@@ -5,6 +5,7 @@ import 'package:center_monitor/providers/center_data/center_data_provider.dart';
 import 'package:center_monitor/providers/center_data/center_data_state.dart';
 import 'package:center_monitor/providers/center_report/center_report_provider.dart';
 import 'package:center_monitor/providers/center_report/center_report_state.dart';
+import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -473,10 +474,13 @@ class _logInformationState extends State<logInformation> {
                         A10 newDevice = device.copyWith(
                             startTime: startDateTime, endTime: endDateTime);
 
+                        String _loginNumber = context
+                            .read<LoginNumberProvider>()
+                            .state
+                            .phoneNumber;
                         try {
-                          context
-                              .read<CenterDataProvider>()
-                              .getCenterData(device: newDevice);
+                          context.read<CenterDataProvider>().getCenterData(
+                              device: newDevice, loginNumber: _loginNumber);
                         } catch (e) {
                           errorDialog(context, e.toString());
                         }

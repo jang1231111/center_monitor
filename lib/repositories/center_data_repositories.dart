@@ -9,10 +9,18 @@ class CenterDataRepostiories {
 
   CenterDataRepostiories({required this.apiServices});
 
-  Future<CenterDataInfo> getCenterData({required A10 device}) async {
+  Future<CenterDataInfo> getCenterData(
+      {required A10 device, required String loginNumber}) async {
     try {
-      final List<LogData> logDatas = await apiServices.selectCenterData(device);
+      List<LogData> logDatas;
 
+      if (loginNumber == '010-9999-9999') {
+        logDatas = await apiServices.selectInSungCenterData(device);
+      } else if (loginNumber == '010-7777-7777') {
+        logDatas = await apiServices.selectMnbCenterData(device);
+      } else {
+        throw CustomError(errMsg: 'LoginNumber Err');
+      }
       CenterDataInfo centerDataInfo = CenterDataInfo(logDatas: logDatas);
 
       return centerDataInfo;

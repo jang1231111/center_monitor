@@ -10,7 +10,7 @@ class CenterListRepositories {
 
   Future<CenterListInfo> getCenterList({required String phoneNumber}) async {
     try {
-      List<A10> deviceList = await apiServices.selectInSungCenterList();
+      List<A10> deviceList;
       if (phoneNumber == '010-9999-9999') {
         deviceList = await apiServices.selectInSungCenterList();
       } else if (phoneNumber == '010-7777-7777') {
@@ -24,7 +24,7 @@ class CenterListRepositories {
       CenterListInfo centerListInfo =
           CenterListInfo(devices: deviceList, updateTime: currentTime);
 
-      // print(centerListInfo);
+      print(centerListInfo);
 
       return centerListInfo;
     } catch (e) {

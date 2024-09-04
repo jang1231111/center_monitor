@@ -25,7 +25,7 @@ class ApiServices {
     final List<A10> deviceList = [];
     A10 a10;
     for (final row in result.rows) {
-      print(row.assoc());
+      // print(row.assoc());
 
       a10 = A10.fromJson(row.assoc());
       deviceList.add(a10);
@@ -54,7 +54,7 @@ class ApiServices {
     await conn.connect();
 
     var result = await conn.execute(
-        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1501 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1101 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
     final List<A10> deviceList = [];
     A10 a10;
@@ -76,7 +76,7 @@ class ApiServices {
     return deviceList;
   }
 
-  Future<List<LogData>> selectCenterData(A10 device) async {
+  Future<List<LogData>> selectInSungCenterData(A10 device) async {
     final conn = await MySQLConnection.createConnection(
       host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
       port: 3306,
@@ -84,11 +84,44 @@ class ApiServices {
       password: 'optilo123',
       databaseName: 'GEO_3PL',
     );
-
     await conn.connect();
 
     var result = await conn.execute(
         "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM GEO.SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime}') AND DATE('${device.endTime}') AND a.datetime BETWEEN '${device.startTime}' AND '${device.endTime}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
+
+    final List<LogData> logDatas = [];
+    LogData logData;
+    for (final row in result.rows) {
+      // print(row.assoc());
+
+      logData = LogData.fromJson(row.assoc());
+      logDatas.add(logData);
+    }
+
+    if (logDatas.isEmpty) {
+      // throw WeatherException('Cannot get the location of $city');
+    } else {
+      // print(logDatas);
+    }
+
+    conn.close();
+
+    return logDatas;
+  }
+
+  Future<List<LogData>> selectMnbCenterData(A10 device) async {
+    final conn = await MySQLConnection.createConnection(
+      host: '175.126.77.180',
+      port: 3306,
+      userName: 'iot_platform',
+      password: 'IotPlatform112!!@',
+      databaseName: 'IOT_PLATFORM',
+    );
+
+    await conn.connect();
+
+    var result = await conn.execute(
+        "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime}') AND DATE('${device.endTime}') AND a.datetime BETWEEN '${device.startTime}' AND '${device.endTime}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
 
     final List<LogData> logDatas = [];
     LogData logData;

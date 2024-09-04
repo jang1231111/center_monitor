@@ -16,13 +16,14 @@ class CenterDataProvider with ChangeNotifier {
 
   Future<void> getCenterData({
     required A10 device,
+    required String loginNumber,
   }) async {
     _state = _state.copyWith(status: CenterDataStatus.submitting);
     notifyListeners();
 
     try {
-      final centerDataInfo =
-          await centerDataRepositories.getCenterData(device: device);
+      final centerDataInfo = await centerDataRepositories.getCenterData(
+          device: device, loginNumber: loginNumber);
       print('${centerDataInfo}');
       _state = _state.copyWith(
           status: CenterDataStatus.success, centerDataInfo: centerDataInfo);

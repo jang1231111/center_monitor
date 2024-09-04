@@ -1,7 +1,6 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
-import 'package:center_monitor/pages/center_plan_page.dart';
 import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/providers/center_data/center_data_provider.dart';
 import 'package:center_monitor/providers/center_filter/center_filter_provider.dart';
@@ -14,10 +13,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   static const String routeName = '/main';
   const MainPage({super.key});
 
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+final events = [];
+bool canScroll = false;
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -27,48 +34,79 @@ class MainPage extends StatelessWidget {
         child: SafeArea(
           child: Scaffold(
             body: SingleChildScrollView(
+              physics: canScroll
+                  ? const ScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 20.0,
                   vertical: 10.0,
                 ),
-                child: Column(
-                  children: [
-                    ScanHeader(),
-                    SizedBox(
-                      child: Divider(height: 5),
-                      height: 20,
-                    ),
-                    Text(
-                      '센터 도면',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 38, 94, 176),
-                          fontSize: 15.0),
-                    ),
-                    SizedBox(height: 10),
-                    CenterPlan(),
-                    SizedBox(
-                      child: Divider(
-                        height: 5,
+                child: Listener(
+                  onPointerDown: (event) {
+                    events.add(event.pointer);
+                    print("new event");
+                  },
+                  onPointerUp: (event) {
+                    events.clear();
+                    print("events cleared");
+                    setState(() {
+                      canScroll = true;
+                    });
+                  },
+                  onPointerMove: (event) {
+                    if (events.length == 2) {
+                      setState(() {
+                        canScroll = false;
+                      });
+                      //   int sensitivity = 8;
+                      //   if (event.delta.dy > sensitivity) {
+                      //     // code for two finger swipe up event
+
+                      //   } else if (event.delta.dy < -sensitivity) {
+                      //     // code for two finger swipe down event
+
+                      //   }
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      ScanHeader(),
+                      SizedBox(
+                        child: Divider(height: 5),
+                        height: 20,
                       ),
-                      height: 20,
-                    ),
-                    Text(
-                      '센터 리스트',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 38, 94, 176),
-                          fontSize: 15.0),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ShowUpdateTime(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    FilterCenter(),
-                    ShowDevices(),
-                  ],
+                      Text(
+                        '센터 도면',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 38, 94, 176),
+                            fontSize: 15.0),
+                      ),
+                      SizedBox(height: 10),
+                      CenterPlan(),
+                      SizedBox(
+                        child: Divider(
+                          height: 5,
+                        ),
+                        height: 20,
+                      ),
+                      Text(
+                        '센터 리스트',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 38, 94, 176),
+                            fontSize: 15.0),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ShowUpdateTime(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      FilterCenter(),
+                      ShowDevices(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -79,51 +117,156 @@ class MainPage extends StatelessWidget {
   }
 }
 
+// class MainPage2 extends StatelessWidget {
+//   static const String routeName = '/main';
+//   const MainPage2({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return PopScope(
+//       canPop: false,
+//       child: Container(
+//         color: Colors.white,
+//         child: SafeArea(
+//           child: Scaffold(
+//             body: SingleChildScrollView(
+//               physics: canScroll
+//                   ? const ScrollPhysics()
+//                   : const NeverScrollableScrollPhysics(),
+//               child: Padding(
+//                 padding: const EdgeInsetsDirectional.symmetric(
+//                   horizontal: 20.0,
+//                   vertical: 10.0,
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     ScanHeader(),
+//                     SizedBox(
+//                       child: Divider(height: 5),
+//                       height: 20,
+//                     ),
+//                     Text(
+//                       '센터 도면',
+//                       style: TextStyle(
+//                           color: Color.fromARGB(255, 38, 94, 176),
+//                           fontSize: 15.0),
+//                     ),
+//                     SizedBox(height: 10),
+//                     CenterPlan(),
+//                     SizedBox(
+//                       child: Divider(
+//                         height: 5,
+//                       ),
+//                       height: 20,
+//                     ),
+//                     Text(
+//                       '센터 리스트',
+//                       style: TextStyle(
+//                           color: Color.fromARGB(255, 38, 94, 176),
+//                           fontSize: 15.0),
+//                     ),
+//                     SizedBox(
+//                       height: 10,
+//                     ),
+//                     ShowUpdateTime(),
+//                     SizedBox(
+//                       height: 10,
+//                     ),
+//                     FilterCenter(),
+//                     ShowDevices(),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class CenterPlan extends StatelessWidget {
   const CenterPlan({super.key});
 
   @override
   Widget build(BuildContext context) {
     final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
-    // final devices =
-    //     context.read<CenterListProvider>().state.centerListInfo.devices;
+    final devices =
+        context.watch<CenterListProvider>().state.centerListInfo.devices;
 
-    return GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, CenterPlanPage.routeName);
-        },
-        child: Stack(
-          children: [
-            Center(
-              child: Container(
-                color: Colors.white,
-                // child: Image.asset('assets/images/center.png'),
-                child: loginNumber == '010-9999-9999'
-                    ? Image.network(
-                        'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
-                        // fit: BoxFit.fill,
-                        // width: 400,
-                        // height: 300,
-                      )
-                    : Image.network(
-                        'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
-                      ),
-                padding: const EdgeInsets.all(2),
-              ),
+    return
+        // GestureDetector(
+        //     onTap: () {
+        //       Navigator.pushNamed(context, CenterPlanPage.routeName);
+        //     },
+        //     child:
+        InteractiveViewer(
+      child: Stack(
+        children: [
+          Center(
+            child: Container(
+              color: Colors.white,
+              // child: Image.asset('assets/images/center.png'),
+              child: loginNumber == '010-9999-9999'
+                  ? Image.network(
+                      'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
+                      // fit: BoxFit.fill,
+                      // width: 400,
+                      // height: 300,
+                    )
+                  : Image.network(
+                      'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
+                      fit: BoxFit.fill,
+                      width: 400,
+                      height: 300,
+                    ),
+              padding: const EdgeInsets.all(2),
             ),
-            // for (var device in devices)
-            //   Positioned(
-            //     left: device.positionX * 4,
-            //     top: device.positionY * 3,
-            //     child: Container(
-            //       child: Text(
-            //         device.hum,
-            //         style: TextStyle(color: Colors.red),
-            //       ),
-            //     ),
-            //   ),
-          ],
-        ));
+          ),
+          for (var device in devices)
+            loginNumber == '010-9999-9999'
+                ? SizedBox()
+                : Positioned(
+                    left: device.positionX * 4,
+                    top: device.positionY * 3,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 91, 91, 91),
+                        ),
+                        width: 30,
+                        height: 35,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset('assets/images/temp_ic.png',
+                                    width: 10, height: 10, fit: BoxFit.fill),
+                                Text(
+                                  '${device.temp}',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Image.asset('assets/images/ic_humidity.png',
+                                    width: 10, height: 10, fit: BoxFit.fill),
+                                Text(
+                                  '${double.parse(device.hum).floor()}',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
+                  ),
+        ],
+      ),
+    );
+    // );
   }
 }
 
@@ -480,11 +623,17 @@ class DeviceItem extends StatelessWidget {
                                         ),
                                         TextButton(
                                           onPressed: () async {
+                                            String _loginNumber = context
+                                                .read<LoginNumberProvider>()
+                                                .state
+                                                .phoneNumber;
                                             try {
                                               await context
                                                   .read<CenterDataProvider>()
                                                   .getCenterData(
-                                                      device: device);
+                                                      device: device,
+                                                      loginNumber:
+                                                          _loginNumber);
                                               Navigator.pop(context);
                                               Navigator.pushNamed(
                                                   context, DetailPage.routeName,
