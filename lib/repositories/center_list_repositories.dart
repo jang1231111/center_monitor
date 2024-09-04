@@ -10,7 +10,15 @@ class CenterListRepositories {
 
   Future<CenterListInfo> getCenterList({required String phoneNumber}) async {
     try {
-      final List<A10> deviceList = await apiServices.selectCenterList();
+      List<A10> deviceList = await apiServices.selectInSungCenterList();
+      if (phoneNumber == '010-9999-9999') {
+        deviceList = await apiServices.selectInSungCenterList();
+      } else if (phoneNumber == '010-7777-7777') {
+        deviceList = await apiServices.selectMnbCenterList();
+      } else {
+        throw CustomError(errMsg: '전화번호를 확인해주세요.');
+      }
+
       final DateTime currentTime = DateTime.now();
 
       CenterListInfo centerListInfo =
