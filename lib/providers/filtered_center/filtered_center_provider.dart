@@ -15,6 +15,9 @@ class FilteredCenterProvider {
     List<A10> _centerList = centerListProvider.state.centerListInfo.devices;
 
     switch (centerFilterProvider.state.filter) {
+      case Filter.all:
+        _filteredCenterList = _centerList;
+        break;
       case Filter.a:
         _filteredCenterList = _centerList.where((A10 device) {
           return device.deName.contains('가');

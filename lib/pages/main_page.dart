@@ -98,7 +98,7 @@ class CenterPlan extends StatelessWidget {
               child: Container(
                 color: Colors.white,
                 // child: Image.asset('assets/images/center.png'),
-                child: loginNumber == ''
+                child: loginNumber == '010-9999-9999'
                     ? Image.network(
                         'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
                         // fit: BoxFit.fill,
@@ -171,11 +171,14 @@ class ShowUpdateTime extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
+                    String _phoneNumber =
+                        context.read<LoginNumberProvider>().state.phoneNumber;
+
                     try {
                       Navigator.pop(context);
                       await context
                           .read<CenterListProvider>()
-                          .getCenterList(phoneNumber: 'phoneNumber');
+                          .getCenterList(phoneNumber: _phoneNumber);
                     } on CustomError catch (e) {
                       errorDialog(buildContext, e.toString());
                     }
@@ -242,18 +245,24 @@ class FilterCenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final phoneNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            filterButton(context, Filter.a),
-            filterButton(context, Filter.b),
-            filterButton(context, Filter.c),
-            filterButton(context, Filter.d),
-            filterButton(context, Filter.e),
-          ],
-        )
+        filterButton(context, Filter.all),
+        phoneNumber == '010-9999-9999'
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  filterButton(context, Filter.a),
+                  filterButton(context, Filter.b),
+                  filterButton(context, Filter.c),
+                  filterButton(context, Filter.d),
+                  filterButton(context, Filter.e),
+                ],
+              )
+            : SizedBox(
+                height: 5,
+              )
       ],
     );
   }
@@ -264,15 +273,17 @@ class FilterCenter extends StatelessWidget {
         context.read<CenterFilterProvider>().changeFilter(filter);
       },
       child: Text(
-        filter == Filter.a
-            ? '가동'
-            : filter == Filter.b
-                ? '나동'
-                : filter == Filter.c
-                    ? '다동'
-                    : filter == Filter.d
-                        ? '라동'
-                        : '마동',
+        filter == Filter.all
+            ? '전체'
+            : filter == Filter.a
+                ? '가동'
+                : filter == Filter.b
+                    ? '나동'
+                    : filter == Filter.c
+                        ? '다동'
+                        : filter == Filter.d
+                            ? '라동'
+                            : '마동',
         style: TextStyle(
           fontSize: 18.0,
           color: textColor(context, filter),

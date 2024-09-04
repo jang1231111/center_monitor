@@ -9,7 +9,7 @@ class CenterFilterState extends Equatable {
   });
 
   factory CenterFilterState.initial() {
-    return CenterFilterState(filter: Filter.a);
+    return CenterFilterState(filter: Filter.all);
   }
 
   @override
