@@ -8,6 +8,7 @@ import 'package:center_monitor/providers/center_filter/center_filter_provider.da
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_report/center_report_provider.dart';
 import 'package:center_monitor/providers/filtered_center/filtered_center_provider.dart';
+import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/repositories/center_data_repositories.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
 import 'package:center_monitor/serivices/api_services.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
               httpClient: http.Client(),
             ),
           ),
+        ),
+        ChangeNotifierProvider<LoginNumberProvider>(
+          create: (context) => LoginNumberProvider(),
         ),
         ChangeNotifierProvider<CenterListProvider>(
           create: (context) => CenterListProvider(

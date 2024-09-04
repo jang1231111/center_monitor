@@ -83,8 +83,8 @@ class CenterPlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final devices =
-        context.read<CenterListProvider>().state.centerListInfo.devices;
+    // final devices =
+    //     context.read<CenterListProvider>().state.centerListInfo.devices;
 
     return GestureDetector(
         onTap: () {

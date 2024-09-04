@@ -3,6 +3,7 @@ import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
+import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,7 @@ class _SigninPageState extends State<SigninPage> {
       await context
           .read<CenterListProvider>()
           .getCenterList(phoneNumber: _phoneNumber!);
+      context.read<LoginNumberProvider>().changeLoginNumber(_phoneNumber!);
       Navigator.pushNamed(context, MainPage.routeName);
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
