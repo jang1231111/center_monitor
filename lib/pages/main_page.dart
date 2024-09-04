@@ -203,31 +203,28 @@ class CenterPlan extends StatelessWidget {
         InteractiveViewer(
       child: Stack(
         children: [
-          Center(
-            child: Container(
-              color: Colors.white,
-              // child: Image.asset('assets/images/center.png'),
-              child: loginNumber == '010-9999-9999'
-                  ? Image.network(
-                      'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
-                      // fit: BoxFit.fill,
-                      // width: 400,
-                      // height: 300,
-                    )
-                  : Image.network(
-                      'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
-                      fit: BoxFit.fill,
-                      width: 400,
-                      height: 300,
-                    ),
-              padding: const EdgeInsets.all(2),
-            ),
+          Container(
+            color: Colors.white,
+            // child: Image.asset('assets/images/center.png'),
+            child: loginNumber == '010-9999-9999'
+                ? Image.network(
+                    'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
+                    // fit: BoxFit.fill,
+                    // width: 400,
+                    // height: 300,
+                  )
+                : Image.network(
+                    'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
+                    fit: BoxFit.fill,
+                    width: 380,
+                    height: 300,
+                  ),
           ),
           for (var device in devices)
             loginNumber == '010-9999-9999'
                 ? SizedBox()
                 : Positioned(
-                    left: device.positionX * 4,
+                    left: device.positionX * 3.8,
                     top: device.positionY * 3,
                     child: Container(
                         decoration: BoxDecoration(
