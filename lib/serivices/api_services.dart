@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:center_monitor/constants/constants.dart';
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/log_data_model.dart';
-import 'package:center_monitor/models/login_request.dart';
 import 'package:center_monitor/serivices/http_error_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:mysql_client/mysql_client.dart';
@@ -12,6 +11,108 @@ class ApiServices {
   final http.Client httpClient;
 
   ApiServices({required this.httpClient});
+
+  Future<String> intergrationLogin(String ID, String Password) async {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+
+    data['userId'] = ID;
+    data["password"] = Password;
+
+    var client = http.Client();
+    var uri = Uri.parse('$khttpUri$kIntergrationLoginUri');
+    try {
+      final http.Response response = await client.post(uri,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data));
+
+      if (response.statusCode != 200) {
+        throw Exception(httpErrorHandler(response));
+      }
+
+      final responseBody = response.body;
+      final center = responseBody.toString();
+
+      // if (strResponse == '{msg: No Data In MANAGER_INFO, notice: []}') {
+      //   throw Exception('ID 및 Password를 학인해 주세요');
+      // }
+
+      return center;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<String> login(String ID, String Password, String center) async {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+
+    data['userId'] = ID;
+    data["password"] = Password;
+
+    var client = http.Client();
+    var uri = Uri.parse('$khttpUri$center$kLoginUri');
+
+    print('Login Uri ${uri}');
+
+    try {
+      final http.Response response = await client.post(uri,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data));
+
+      if (response.statusCode != 200) {
+        throw Exception(httpErrorHandler(response));
+      }
+
+      final responseBody = json.decode(response.body);
+      final token = responseBody['token'];
+
+      // if (strResponse == '{msg: No Data In MANAGER_INFO, notice: []}') {
+      //   throw Exception('ID 및 Password를 학인해 주세요');
+      // }
+
+      print(responseBody.toString());
+
+      return token;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<A10>> getCenterList(String token, String center) async {
+    var client = http.Client();
+    var uri = Uri.parse('$khttpUri$center$kcenterListUri');
+
+    try {
+      print('CenterList Uri  ${uri}');
+
+      print('Bearer $token');
+
+      final http.Response response = await client.post(uri, headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      print('getCenterList Error Check ${response.headers.toString()}');
+      if (response.statusCode != 200) {
+        throw Exception(httpErrorHandler(response));
+      }
+
+      final responseBody = json.decode(response.body);
+      // print(responseBody.toString());
+
+      print('테스트 ${responseBody.toString()}');
+
+      final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
+
+      return deviceList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// 인성 1501 , 보령 1601
+  /// MNB 1101 , BCS 1301
 
   /// 인성
   Future<List<A10>> selectInSungCenterList() async {
@@ -47,6 +148,40 @@ class ApiServices {
     return deviceList;
   }
 
+  /// 보령
+  Future<List<A10>> selectBrCenterList() async {
+    final conn = await MySQLConnection.createConnection(
+      host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
+      port: 3306,
+      userName: 'optilo',
+      password: 'optilo123',
+      databaseName: 'GEO_3PL',
+    );
+    await conn.connect();
+
+    var result = await conn.execute(
+        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE a.center_sn = 1601 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+
+    final List<A10> deviceList = [];
+    A10 a10;
+    for (final row in result.rows) {
+      // print(row.assoc());
+
+      a10 = A10.fromJsonLocal(row.assoc());
+      deviceList.add(a10);
+    }
+
+    if (deviceList.isEmpty) {
+      // throw WeatherException('Cannot get the location of $city');
+    } else {
+      // print(deviceList);
+    }
+
+    conn.close();
+
+    return deviceList;
+  }
+
   /// MNB
   Future<List<A10>> selectMnbCenterList() async {
     final conn = await MySQLConnection.createConnection(
@@ -60,6 +195,40 @@ class ApiServices {
 
     var result = await conn.execute(
         "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1101 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+
+    final List<A10> deviceList = [];
+    A10 a10;
+    for (final row in result.rows) {
+      print(row.assoc());
+
+      a10 = A10.fromJsonUTC(row.assoc());
+      deviceList.add(a10);
+    }
+
+    if (deviceList.isEmpty) {
+      // throw WeatherException('Cannot get the location of $city');
+    } else {
+      // print(deviceList);
+    }
+
+    conn.close();
+
+    return deviceList;
+  }
+
+  /// BCS
+  Future<List<A10>> selectBcsCenterList() async {
+    final conn = await MySQLConnection.createConnection(
+      host: '175.126.77.180',
+      port: 3306,
+      userName: 'iot_platform',
+      password: 'IotPlatform112!!@',
+      databaseName: 'IOT_PLATFORM',
+    );
+    await conn.connect();
+
+    var result = await conn.execute(
+        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1301 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
     final List<A10> deviceList = [];
     A10 a10;
@@ -148,45 +317,45 @@ class ApiServices {
     return logDatas;
   }
 
-  Future<void> getCenterInfo(String phoneNumber) async {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    // final Map<String, dynamic> response = new Map<String, dynamic>();
-    // final Map<String, dynamic> common = new Map<String, dynamic>();
+  // Future<void> getCenterInfo(String phoneNumber) async {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   // final Map<String, dynamic> response = new Map<String, dynamic>();
+  //   // final Map<String, dynamic> common = new Map<String, dynamic>();
 
-    data['userId'] = 'admin';
-    data["password"] = 'admin123';
+  //   data['userId'] = 'admin';
+  //   data["password"] = 'admin123';
 
-    var client = http.Client();
-    var uri = Uri.parse(kLoginUri);
+  //   var client = http.Client();
+  //   var uri = Uri.parse(kLoginUri);
 
-    try {
-      final http.Response response = await client.post(uri,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(data));
+  //   try {
+  //     final http.Response response = await client.post(uri,
+  //         headers: {"Content-Type": "application/json"},
+  //         body: jsonEncode(data));
 
-      /// 인터셉터 참고하면 더 편할 듯
-      ///  원래 기본 헤더 authenti 머시기
-      ///  baer ? + 토큰 넣기
+  //     /// 인터셉터 참고하면 더 편할 듯
+  //     ///  원래 기본 헤더 authenti 머시기
+  //     ///  baer ? + 토큰 넣기
 
-      if (response.statusCode != 200) {
-        throw Exception(httpErrorHandler(response));
-      }
+  //     if (response.statusCode != 200) {
+  //       throw Exception(httpErrorHandler(response));
+  //     }
 
-      final responseBody = json.decode(response.body);
+  //     final responseBody = json.decode(response.body);
 
-      if (responseBody.toString() ==
-          '{msg: No Data In MANAGER_INFO, notice: []}') {
-        throw Exception('전화번호를 확인해 주세요');
-      }
+  //     if (responseBody.toString() ==
+  //         '{msg: No Data In MANAGER_INFO, notice: []}') {
+  //       throw Exception('전화번호를 확인해 주세요');
+  //     }
 
-      print(responseBody.toString());
-      // final centerInfo = Centerinfo.fromJson(responseBody);
+  //     print(responseBody.toString());
+  //     // final centerInfo = Centerinfo.fromJson(responseBody);
 
-      // return centerInfo;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     // return centerInfo;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   // Future<List<A10>> getDeviceList(Centerinfo centerInfo) async {
   //   final Map<String, dynamic> data = new Map<String, dynamic>();

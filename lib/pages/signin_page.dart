@@ -4,6 +4,7 @@ import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
+import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,8 @@ class SigninPage extends StatefulWidget {
 class _SigninPageState extends State<SigninPage> {
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-  String? _phoneNumber;
+  String? _ID;
+  String? _Password;
 
   void _submit() async {
     setState(() {
@@ -37,10 +39,18 @@ class _SigninPageState extends State<SigninPage> {
     try {
       await context
           .read<CenterListProvider>()
-          .getCenterList(phoneNumber: _phoneNumber!);
-      context.read<LoginNumberProvider>().changeLoginNumber(_phoneNumber!);
-      Navigator.pushNamed(context, MainPage.routeName);
+          .signIn(ID: _ID!, Password: _Password!);
+      showDialog(
+        context: context,
+        builder: (context) => CenterChoiceDialog(centers: ['a']),
+      );
+      // context.read<LoginNumberProvider>().changeLoginNumber(_phoneNumber!);
+      // Navigator.pushNamed(context, MainPage.routeName);
     } on CustomError catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => CenterChoiceDialog(centers: ['a']),
+      );
       errorDialog(context, e.toString());
     }
   }
@@ -88,32 +98,52 @@ class _SigninPageState extends State<SigninPage> {
                         TextFormField(
                           scrollPadding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.visiblePassword,
                           autocorrect: false,
-                          maxLength: 11,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             filled: true,
-                            labelText: 'Login Number',
+                            labelText: '아이디',
                             prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return '로그인 번호를 입려하세요';
-                            }
-                            if (value.trim().length < 11)
-                              return '로그인 번호는 11자리 전체를 입력해야 합니다.';
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return '아이디를 입려하세요';
+                            // }
+                            // if (value.trim().length < 11)
+                            //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
-                          onSaved: (String? inputPhoneNumber) {
-                            String phoneNumber = '';
-                            phoneNumber += inputPhoneNumber!.substring(0, 3);
-                            phoneNumber += '-';
-                            phoneNumber += inputPhoneNumber.substring(3, 7);
-                            phoneNumber += '-';
-                            phoneNumber += inputPhoneNumber.substring(7, 11);
-
-                            _phoneNumber = phoneNumber;
+                          onSaved: (String? inputID) {
+                            _ID = inputID;
+                            _ID = 'insung';
+                          },
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        TextFormField(
+                          scrollPadding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          keyboardType: TextInputType.visiblePassword,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            labelText: '비밀번호',
+                            prefixIcon: Icon(Icons.password),
+                          ),
+                          validator: (String? value) {
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return '비밀번호를 입려하세요';
+                            // }
+                            // if (value.trim().length < 11)
+                            //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
+                            return null;
+                          },
+                          onSaved: (String? inputPassword) {
+                            _Password = inputPassword;
+                            _Password = 'insung123';
                           },
                         ),
                         // TextButton.icon(

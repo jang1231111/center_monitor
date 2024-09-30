@@ -8,13 +8,46 @@ class CenterListRepositories {
 
   CenterListRepositories({required this.apiServices});
 
+  Future<CenterListInfo> signIn(
+      {required String ID, required String Password}) async {
+    try {
+      String center;
+      String token;
+      List<A10> deviceList;
+
+      center = await apiServices.intergrationLogin(ID, Password);
+      print('IntergrationLogin Center Test $center');
+
+      token = await apiServices.login(ID, Password, center);
+      print('IntergrationLogin Token Test $token');
+
+      deviceList = await apiServices.getCenterList(token, center);
+      print('IntergrationLogin deviceList Test $deviceList');
+
+      final DateTime currentTime = DateTime.now();
+
+      CenterListInfo centerListInfo =
+          CenterListInfo(devices: deviceList, updateTime: currentTime);
+
+      print(centerListInfo);
+
+      return centerListInfo;
+    } catch (e) {
+      throw CustomError(errMsg: e.toString());
+    }
+  }
+
   Future<CenterListInfo> getCenterList({required String phoneNumber}) async {
     try {
       List<A10> deviceList;
       if (phoneNumber == '010-9999-9999') {
         deviceList = await apiServices.selectInSungCenterList();
+      } else if (phoneNumber == '010-8888-8888') {
+        deviceList = await apiServices.selectBrCenterList();
       } else if (phoneNumber == '010-7777-7777') {
         deviceList = await apiServices.selectMnbCenterList();
+      } else if (phoneNumber == '010-6666-6666') {
+        deviceList = await apiServices.selectBcsCenterList();
       } else {
         throw CustomError(errMsg: '전화번호를 확인해주세요.');
       }
