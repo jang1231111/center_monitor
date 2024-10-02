@@ -1,7 +1,7 @@
-import 'package:center_monitor/models/center_list_info.dart';
+import 'package:center_monitor/models/device_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 
-enum CenterListStatus {
+enum DeviceListStatus {
   initial,
   submitting,
   success,
@@ -9,14 +9,14 @@ enum CenterListStatus {
 }
 
 class CenterListState {
-  final CenterListStatus centerListStatus;
-  final CenterListInfo centerListInfo;
+  final DeviceListStatus centerListStatus;
+  final DeviceListInfo centerListInfo;
   final CustomError error;
 
   factory CenterListState.initial() {
     return CenterListState(
-        centerListStatus: CenterListStatus.initial,
-        centerListInfo: CenterListInfo.initial(),
+        centerListStatus: DeviceListStatus.initial,
+        centerListInfo: DeviceListInfo.initial(),
         error: CustomError());
   }
 
@@ -30,8 +30,8 @@ class CenterListState {
       'CenterListState(signinStatus: $centerListStatus, centerListInfo: $centerListInfo, error: $error)';
 
   CenterListState copyWith({
-    CenterListStatus? centerListStatus,
-    CenterListInfo? centerListInfo,
+    DeviceListStatus? centerListStatus,
+    DeviceListInfo? centerListInfo,
     CustomError? error,
   }) {
     return CenterListState(

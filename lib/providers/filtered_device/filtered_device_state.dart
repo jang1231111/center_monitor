@@ -1,22 +1,22 @@
 import 'package:center_monitor/models/a10_model.dart';
 
-class FilteredCenterState {
+class FilteredDeviceState {
   final List<A10> filtereCenterList;
 
-  FilteredCenterState({required this.filtereCenterList});
+  FilteredDeviceState({required this.filtereCenterList});
 
-  factory FilteredCenterState.initial() {
-    return FilteredCenterState(filtereCenterList: []);
+  factory FilteredDeviceState.initial() {
+    return FilteredDeviceState(filtereCenterList: []);
   }
 
   @override
   String toString() =>
       'FilteredDevicesState(filteredDevices: $filtereCenterList)';
 
-  FilteredCenterState copyWith({
+  FilteredDeviceState copyWith({
     List<A10>? filteredDevices,
   }) {
-    return FilteredCenterState(
+    return FilteredDeviceState(
       filtereCenterList: filteredDevices ?? this.filtereCenterList,
     );
   }

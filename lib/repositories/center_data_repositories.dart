@@ -1,5 +1,5 @@
 import 'package:center_monitor/models/a10_model.dart';
-import 'package:center_monitor/models/center_data_info.dart';
+import 'package:center_monitor/models/device_data_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/log_data_model.dart';
 import 'package:center_monitor/serivices/api_services.dart';
@@ -9,7 +9,7 @@ class CenterDataRepostiories {
 
   CenterDataRepostiories({required this.apiServices});
 
-  Future<CenterDataInfo> getCenterData(
+  Future<DeviceDataInfo> getCenterData(
       {required A10 device, required String loginNumber}) async {
     try {
       List<LogData> logDatas;
@@ -21,7 +21,7 @@ class CenterDataRepostiories {
       } else {
         throw CustomError(errMsg: 'LoginNumber Err');
       }
-      CenterDataInfo centerDataInfo = CenterDataInfo(logDatas: logDatas);
+      DeviceDataInfo centerDataInfo = DeviceDataInfo(logDatas: logDatas);
 
       return centerDataInfo;
     } catch (e) {

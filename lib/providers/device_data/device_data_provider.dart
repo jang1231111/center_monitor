@@ -1,14 +1,14 @@
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
-import 'package:center_monitor/providers/center_data/center_data_state.dart';
+import 'package:center_monitor/providers/device_data/device_data_state.dart';
 import 'package:center_monitor/repositories/center_data_repositories.dart';
 import 'package:flutter/material.dart';
 
-class CenterDataProvider with ChangeNotifier {
+class DeviceDataProvider with ChangeNotifier {
   CenterDataState _state = CenterDataState.initial();
   CenterDataState get state => _state;
 
-  CenterDataProvider({
+  DeviceDataProvider({
     required this.centerDataRepositories,
   });
 
@@ -18,7 +18,7 @@ class CenterDataProvider with ChangeNotifier {
     required A10 device,
     required String loginNumber,
   }) async {
-    _state = _state.copyWith(status: CenterDataStatus.submitting);
+    _state = _state.copyWith(status: DeviceDataStatus.submitting);
     notifyListeners();
 
     try {
@@ -26,10 +26,10 @@ class CenterDataProvider with ChangeNotifier {
           device: device, loginNumber: loginNumber);
       print('${centerDataInfo}');
       _state = _state.copyWith(
-          status: CenterDataStatus.success, centerDataInfo: centerDataInfo);
+          status: DeviceDataStatus.success, centerDataInfo: centerDataInfo);
       notifyListeners();
     } on CustomError catch (e) {
-      _state = _state.copyWith(status: CenterDataStatus.error, error: e);
+      _state = _state.copyWith(status: DeviceDataStatus.error, error: e);
       notifyListeners();
       rethrow;
     }

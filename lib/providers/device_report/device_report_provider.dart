@@ -1,13 +1,13 @@
 import 'package:center_monitor/models/log_data_model.dart';
-import 'package:center_monitor/providers/center_data/center_data_provider.dart';
-import 'package:center_monitor/providers/center_report/center_report_state.dart';
+import 'package:center_monitor/providers/device_data/device_data_provider.dart';
+import 'package:center_monitor/providers/device_report/device_report_state.dart';
 
-class CenterReportProvider {
-  final CenterDataProvider centerDataProvider;
+class DeviceReportProvider {
+  final DeviceDataProvider centerDataProvider;
 
-  CenterReportProvider({required this.centerDataProvider});
+  DeviceReportProvider({required this.centerDataProvider});
 
-  CenterReportState get state {
+  DeviceReportState get state {
     List<LogData> logDatas = centerDataProvider.state.centerDataInfo.logDatas;
     double _tempLow = 999;
     double _tempHigh = -999;
@@ -30,7 +30,7 @@ class CenterReportProvider {
         }
       }
     }
-    return CenterReportState(
+    return DeviceReportState(
         tempLow: _tempLow,
         tempHigh: _tempHigh,
         humLow: _humLow,

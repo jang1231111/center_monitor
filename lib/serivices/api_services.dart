@@ -52,7 +52,7 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kLoginUri');
 
-    print('Login Uri ${uri}');
+    // print('Login Uri ${uri}');
 
     try {
       final http.Response response = await client.post(uri,
@@ -70,7 +70,7 @@ class ApiServices {
       //   throw Exception('ID 및 Password를 학인해 주세요');
       // }
 
-      print(responseBody.toString());
+      // print(responseBody.toString());
 
       return token;
     } catch (e) {
@@ -83,25 +83,19 @@ class ApiServices {
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
     try {
-      print('CenterList Uri  ${uri}');
-
-      print('Bearer $token');
-
       final http.Response response = await client.post(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       });
 
-      print('getCenterList Error Check ${response.headers.toString()}');
       if (response.statusCode != 200) {
         throw Exception(httpErrorHandler(response));
       }
 
       final responseBody = json.decode(response.body);
-      // print(responseBody.toString());
 
-      print('테스트 ${responseBody.toString()}');
+      print('getCenterList ${responseBody.toString()}');
 
       final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
 

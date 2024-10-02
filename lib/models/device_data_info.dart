@@ -1,18 +1,18 @@
 import 'package:center_monitor/models/log_data_model.dart';
 
-class CenterDataInfo {
+class DeviceDataInfo {
   final List<LogData> logDatas;
 
-  factory CenterDataInfo.initial() {
-    return CenterDataInfo(logDatas: []);
+  factory DeviceDataInfo.initial() {
+    return DeviceDataInfo(logDatas: []);
   }
 
-  CenterDataInfo({required this.logDatas});
+  DeviceDataInfo({required this.logDatas});
 
-  CenterDataInfo copyWith({
+  DeviceDataInfo copyWith({
     List<LogData>? logdatas,
   }) {
-    return CenterDataInfo(
+    return DeviceDataInfo(
       logDatas: logdatas ?? this.logDatas,
     );
   }

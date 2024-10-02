@@ -1,10 +1,10 @@
-class CenterReportState {
+class DeviceReportState {
   final double tempLow;
   final double tempHigh;
   final double humLow;
   final double humHigh;
 
-  CenterReportState(
+  DeviceReportState(
       {required this.tempLow,
       required this.tempHigh,
       required this.humLow,
@@ -15,13 +15,13 @@ class CenterReportState {
     return 'CenterReportState(tempLow: $tempLow, tempHigh: $tempHigh, humLow: $humLow, humHigh: $humHigh)';
   }
 
-  CenterReportState copyWith({
+  DeviceReportState copyWith({
     double? tempLow,
     double? tempHigh,
     double? humLow,
     double? humHigh,
   }) {
-    return CenterReportState(
+    return DeviceReportState(
       tempLow: tempLow ?? this.tempLow,
       tempHigh: tempHigh ?? this.tempHigh,
       humLow: humLow ?? this.humLow,

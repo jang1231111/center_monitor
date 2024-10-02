@@ -1,8 +1,8 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
-import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/center_list/center_list_state.dart';
+import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
@@ -38,26 +38,18 @@ class _SigninPageState extends State<SigninPage> {
 
     try {
       await context
-          .read<CenterListProvider>()
+          .read<DeviceListProvider>()
           .signIn(ID: _ID!, Password: _Password!);
-      showDialog(
-        context: context,
-        builder: (context) => CenterChoiceDialog(centers: ['a']),
-      );
-      // context.read<LoginNumberProvider>().changeLoginNumber(_phoneNumber!);
-      // Navigator.pushNamed(context, MainPage.routeName);
+
+      showCenterChoiceDialog(context, ['a', 'b']);
     } on CustomError catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => CenterChoiceDialog(centers: ['a']),
-      );
       errorDialog(context, e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final centerListState = context.watch<CenterListProvider>().state;
+    final centerListState = context.watch<DeviceListProvider>().state;
 
     return Container(
       color: Colors.white,
@@ -146,33 +138,35 @@ class _SigninPageState extends State<SigninPage> {
                             _Password = 'insung123';
                           },
                         ),
-                        // TextButton.icon(
-                        //   onPressed: null,
-                        //   // centerListState.signinStatus == CenterListStatus.submitting
-                        //   //     ? null
-                        //   //     : () {
-                        //   //         Navigator.pushNamed(
-                        //   //             context, SignupPage.routeName);
-                        //   //       },
-                        //   icon: Icon(Icons.question_answer),
-                        //   label: Text('Forgot Login Number?'),
-                        //   style: TextButton.styleFrom(
-                        //       textStyle: TextStyle(
-                        //     fontSize: 10.0,
-                        //     decoration: TextDecoration.underline,
-                        //   )),
-                        // ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
-                        SizedBox(height: 20.0),
+                        TextButton.icon(
+                          onPressed: null,
+                          // centerListState.signinStatus == CenterListStatus.submitting
+                          //     ? null
+                          //     : () {
+                          //         Navigator.pushNamed(
+                          //             context, SignupPage.routeName);
+                          //       },
+                          icon: Icon(Icons.question_answer),
+                          label: Text('Forgot Login Number?'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                            fontSize: 10.0,
+                            decoration: TextDecoration.underline,
+                          )),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
                         ElevatedButton(
                           onPressed: centerListState.centerListStatus ==
-                                  CenterListStatus.submitting
+                                  DeviceListStatus.submitting
                               ? null
                               : _submit,
                           child: Text(centerListState.centerListStatus ==
-                                  CenterListStatus.submitting
+                                  DeviceListStatus.submitting
                               ? 'Loading...'
                               : 'Sign in'),
                           style: ElevatedButton.styleFrom(
@@ -192,7 +186,7 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 50.0,
+                          height: 20.0,
                         ),
                         Container(
                           decoration: BoxDecoration(

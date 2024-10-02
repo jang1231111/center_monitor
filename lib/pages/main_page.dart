@@ -2,11 +2,11 @@ import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/detail_page.dart';
-import 'package:center_monitor/providers/center_data/center_data_provider.dart';
-import 'package:center_monitor/providers/center_filter/center_filter_provider.dart';
-import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/center_list/center_list_state.dart';
-import 'package:center_monitor/providers/filtered_center/filtered_center_provider.dart';
+import 'package:center_monitor/providers/device_data/device_data_provider.dart';
+import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
+import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/providers/device_list/device_list_state.dart';
+import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +192,7 @@ class CenterPlan extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     final devices =
-        context.watch<CenterListProvider>().state.centerListInfo.devices;
+        context.watch<DeviceListProvider>().state.centerListInfo.devices;
 
     return
         // GestureDetector(
@@ -273,7 +273,7 @@ class ShowUpdateTime extends StatelessWidget {
   @override
   Widget build(BuildContext buildContext) {
     final updateTime = buildContext
-        .watch<CenterListProvider>()
+        .watch<DeviceListProvider>()
         .state
         .centerListInfo
         .updateTime;
@@ -317,7 +317,7 @@ class ShowUpdateTime extends StatelessWidget {
                     try {
                       Navigator.pop(context);
                       await context
-                          .read<CenterListProvider>()
+                          .read<DeviceListProvider>()
                           .getCenterList(phoneNumber: _phoneNumber);
                     } on CustomError catch (e) {
                       errorDialog(buildContext, e.toString());
@@ -353,7 +353,7 @@ class ScanHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     final filteredCenterList =
-        context.watch<FilteredCenterProvider>().state.filtereCenterList;
+        context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -410,7 +410,7 @@ class FilterCenter extends StatelessWidget {
   Widget filterButton(BuildContext context, Filter filter) {
     return TextButton(
       onPressed: () {
-        context.read<CenterFilterProvider>().changeFilter(filter);
+        context.read<DeviceFilterProvider>().changeFilter(filter);
       },
       child: Text(
         filter == Filter.all
@@ -433,7 +433,7 @@ class FilterCenter extends StatelessWidget {
   }
 
   Color textColor(BuildContext context, Filter filter) {
-    final currentFilter = context.watch<CenterFilterProvider>().state.filter;
+    final currentFilter = context.watch<DeviceFilterProvider>().state.filter;
     return currentFilter == filter ? Colors.blue : Colors.grey;
   }
 }
@@ -474,11 +474,11 @@ class _ShowDevicesState extends State<ShowDevices> {
   @override
   Widget build(BuildContext context) {
     final filteredCenterList =
-        context.watch<FilteredCenterProvider>().state.filtereCenterList;
+        context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
-    CenterListState centerListState = context.watch<CenterListProvider>().state;
+    CenterListState centerListState = context.watch<DeviceListProvider>().state;
 
-    return centerListState.centerListStatus == CenterListStatus.submitting
+    return centerListState.centerListStatus == DeviceListStatus.submitting
         ? Center(
             child: CircularProgressIndicator(),
           )
@@ -626,7 +626,7 @@ class DeviceItem extends StatelessWidget {
                                                 .phoneNumber;
                                             try {
                                               await context
-                                                  .read<CenterDataProvider>()
+                                                  .read<DeviceDataProvider>()
                                                   .getCenterData(
                                                       device: device,
                                                       loginNumber:

@@ -1,6 +1,6 @@
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
-import 'package:center_monitor/models/center_list_info.dart';
+import 'package:center_monitor/models/device_list_info.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 
 class CenterListRepositories {
@@ -8,7 +8,7 @@ class CenterListRepositories {
 
   CenterListRepositories({required this.apiServices});
 
-  Future<CenterListInfo> signIn(
+  Future<DeviceListInfo> signIn(
       {required String ID, required String Password}) async {
     try {
       String center;
@@ -16,18 +16,18 @@ class CenterListRepositories {
       List<A10> deviceList;
 
       center = await apiServices.intergrationLogin(ID, Password);
-      print('IntergrationLogin Center Test $center');
+      // print('IntergrationLogin Center Test $center');
 
       token = await apiServices.login(ID, Password, center);
-      print('IntergrationLogin Token Test $token');
+      // print('login Token Test $token');
 
       deviceList = await apiServices.getCenterList(token, center);
-      print('IntergrationLogin deviceList Test $deviceList');
+      print('getCenterList deviceList Test $deviceList');
 
       final DateTime currentTime = DateTime.now();
 
-      CenterListInfo centerListInfo =
-          CenterListInfo(devices: deviceList, updateTime: currentTime);
+      DeviceListInfo centerListInfo =
+          DeviceListInfo(devices: deviceList, updateTime: currentTime);
 
       print(centerListInfo);
 
@@ -37,7 +37,7 @@ class CenterListRepositories {
     }
   }
 
-  Future<CenterListInfo> getCenterList({required String phoneNumber}) async {
+  Future<DeviceListInfo> getCenterList({required String phoneNumber}) async {
     try {
       List<A10> deviceList;
       if (phoneNumber == '010-9999-9999') {
@@ -54,8 +54,8 @@ class CenterListRepositories {
 
       final DateTime currentTime = DateTime.now();
 
-      CenterListInfo centerListInfo =
-          CenterListInfo(devices: deviceList, updateTime: currentTime);
+      DeviceListInfo centerListInfo =
+          DeviceListInfo(devices: deviceList, updateTime: currentTime);
 
       print(centerListInfo);
 

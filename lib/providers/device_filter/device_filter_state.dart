@@ -1,15 +1,15 @@
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:equatable/equatable.dart';
 
-class CenterFilterState extends Equatable {
+class DeviceFilterState extends Equatable {
   final Filter filter;
 
-  CenterFilterState({
+  DeviceFilterState({
     required this.filter,
   });
 
-  factory CenterFilterState.initial() {
-    return CenterFilterState(filter: Filter.all);
+  factory DeviceFilterState.initial() {
+    return DeviceFilterState(filter: Filter.all);
   }
 
   @override
@@ -18,10 +18,10 @@ class CenterFilterState extends Equatable {
   @override
   List<Object?> get props => [filter];
 
-  CenterFilterState copyWith({
+  DeviceFilterState copyWith({
     Filter? filter,
   }) {
-    return CenterFilterState(
+    return DeviceFilterState(
       filter: filter ?? this.filter,
     );
   }

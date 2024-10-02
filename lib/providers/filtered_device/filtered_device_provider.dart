@@ -1,16 +1,16 @@
 import 'package:center_monitor/models/a10_model.dart';
-import 'package:center_monitor/providers/center_filter/center_filter_provider.dart';
-import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/filtered_center/filtered_center_state.dart';
+import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
+import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/providers/filtered_device/filtered_device_state.dart';
 
-class FilteredCenterProvider {
-  final CenterListProvider centerListProvider;
-  final CenterFilterProvider centerFilterProvider;
+class FilteredDeviceProvider {
+  final DeviceListProvider centerListProvider;
+  final DeviceFilterProvider centerFilterProvider;
 
-  FilteredCenterProvider(
+  FilteredDeviceProvider(
       {required this.centerFilterProvider, required this.centerListProvider});
 
-  FilteredCenterState get state {
+  FilteredDeviceState get state {
     List<A10> _filteredCenterList;
     List<A10> _centerList = centerListProvider.state.centerListInfo.devices;
 
@@ -47,6 +47,6 @@ class FilteredCenterProvider {
 
     // print('_filteredDevices $_filteredDevices');
 
-    return FilteredCenterState(filtereCenterList: _filteredCenterList);
+    return FilteredDeviceState(filtereCenterList: _filteredCenterList);
   }
 }

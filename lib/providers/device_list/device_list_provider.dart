@@ -1,15 +1,15 @@
 import 'package:center_monitor/models/a10_model.dart';
-import 'package:center_monitor/models/center_list_info.dart';
+import 'package:center_monitor/models/device_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
-import 'package:center_monitor/providers/center_list/center_list_state.dart';
+import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
 import 'package:flutter/material.dart';
 
-class CenterListProvider with ChangeNotifier {
+class DeviceListProvider with ChangeNotifier {
   CenterListState _state = CenterListState.initial();
   CenterListState get state => _state;
 
-  CenterListProvider({
+  DeviceListProvider({
     required this.centerListRepositories,
   });
 
@@ -19,21 +19,21 @@ class CenterListProvider with ChangeNotifier {
     required String ID,
     required String Password,
   }) async {
-    _state = _state.copyWith(centerListStatus: CenterListStatus.submitting);
+    _state = _state.copyWith(centerListStatus: DeviceListStatus.submitting);
     notifyListeners();
 
     try {
       final centerListInfo =
           await centerListRepositories.signIn(ID: ID, Password: Password);
       _state = _state.copyWith(
-          centerListStatus: CenterListStatus.success,
+          centerListStatus: DeviceListStatus.success,
           centerListInfo: centerListInfo);
 
       print(_state.centerListInfo);
       notifyListeners();
     } on CustomError catch (e) {
       _state =
-          _state.copyWith(centerListStatus: CenterListStatus.error, error: e);
+          _state.copyWith(centerListStatus: DeviceListStatus.error, error: e);
       notifyListeners();
       rethrow;
     }
@@ -42,21 +42,21 @@ class CenterListProvider with ChangeNotifier {
   Future<void> getCenterList({
     required String phoneNumber,
   }) async {
-    _state = _state.copyWith(centerListStatus: CenterListStatus.submitting);
+    _state = _state.copyWith(centerListStatus: DeviceListStatus.submitting);
     notifyListeners();
 
     try {
       final centerListInfo =
           await centerListRepositories.getCenterList(phoneNumber: phoneNumber);
       _state = _state.copyWith(
-          centerListStatus: CenterListStatus.success,
+          centerListStatus: DeviceListStatus.success,
           centerListInfo: centerListInfo);
 
       print(_state.centerListInfo);
       notifyListeners();
     } on CustomError catch (e) {
       _state =
-          _state.copyWith(centerListStatus: CenterListStatus.error, error: e);
+          _state.copyWith(centerListStatus: DeviceListStatus.error, error: e);
       notifyListeners();
       rethrow;
     }
@@ -93,7 +93,7 @@ class CenterListProvider with ChangeNotifier {
       }
     }
 
-    CenterListInfo centerListInfo =
+    DeviceListInfo centerListInfo =
         _state.centerListInfo.copyWith(devices: newDevices);
 
     _state = _state.copyWith(centerListInfo: centerListInfo);
@@ -139,7 +139,7 @@ class CenterListProvider with ChangeNotifier {
       }
     }
 
-    CenterListInfo centerListInfo =
+    DeviceListInfo centerListInfo =
         _state.centerListInfo.copyWith(devices: newDevices);
 
     _state = _state.copyWith(centerListInfo: centerListInfo);

@@ -1,10 +1,10 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/log_data_model.dart';
-import 'package:center_monitor/providers/center_data/center_data_provider.dart';
-import 'package:center_monitor/providers/center_data/center_data_state.dart';
-import 'package:center_monitor/providers/center_report/center_report_provider.dart';
-import 'package:center_monitor/providers/center_report/center_report_state.dart';
+import 'package:center_monitor/providers/device_data/device_data_provider.dart';
+import 'package:center_monitor/providers/device_data/device_data_state.dart';
+import 'package:center_monitor/providers/device_report/device_report_provider.dart';
+import 'package:center_monitor/providers/device_report/device_report_state.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ class dataChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     A10 device = ModalRoute.of(context)!.settings.arguments as A10;
-    CenterDataState centerDataProv = context.watch<CenterDataProvider>().state;
+    CenterDataState centerDataProv = context.watch<DeviceDataProvider>().state;
 
     return SfCartesianChart(
       primaryYAxis: NumericAxis(
@@ -189,11 +189,11 @@ class _logInformationState extends State<logInformation> {
 
   @override
   Widget build(BuildContext context) {
-    CenterReportState centerReportState =
-        context.watch<CenterReportProvider>().state;
-    CenterDataState centerDataProv = context.watch<CenterDataProvider>().state;
+    DeviceReportState centerReportState =
+        context.watch<DeviceReportProvider>().state;
+    CenterDataState centerDataProv = context.watch<DeviceDataProvider>().state;
 
-    return centerDataProv.centerDataStatus == CenterDataStatus.submitting
+    return centerDataProv.centerDataStatus == DeviceDataStatus.submitting
         ? Center(
             child: CircularProgressIndicator(),
           )
@@ -479,7 +479,7 @@ class _logInformationState extends State<logInformation> {
                             .state
                             .phoneNumber;
                         try {
-                          context.read<CenterDataProvider>().getCenterData(
+                          context.read<DeviceDataProvider>().getCenterData(
                               device: newDevice, loginNumber: _loginNumber);
                         } catch (e) {
                           errorDialog(context, e.toString());
