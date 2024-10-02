@@ -7,7 +7,7 @@ class DeviceListRepositories {
 
   DeviceListRepositories({required this.apiServices});
 
-  Future<DeviceListInfo> getCenterList({required String phoneNumber}) async {
+  Future<DeviceListInfo> getDeviceList({required String phoneNumber}) async {
     try {
       List<A10> deviceList;
       if (phoneNumber == '010-9999-9999') {

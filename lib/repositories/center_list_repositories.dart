@@ -1,5 +1,7 @@
+import 'package:center_monitor/models/center/center_info.dart';
 import 'package:center_monitor/models/center/center_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
+import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 
 class CenterListRepositories {
@@ -7,7 +9,7 @@ class CenterListRepositories {
 
   CenterListRepositories({required this.apiServices});
 
-  Future<CenterListInfo> signIn(
+  Future<CenterListState> signIn(
       {required String ID, required String Password}) async {
     try {
       String center;
@@ -24,9 +26,16 @@ class CenterListRepositories {
       // print('getCenterList deviceList Test $centerList');
 
       CenterListInfo centerListInfo = CenterListInfo(centers: centerList);
-      print(centerListInfo);
+      CenterInfo centerInfo = CenterInfo(center: center, token: token);
 
-      return centerListInfo;
+      CenterListState centerListState = CenterListState(
+          centerListStatus: CenterListStatus.submitting,
+          centerListInfo: centerListInfo,
+          centerInfo: centerInfo,
+          error: CustomError());
+      // print(centerListInfo);
+
+      return centerListState;
     } catch (e) {
       throw CustomError(errMsg: e.toString());
     }

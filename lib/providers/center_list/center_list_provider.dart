@@ -21,12 +21,13 @@ class CenterListProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final centerListInfo =
+      final newCenterListState =
           await centerListRepositories.signIn(ID: ID, Password: Password);
 
       _state = _state.copyWith(
           centerListStatus: CenterListStatus.success,
-          centerListInfo: centerListInfo);
+          centerListInfo: newCenterListState.centerListInfo,
+          centerInfo: newCenterListState.centerInfo);
 
       // print(_state.centerListInfo);
       notifyListeners();

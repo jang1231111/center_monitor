@@ -319,7 +319,7 @@ class ShowUpdateTime extends StatelessWidget {
                       Navigator.pop(context);
                       await context
                           .read<DeviceListProvider>()
-                          .getCenterList(phoneNumber: _phoneNumber);
+                          .getDeviceList(phoneNumber: _phoneNumber);
                     } on CustomError catch (e) {
                       errorDialog(buildContext, e.toString());
                     }

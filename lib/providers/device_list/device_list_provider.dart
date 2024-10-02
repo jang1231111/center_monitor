@@ -38,15 +38,15 @@ class DeviceListProvider with ChangeNotifier {
   //   }
   // }
 
-  Future<void> getCenterList({
-    required String phoneNumber,
+  Future<void> getDeviceList({
+    required int centerSn,
   }) async {
     _state = _state.copyWith(centerListStatus: DeviceListStatus.submitting);
     notifyListeners();
 
     try {
       final centerListInfo =
-          await centerListRepositories.getCenterList(phoneNumber: phoneNumber);
+          await centerListRepositories.getDeviceList(phoneNumber: phoneNumber);
       _state = _state.copyWith(
           centerListStatus: DeviceListStatus.success,
           centerListInfo: centerListInfo);
