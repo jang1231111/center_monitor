@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:center_monitor/constants/constants.dart';
-import 'package:center_monitor/models/a10_model.dart';
-import 'package:center_monitor/models/log_data_model.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
+import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/serivices/http_error_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:mysql_client/mysql_client.dart';

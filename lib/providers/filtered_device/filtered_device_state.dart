@@ -1,4 +1,4 @@
-import 'package:center_monitor/models/a10_model.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 
 class FilteredDeviceState {
   final List<A10> filtereCenterList;

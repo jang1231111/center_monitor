@@ -1,4 +1,5 @@
-import 'package:center_monitor/models/a10_model.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
+import 'package:center_monitor/models/filter/device_filter.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_state.dart';

@@ -1,4 +1,4 @@
-import 'package:center_monitor/models/log_data_model.dart';
+import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/providers/device_data/device_data_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_state.dart';
 

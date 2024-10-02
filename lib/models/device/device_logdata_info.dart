@@ -1,3 +1,24 @@
+class DeviceLogDataInfo {
+  final List<LogData> logDatas;
+
+  factory DeviceLogDataInfo.initial() {
+    return DeviceLogDataInfo(logDatas: []);
+  }
+
+  DeviceLogDataInfo({required this.logDatas});
+
+  DeviceLogDataInfo copyWith({
+    List<LogData>? logdatas,
+  }) {
+    return DeviceLogDataInfo(
+      logDatas: logdatas ?? this.logDatas,
+    );
+  }
+
+  @override
+  String toString() => 'CenterDataInfo(logdatas: $logDatas)';
+}
+
 class LogData {
   final String temp;
   final String hum;

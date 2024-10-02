@@ -1,5 +1,4 @@
-import 'package:center_monitor/models/a10_model.dart';
-import 'package:center_monitor/models/device_list_info.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';

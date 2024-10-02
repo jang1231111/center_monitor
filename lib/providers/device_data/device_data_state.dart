@@ -1,4 +1,4 @@
-import 'package:center_monitor/models/device_data_info.dart';
+import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 
 enum DeviceDataStatus {
@@ -10,13 +10,13 @@ enum DeviceDataStatus {
 
 class CenterDataState {
   final DeviceDataStatus centerDataStatus;
-  final DeviceDataInfo centerDataInfo;
+  final DeviceLogDataInfo centerDataInfo;
   final CustomError error;
 
   factory CenterDataState.initial() {
     return CenterDataState(
         centerDataStatus: DeviceDataStatus.initial,
-        centerDataInfo: DeviceDataInfo.initial(),
+        centerDataInfo: DeviceLogDataInfo.initial(),
         error: CustomError());
   }
 
@@ -27,7 +27,7 @@ class CenterDataState {
 
   CenterDataState copyWith({
     DeviceDataStatus? status,
-    DeviceDataInfo? centerDataInfo,
+    DeviceLogDataInfo? centerDataInfo,
     CustomError? error,
   }) {
     return CenterDataState(

@@ -1,5 +1,5 @@
-import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/providers/device_data/device_data_state.dart';
 import 'package:center_monitor/repositories/center_data_repositories.dart';
 import 'package:flutter/material.dart';

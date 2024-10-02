@@ -1,6 +1,5 @@
-import 'package:center_monitor/models/a10_model.dart';
 import 'package:center_monitor/models/custom_error.dart';
-import 'package:center_monitor/models/device_list_info.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 
 class CenterListRepositories {

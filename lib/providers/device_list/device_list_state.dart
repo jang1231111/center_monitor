@@ -1,4 +1,4 @@
-import 'package:center_monitor/models/device_list_info.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 
 enum DeviceListStatus {

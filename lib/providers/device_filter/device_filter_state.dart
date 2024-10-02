@@ -1,4 +1,4 @@
-import 'package:center_monitor/models/a10_model.dart';
+import 'package:center_monitor/models/filter/device_filter.dart';
 import 'package:equatable/equatable.dart';
 
 class DeviceFilterState extends Equatable {
