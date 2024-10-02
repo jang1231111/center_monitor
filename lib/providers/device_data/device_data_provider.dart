@@ -1,7 +1,7 @@
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/providers/device_data/device_data_state.dart';
-import 'package:center_monitor/repositories/center_data_repositories.dart';
+import 'package:center_monitor/repositories/device_data_repositories.dart';
 import 'package:flutter/material.dart';
 
 class DeviceDataProvider with ChangeNotifier {
@@ -12,7 +12,7 @@ class DeviceDataProvider with ChangeNotifier {
     required this.centerDataRepositories,
   });
 
-  final CenterDataRepostiories centerDataRepositories;
+  final DeviceDataRepostiories centerDataRepositories;
 
   Future<void> getCenterData({
     required A10 device,

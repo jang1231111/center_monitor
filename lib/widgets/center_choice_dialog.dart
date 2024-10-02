@@ -1,7 +1,8 @@
 import 'package:center_monitor/constants/style.dart';
+import 'package:center_monitor/models/center/center_list_info.dart' as center;
 import 'package:flutter/material.dart';
 
-void showCenterChoiceDialog(BuildContext context, List<String> centers) {
+void showCenterChoiceDialog(BuildContext context, List<center.Center> centers) {
   // if (Platform.isIOS) {
   //   showCupertinoDialog(
   //     context: context,
@@ -30,15 +31,14 @@ void showCenterChoiceDialog(BuildContext context, List<String> centers) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: showCenters(context),
+        child: showCenters(context, centers),
       );
     },
   );
 }
 // }
 
-showCenters(BuildContext context) {
-  List<String> centersTest = ['a', 'b', 'c', 'd', 'e', 'f', 'b', 'c', 'd', 'e'];
+showCenters(BuildContext context, List<center.Center> centers) {
   return Container(
     height: 350,
     decoration: BoxDecoration(
@@ -69,14 +69,14 @@ showCenters(BuildContext context) {
           ListView.separated(
             primary: false,
             shrinkWrap: true,
-            itemCount: centersTest.length,
+            itemCount: centers.length,
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(
                 height: 10,
               );
             },
             itemBuilder: (BuildContext context, int index) {
-              return centerButton(context, centersTest[index]);
+              return centerButton(context, centers[index].centerNm);
             },
           ),
         ],

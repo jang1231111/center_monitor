@@ -3,14 +3,16 @@ import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/pages/signin_page.dart';
 import 'package:center_monitor/pages/splash_page.dart';
+import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_data/device_data_provider.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
-import 'package:center_monitor/repositories/center_data_repositories.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
+import 'package:center_monitor/repositories/device_data_repositories.dart';
+import 'package:center_monitor/repositories/device_list_repositories.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,24 +38,35 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        Provider<CenterDataRepostiories>(
-          create: (context) => CenterDataRepostiories(
+        Provider<DeviceListRepositories>(
+          create: (context) => DeviceListRepositories(
             apiServices: ApiServices(
               httpClient: http.Client(),
             ),
           ),
+        ),
+        Provider<DeviceDataRepostiories>(
+          create: (context) => DeviceDataRepostiories(
+            apiServices: ApiServices(
+              httpClient: http.Client(),
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<CenterListProvider>(
+          create: (context) => CenterListProvider(
+              centerListRepositories: context.read<CenterListRepositories>()),
         ),
         ChangeNotifierProvider<LoginNumberProvider>(
           create: (context) => LoginNumberProvider(),
         ),
         ChangeNotifierProvider<DeviceListProvider>(
           create: (context) => DeviceListProvider(
-            centerListRepositories: context.read<CenterListRepositories>(),
+            centerListRepositories: context.read<DeviceListRepositories>(),
           ),
         ),
         ChangeNotifierProvider<DeviceDataProvider>(
           create: (context) => DeviceDataProvider(
-            centerDataRepositories: context.read<CenterDataRepostiories>(),
+            centerDataRepositories: context.read<DeviceDataRepostiories>(),
           ),
         ),
         ChangeNotifierProvider<DeviceFilterProvider>(

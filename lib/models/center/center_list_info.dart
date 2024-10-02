@@ -3,6 +3,10 @@ class CenterListInfo {
 
   CenterListInfo({required this.centers});
 
+  factory CenterListInfo.initial() {
+    return CenterListInfo(centers: []);
+  }
+
   CenterListInfo copyWith({
     List<Center>? centers,
   }) {
@@ -16,13 +20,13 @@ class CenterListInfo {
 }
 
 class Center {
-  final String id;
-  final String centerSn;
+  final int id;
+  final int centerSn;
   final String centerNm;
-  final String total;
-  final String inactive;
-  final String tempWarn;
-  final String humWarn;
+  final int total;
+  final int inactive;
+  final int tempWarn;
+  final int humWarn;
 
   Center(
       {required this.id,
@@ -33,7 +37,7 @@ class Center {
       required this.tempWarn,
       required this.humWarn});
 
-  factory Center.fromJsonLocal(Map<String, dynamic> json) {
+  factory Center.fromJson(Map<String, dynamic> json) {
     return Center(
       id: json['id'],
       centerSn: json['centerSn'],
@@ -51,13 +55,13 @@ class Center {
   }
 
   Center copyWith({
-    String? id,
-    String? centerSn,
+    int? id,
+    int? centerSn,
     String? centerNm,
-    String? total,
-    String? inactive,
-    String? tempWarn,
-    String? humWarn,
+    int? total,
+    int? inactive,
+    int? tempWarn,
+    int? humWarn,
   }) {
     return Center(
       id: id ?? this.id,

@@ -1,5 +1,6 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
+import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
@@ -36,10 +37,11 @@ class _SigninPageState extends State<SigninPage> {
 
     try {
       await context
-          .read<DeviceListProvider>()
+          .read<CenterListProvider>()
           .signIn(ID: _ID!, Password: _Password!);
 
-      showCenterChoiceDialog(context, ['a', 'b']);
+      showCenterChoiceDialog(context,
+          context.read<CenterListProvider>().state.centerListInfo.centers);
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
     }

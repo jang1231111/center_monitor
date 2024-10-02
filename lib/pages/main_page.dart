@@ -477,7 +477,7 @@ class _ShowDevicesState extends State<ShowDevices> {
     final filteredCenterList =
         context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
-    CenterListState centerListState = context.watch<DeviceListProvider>().state;
+    DeviceListState centerListState = context.watch<DeviceListProvider>().state;
 
     return centerListState.centerListStatus == DeviceListStatus.submitting
         ? Center(

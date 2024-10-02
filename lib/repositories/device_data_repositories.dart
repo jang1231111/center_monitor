@@ -3,10 +3,10 @@ import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 
-class CenterDataRepostiories {
+class DeviceDataRepostiories {
   final ApiServices apiServices;
 
-  CenterDataRepostiories({required this.apiServices});
+  DeviceDataRepostiories({required this.apiServices});
 
   Future<DeviceLogDataInfo> getCenterData(
       {required A10 device, required String loginNumber}) async {

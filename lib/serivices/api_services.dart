@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:center_monitor/constants/constants.dart';
+import 'package:center_monitor/models/center/center_list_info.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/serivices/http_error_handler.dart';
@@ -77,7 +78,7 @@ class ApiServices {
     }
   }
 
-  Future<List<A10>> getCenterList(String token, String center) async {
+  Future<List<Center>> getCenterList(String token, String center) async {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
@@ -92,13 +93,13 @@ class ApiServices {
         throw Exception(httpErrorHandler(response));
       }
 
-      final responseBody = json.decode(response.body);
+      final utfResponseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> responseBody = json.decode(utfResponseBody);
 
-      print('getCenterList ${responseBody.toString()}');
+      // print('getCenterList ${responseBody.toString()}');
 
-      final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
-
-      return deviceList;
+      final centerList = responseBody.map((i) => Center.fromJson(i)).toList();
+      return centerList;
     } catch (e) {
       rethrow;
     }

@@ -8,19 +8,19 @@ enum DeviceListStatus {
   error,
 }
 
-class CenterListState {
+class DeviceListState {
   final DeviceListStatus centerListStatus;
   final DeviceListInfo centerListInfo;
   final CustomError error;
 
-  factory CenterListState.initial() {
-    return CenterListState(
+  factory DeviceListState.initial() {
+    return DeviceListState(
         centerListStatus: DeviceListStatus.initial,
         centerListInfo: DeviceListInfo.initial(),
         error: CustomError());
   }
 
-  CenterListState(
+  DeviceListState(
       {required this.centerListStatus,
       required this.centerListInfo,
       required this.error});
@@ -29,12 +29,12 @@ class CenterListState {
   String toString() =>
       'CenterListState(signinStatus: $centerListStatus, centerListInfo: $centerListInfo, error: $error)';
 
-  CenterListState copyWith({
+  DeviceListState copyWith({
     DeviceListStatus? centerListStatus,
     DeviceListInfo? centerListInfo,
     CustomError? error,
   }) {
-    return CenterListState(
+    return DeviceListState(
       centerListStatus: centerListStatus ?? this.centerListStatus,
       centerListInfo: centerListInfo ?? this.centerListInfo,
       error: error ?? this.error,
