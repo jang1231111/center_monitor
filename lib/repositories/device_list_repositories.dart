@@ -12,7 +12,7 @@ class DeviceListRepositories {
     required String company,
     required String token,
   }) async {
-    // try {
+    try {
       List<A10> deviceList;
       deviceList = await apiServices.getDeviceList(id,company,token);
 
@@ -24,8 +24,8 @@ class DeviceListRepositories {
       print(centerListInfo);
 
       return centerListInfo;
-    // } catch (e) {
-    //   throw CustomError(errMsg: e.toString());
-    // }
+    } catch (e) {
+      throw CustomError(errMsg: e.toString());
+    }
   }
 }

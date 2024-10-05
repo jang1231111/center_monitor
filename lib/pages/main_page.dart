@@ -1,8 +1,10 @@
+import 'package:center_monitor/constants/constants.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/filter/device_filter.dart';
 import 'package:center_monitor/pages/detail_page.dart';
+import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_data/device_data_provider.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
@@ -186,14 +188,16 @@ class _MainPageState extends State<MainPage> {
 //   }
 // }
 
-class CenterPlan extends StatelessWidget {
+class CenterPlan extends StatelessWidget { 
   const CenterPlan({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     final devices =
         context.watch<DeviceListProvider>().state.centerListInfo.devices;
+
+        final company = context.read<CenterListProvider>().state.loginInfo.company;
+        final centerSn = context.read<CenterListProvider>().state.loginInfo.selectedCenter.centerSn;
 
     return
         // GestureDetector(
@@ -205,62 +209,50 @@ class CenterPlan extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            color: Colors.white,
-            // child: Image.asset('assets/images/center.png'),
-            child: loginNumber == '010-9999-9999'
-                ? Image.network(
-                    'http://geo.logithermo.com/upload/center/geo/위험물%20인성창고.jpg',
-                    // fit: BoxFit.fill,
-                    // width: 400,
-                    // height: 300,
-                  )
-                : Image.network(
-                    'http://175.126.232.236:9092/upload/center/175/MNB.jpg',
-                    fit: BoxFit.fill,
-                    width: 380,
-                    height: 300,
-                  ),
-          ),
+              color: Colors.white,
+              // child: Image.asset('assets/images/center.png'),
+              child: Image.network(
+                '$khttpUri$company$centerPlanUri1$company/${centerSn}$centerPlanUri2',
+                fit: BoxFit.fill,
+                width: 400,
+                height: 300, 
+              )),
           for (var device in devices)
-            loginNumber == '010-9999-9999'
-                ? SizedBox()
-                : Positioned(
-                    left: device.positionX * 3.8,
-                    top: device.positionY * 3,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 91, 91, 91),
-                        ),
-                        width: 30,
-                        height: 35,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset('assets/images/temp_ic.png',
-                                    width: 10, height: 10, fit: BoxFit.fill),
-                                Text(
-                                  '${device.temp}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/images/ic_humidity.png',
-                                    width: 10, height: 10, fit: BoxFit.fill),
-                                Text(
-                                  '${device.hum.floor()}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
+            Positioned(
+              left: device.positionX * 3.8,
+              top: device.positionY * 3,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 91, 91, 91),
                   ),
+                  width: 35,
+                  height: 35,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset('assets/images/temp_ic.png',
+                              width: 10, height: 10, fit: BoxFit.fill),
+                          Text(
+                            '${device.temp.toStringAsFixed(1)}',
+                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Image.asset('assets/images/ic_humidity.png',
+                              width: 10, height: 10, fit: BoxFit.fill),
+                          Text(
+                            '${device.hum.floor()}',
+                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+            ),
         ],
       ),
     );
@@ -352,23 +344,16 @@ class ScanHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     final filteredCenterList =
         context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        loginNumber == '010-9999-9999'
-            ? Text(
-                // 로그인 화면 구현 시, 사용자 정보 받아들여와 센터 이름으로 표시 처리
-                '인성 창고',
-                style: TextStyle(fontSize: 25.0),
-              )
-            : Text(
-                'MNB',
-                style: TextStyle(fontSize: 25.0),
-              ),
+        Text(
+          '${context.read<CenterListProvider>().state.loginInfo.company}',
+          style: TextStyle(fontSize: 25.0),
+        ),
         Text(
           '센터 개수 : ${filteredCenterList.length}',
           style: TextStyle(
@@ -712,8 +697,7 @@ class DeviceItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              getbatteryImage(
-                                  context, device.battery),
+                              getbatteryImage(context, device.battery),
                               Text(
                                 '${device.battery}%',
                                 style: Temp(context),
