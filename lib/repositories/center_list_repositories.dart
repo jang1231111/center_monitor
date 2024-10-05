@@ -1,5 +1,5 @@
 import 'package:center_monitor/models/center/center_list_info.dart';
-import 'package:center_monitor/models/center/selected_center_info.dart';
+import 'package:center_monitor/models/center/login_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/serivices/api_services.dart';
@@ -30,10 +30,10 @@ class CenterListRepositories {
       CenterListState centerListState = CenterListState(
           centerListStatus: CenterListStatus.submitting,
           centerListInfo: centerListInfo,
-          selectedCenterInfo: SelectedCenterInfo(
+          loginInfo: LoginInfo(
               company: company,
               token: token,
-              selectedConter: CenterInfo.initial()),
+              selectedCenter: CenterInfo.initial()),
           error: CustomError());
       // print(centerListInfo);
 

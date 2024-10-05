@@ -82,6 +82,8 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
+    print('centerList Uri $uri');
+
     try {
       final http.Response response = await client.post(uri, headers: {
         'Content-Type': 'application/json',
@@ -107,14 +109,14 @@ class ApiServices {
   }
 
   Future<List<A10>> getDeviceList(
-    int centerSn,
+    int id,
     String company,
     String token,
   ) async {
     var client = http.Client();
-    var uri = Uri.parse('$khttpUri$company$kdeviceListUri$centerSn');
+    var uri = Uri.parse('$khttpUri$company$kdeviceListUri$id');
 
-    print('getDeviceList Uri : ${uri.toString()}');
+    // print('getDeviceList Uri : ${uri.toString()}');
 
     try {
       final http.Response response = await client.post(uri, headers: {
@@ -130,7 +132,7 @@ class ApiServices {
       final utfResponseBody = utf8.decode(response.bodyBytes);
       final List<dynamic> responseBody = json.decode(utfResponseBody);
 
-      print('getDeviceList ${responseBody.toString()}');
+      print('getDeviceList $responseBody');
 
       final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
       return deviceList;
@@ -143,207 +145,207 @@ class ApiServices {
   /// MNB 1101 , BCS 1301
 
   /// 인성
-  Future<List<A10>> selectInSungCenterList() async {
-    final conn = await MySQLConnection.createConnection(
-      host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
-      port: 3306,
-      userName: 'optilo',
-      password: 'optilo123',
-      databaseName: 'GEO_3PL',
-    );
-    await conn.connect();
+  // Future<List<A10>> selectInSungCenterList() async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
+  //     port: 3306,
+  //     userName: 'optilo',
+  //     password: 'optilo123',
+  //     databaseName: 'GEO_3PL',
+  //   );
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE a.center_sn = 1501 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+  //   var result = await conn.execute(
+  //       "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE a.center_sn = 1501 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
-    final List<A10> deviceList = [];
-    A10 a10;
-    for (final row in result.rows) {
-      // print(row.assoc());
+  //   final List<A10> deviceList = [];
+  //   A10 a10;
+  //   for (final row in result.rows) {
+  //     // print(row.assoc());
 
-      a10 = A10.fromJsonLocal(row.assoc());
-      deviceList.add(a10);
-    }
+  //     a10 = A10.fromJsonLocal(row.assoc());
+  //     deviceList.add(a10);
+  //   }
 
-    if (deviceList.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(deviceList);
-    }
+  //   if (deviceList.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(deviceList);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return deviceList;
-  }
+  //   return deviceList;
+  // }
 
-  /// 보령
-  Future<List<A10>> selectBrCenterList() async {
-    final conn = await MySQLConnection.createConnection(
-      host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
-      port: 3306,
-      userName: 'optilo',
-      password: 'optilo123',
-      databaseName: 'GEO_3PL',
-    );
-    await conn.connect();
+  // /// 보령
+  // Future<List<A10>> selectBrCenterList() async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
+  //     port: 3306,
+  //     userName: 'optilo',
+  //     password: 'optilo123',
+  //     databaseName: 'GEO_3PL',
+  //   );
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE a.center_sn = 1601 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+  //   var result = await conn.execute(
+  //       "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE a.center_sn = 1601 AND a.status = 1 AND a.record_date > DATE_SUB(CURDATE(), INTERVAL 2 MONTH) ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
-    final List<A10> deviceList = [];
-    A10 a10;
-    for (final row in result.rows) {
-      // print(row.assoc());
+  //   final List<A10> deviceList = [];
+  //   A10 a10;
+  //   for (final row in result.rows) {
+  //     // print(row.assoc());
 
-      a10 = A10.fromJsonLocal(row.assoc());
-      deviceList.add(a10);
-    }
+  //     a10 = A10.fromJsonLocal(row.assoc());
+  //     deviceList.add(a10);
+  //   }
 
-    if (deviceList.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(deviceList);
-    }
+  //   if (deviceList.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(deviceList);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return deviceList;
-  }
+  //   return deviceList;
+  // }
 
-  /// MNB
-  Future<List<A10>> selectMnbCenterList() async {
-    final conn = await MySQLConnection.createConnection(
-      host: '175.126.77.180',
-      port: 3306,
-      userName: 'iot_platform',
-      password: 'IotPlatform112!!@',
-      databaseName: 'IOT_PLATFORM',
-    );
-    await conn.connect();
+  // /// MNB
+  // Future<List<A10>> selectMnbCenterList() async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: '175.126.77.180',
+  //     port: 3306,
+  //     userName: 'iot_platform',
+  //     password: 'IotPlatform112!!@',
+  //     databaseName: 'IOT_PLATFORM',
+  //   );
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1101 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+  //   var result = await conn.execute(
+  //       "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1101 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
-    final List<A10> deviceList = [];
-    A10 a10;
-    for (final row in result.rows) {
-      print(row.assoc());
+  //   final List<A10> deviceList = [];
+  //   A10 a10;
+  //   for (final row in result.rows) {
+  //     print(row.assoc());
 
-      a10 = A10.fromJsonUTC(row.assoc());
-      deviceList.add(a10);
-    }
+  //     a10 = A10.fromJsonUTC(row.assoc());
+  //     deviceList.add(a10);
+  //   }
 
-    if (deviceList.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(deviceList);
-    }
+  //   if (deviceList.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(deviceList);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return deviceList;
-  }
+  //   return deviceList;
+  // }
 
-  /// BCS
-  Future<List<A10>> selectBcsCenterList() async {
-    final conn = await MySQLConnection.createConnection(
-      host: '175.126.77.180',
-      port: 3306,
-      userName: 'iot_platform',
-      password: 'IotPlatform112!!@',
-      databaseName: 'IOT_PLATFORM',
-    );
-    await conn.connect();
+  // /// BCS
+  // Future<List<A10>> selectBcsCenterList() async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: '175.126.77.180',
+  //     port: 3306,
+  //     userName: 'iot_platform',
+  //     password: 'IotPlatform112!!@',
+  //     databaseName: 'IOT_PLATFORM',
+  //   );
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1301 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
+  //   var result = await conn.execute(
+  //       "SELECT * FROM (SELECT DISTINCT a.de_number, a.center_sn, a.de_name, TRUNCATE(b.temp, 1) AS temp, TRUNCATE(b.hum, 1) AS hum, b.battery, a.de_location, c.temp_low, c.temp_high, c.hum_low, c.hum_high, DATE_FORMAT(b.datetime, '%Y-%m-%d %H:%i') AS `datetime`, DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i') AS start_time, DATE_FORMAT(a.end_time, '%Y-%m-%d %H:%i') AS end_time, b.position_x, b.position_y FROM CENTER_HISTORY a LEFT JOIN CENTER_DEVICE b ON a.de_number = b.de_number AND a.record_date = DATE(b.datetime) AND b.`status` = 1 LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE a.center_sn = 1301 AND a.status = 1 AND a.record_date = CURDATE()ORDER BY b.datetime DESC , a.record_date DESC) A GROUP BY A.de_number , A.center_sn , A.de_name ORDER BY A.de_name");
 
-    final List<A10> deviceList = [];
-    A10 a10;
-    for (final row in result.rows) {
-      print(row.assoc());
+  //   final List<A10> deviceList = [];
+  //   A10 a10;
+  //   for (final row in result.rows) {
+  //     print(row.assoc());
 
-      a10 = A10.fromJsonUTC(row.assoc());
-      deviceList.add(a10);
-    }
+  //     a10 = A10.fromJsonUTC(row.assoc());
+  //     deviceList.add(a10);
+  //   }
 
-    if (deviceList.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(deviceList);
-    }
+  //   if (deviceList.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(deviceList);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return deviceList;
-  }
+  //   return deviceList;
+  // }
 
-  Future<List<LogData>> selectInSungCenterData(A10 device) async {
-    final conn = await MySQLConnection.createConnection(
-      host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
-      port: 3306,
-      userName: 'optilo',
-      password: 'optilo123',
-      databaseName: 'GEO_3PL',
-    );
-    await conn.connect();
+  // Future<List<LogData>> selectInSungCenterData(A10 device) async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: 'new-geo.ctx65l43l4tv.ap-northeast-2.rds.amazonaws.com',
+  //     port: 3306,
+  //     userName: 'optilo',
+  //     password: 'optilo123',
+  //     databaseName: 'GEO_3PL',
+  //   );
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM GEO.SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime}') AND DATE('${device.endTime}') AND a.datetime BETWEEN '${device.startTime}' AND '${device.endTime}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
+  //   var result = await conn.execute(
+  //       "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM GEO.SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN GEO.INFO_LIMIT c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.timeStamp}') AND DATE('${device.endTime}') AND a.datetime BETWEEN '${device.timeStamp}' AND '${device.endTime}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
 
-    final List<LogData> logDatas = [];
-    LogData logData;
-    for (final row in result.rows) {
-      // print(row.assoc());
+  //   final List<LogData> logDatas = [];
+  //   LogData logData;
+  //   for (final row in result.rows) {
+  //     // print(row.assoc());
 
-      logData = LogData.fromJsonLocal(row.assoc());
-      logDatas.add(logData);
-    }
+  //     logData = LogData.fromJsonLocal(row.assoc());
+  //     logDatas.add(logData);
+  //   }
 
-    if (logDatas.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(logDatas);
-    }
+  //   if (logDatas.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(logDatas);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return logDatas;
-  }
+  //   return logDatas;
+  // }
 
-  Future<List<LogData>> selectMnbCenterData(A10 device) async {
-    final conn = await MySQLConnection.createConnection(
-      host: '175.126.77.180',
-      port: 3306,
-      userName: 'iot_platform',
-      password: 'IotPlatform112!!@',
-      databaseName: 'IOT_PLATFORM',
-    );
+  // Future<List<LogData>> selectMnbCenterData(A10 device) async {
+  //   final conn = await MySQLConnection.createConnection(
+  //     host: '175.126.77.180',
+  //     port: 3306,
+  //     userName: 'iot_platform',
+  //     password: 'IotPlatform112!!@',
+  //     databaseName: 'IOT_PLATFORM',
+  //   );
 
-    await conn.connect();
+  //   await conn.connect();
 
-    var result = await conn.execute(
-        "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.startTime.toUtc()}') AND DATE('${device.endTime.toUtc()}') AND a.datetime BETWEEN '${device.startTime.toUtc()}' AND '${device.endTime.toUtc()}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
+  //   var result = await conn.execute(
+  //       "SELECT DISTINCT b.de_number, TRUNCATE(a.temp, 1) AS temp, TRUNCATE(a.hum, 1) AS hum, DATE_FORMAT(a.datetime, '%Y-%m-%d %H:%i') AS datetime, c.temp_high, c.temp_low, c.hum_high, c.hum_low FROM SENSOR_C a LEFT JOIN CENTER_HISTORY b ON a.de_number = b.de_number LEFT JOIN LIMIT_INFO c ON b.de_location = c.de_location WHERE b.de_number = '${device.deNumber}' AND b.`status` = 1 AND b.record_date BETWEEN DATE('${device.timeStamp.toUtc()}') AND DATE('${device.endTime.toUtc()}') AND a.datetime BETWEEN '${device.timeStamp.toUtc()}' AND '${device.endTime.toUtc()}' AND a.datetime BETWEEN b.start_time AND b.end_time GROUP BY b.seq , YEAR(a.datetime) , MONTH(a.datetime) , DAY(a.datetime) , HOUR(a.datetime) , FLOOR(MINUTE(a.datetime) / 10) * 10 ORDER BY b.seq , a.datetime");
 
-    final List<LogData> logDatas = [];
-    LogData logData;
-    for (final row in result.rows) {
-      // print(row.assoc());
+  //   final List<LogData> logDatas = [];
+  //   LogData logData;
+  //   for (final row in result.rows) {
+  //     // print(row.assoc());
 
-      logData = LogData.fromJsonUTC(row.assoc());
-      logDatas.add(logData);
-    }
+  //     logData = LogData.fromJsonUTC(row.assoc());
+  //     logDatas.add(logData);
+  //   }
 
-    if (logDatas.isEmpty) {
-      // throw WeatherException('Cannot get the location of $city');
-    } else {
-      // print(logDatas);
-    }
+  //   if (logDatas.isEmpty) {
+  //     // throw WeatherException('Cannot get the location of $city');
+  //   } else {
+  //     // print(logDatas);
+  //   }
 
-    conn.close();
+  //   conn.close();
 
-    return logDatas;
-  }
+  //   return logDatas;
+  // }
 
   // Future<void> getCenterInfo(String phoneNumber) async {
   //   final Map<String, dynamic> data = new Map<String, dynamic>();

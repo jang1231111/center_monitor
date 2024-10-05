@@ -8,13 +8,13 @@ class DeviceListRepositories {
   DeviceListRepositories({required this.apiServices});
 
   Future<DeviceListInfo> getDeviceList({
-    required int centerSn,
+    required int id,
     required String company,
     required String token,
   }) async {
-    try {
+    // try {
       List<A10> deviceList;
-      deviceList = await apiServices.getDeviceList(centerSn,company,token);
+      deviceList = await apiServices.getDeviceList(id,company,token);
 
       final DateTime currentTime = DateTime.now();
 
@@ -24,8 +24,8 @@ class DeviceListRepositories {
       print(centerListInfo);
 
       return centerListInfo;
-    } catch (e) {
-      throw CustomError(errMsg: e.toString());
-    }
+    // } catch (e) {
+    //   throw CustomError(errMsg: e.toString());
+    // }
   }
 }

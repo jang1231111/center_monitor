@@ -14,24 +14,24 @@ class DeviceDataProvider with ChangeNotifier {
 
   final DeviceDataRepostiories centerDataRepositories;
 
-  Future<void> getCenterData({
-    required A10 device,
-    required String loginNumber,
-  }) async {
-    _state = _state.copyWith(status: DeviceDataStatus.submitting);
-    notifyListeners();
+  // Future<void> getCenterData({
+  //   required A10 device,
+  //   required String loginNumber,
+  // }) async {
+  //   _state = _state.copyWith(status: DeviceDataStatus.submitting);
+  //   notifyListeners();
 
-    try {
-      final centerDataInfo = await centerDataRepositories.getCenterData(
-          device: device, loginNumber: loginNumber);
-      print('${centerDataInfo}');
-      _state = _state.copyWith(
-          status: DeviceDataStatus.success, centerDataInfo: centerDataInfo);
-      notifyListeners();
-    } on CustomError catch (e) {
-      _state = _state.copyWith(status: DeviceDataStatus.error, error: e);
-      notifyListeners();
-      rethrow;
-    }
-  }
+  //   try {
+  //     final centerDataInfo = await centerDataRepositories.getCenterData(
+  //         device: device, loginNumber: loginNumber);
+  //     print('${centerDataInfo}');
+  //     _state = _state.copyWith(
+  //         status: DeviceDataStatus.success, centerDataInfo: centerDataInfo);
+  //     notifyListeners();
+  //   } on CustomError catch (e) {
+  //     _state = _state.copyWith(status: DeviceDataStatus.error, error: e);
+  //     notifyListeners();
+  //     rethrow;
+  //   }
+  // }
 }

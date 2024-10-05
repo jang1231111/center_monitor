@@ -53,7 +53,7 @@ class _SigninPageState extends State<SigninPage> {
 
     return Container(
       color: Colors.white,
-      child: SafeArea(
+      child: SafeArea( 
         child: PopScope(
           canPop: false,
           child: GestureDetector(
@@ -96,7 +96,7 @@ class _SigninPageState extends State<SigninPage> {
                             border: OutlineInputBorder(),
                             filled: true,
                             labelText: '아이디',
-                            prefixIcon: Icon(Icons.login),
+                            prefixIcon: Icon(Icons.login), 
                           ),
                           validator: (String? value) {
                             // if (value == null || value.trim().isEmpty) {

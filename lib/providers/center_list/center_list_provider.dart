@@ -28,7 +28,7 @@ class CenterListProvider with ChangeNotifier {
       _state = _state.copyWith(
           centerListStatus: CenterListStatus.success,
           centerListInfo: newCenterListState.centerListInfo,
-          selectedCenterInfo: newCenterListState.selectedCenterInfo);
+          loginInfo: newCenterListState.loginInfo);
 
       // print(_state.centerListInfo);
       notifyListeners();
@@ -42,15 +42,15 @@ class CenterListProvider with ChangeNotifier {
 
   void changeToken(String newToken) {
     _state = _state.copyWith(
-        selectedCenterInfo:
-            _state.selectedCenterInfo.copyWith(token: newToken));
+        loginInfo:
+            _state.loginInfo.copyWith(token: newToken));
     notifyListeners();
   }
 
   void changeSelectedCenterInfo(CenterInfo newSelectedCenterInfo) {
     _state = _state.copyWith(
-        selectedCenterInfo: _state.selectedCenterInfo
-            .copyWith(selectedConter: newSelectedCenterInfo));
+        loginInfo: _state.loginInfo
+            .copyWith(selectedCenter: newSelectedCenterInfo));
     notifyListeners();
   }
 }

@@ -16,3 +16,4 @@ class CustomError {
   @override
   int get hashCode => errMsg.hashCode;
 }
+ 

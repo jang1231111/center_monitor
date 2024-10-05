@@ -24,123 +24,132 @@ class DeviceListInfo {
 }
 
 class A10 {
+  final int id;
+  final int parentCenterSn;
+  final int centerSn;
+  final String centerNm;
   final String deNumber;
-  final String centerSn;
   final String deName;
-  final String temp;
-  final String hum;
-  final String battery;
   final String deLocation;
-  final String tempLow;
-  final String tempHigh;
-  final String humLow;
-  final String humHigh;
-  final DateTime datetime;
-  final DateTime startTime;
-  final DateTime endTime;
+  final double temp;
+  final double hum;
+  final int battery;
+  final DateTime timeStamp;
+  final String? description;
   final double positionX;
   final double positionY;
+  final double tempLow;
+  final double tempHigh;
+  final double humLow;
+  final double humHigh;
 
   factory A10.fromJsonLocal(Map<String, dynamic> json) {
+    print(json.toString());
     return A10(
-      deNumber: json['de_number'],
-      centerSn: json['center_sn'],
-      deName: json['de_name'],
+      id: json['id'],
+      parentCenterSn:  json['parentCenterSn'],
+      centerSn: json['centerSn'],
+      centerNm: json['centerNm'],
+      deNumber: json['deNumber'],
+      deName: json['deName'],
+      deLocation: json['deLocation'],
       temp: json['temp'],
       hum: json['hum'],
       battery: json['battery'],
-      deLocation: json['de_location'],
-      tempLow: json['temp_low'],
-      tempHigh: json['temp_high'],
-      humLow: json['hum_low'],
-      humHigh: json['hum_high'],
-      datetime: DateTime.parse(json['datetime']),
-      startTime: DateTime.parse(json['start_time']),
-      endTime: DateTime.parse(json['end_time']),
-      positionX: double.parse(json['position_x']),
-      positionY: double.parse(json['position_y']),
+      timeStamp: DateTime.parse(json['timestamp']),
+      description: json['description'],
+      positionX: json['positionX'],
+      positionY: json['positionY'],
+      tempLow: json['tempLow'],
+      tempHigh: json['tempHigh'],
+      humLow: json['humLow'],
+      humHigh: json['humHigh'],
     );
   }
 
-  factory A10.fromJsonUTC(Map<String, dynamic> json) {
-    return A10(
-      deNumber: json['de_number'],
-      centerSn: json['center_sn'],
-      deName: json['de_name'],
-      temp: json['temp'],
-      hum: json['hum'],
-      battery: json['battery'],
-      deLocation: json['de_location'],
-      tempLow: json['temp_low'],
-      tempHigh: json['temp_high'],
-      humLow: json['hum_low'],
-      humHigh: json['hum_high'],
-      datetime: DateTime.parse(json['datetime'] + 'Z').toLocal(),
-      startTime: DateTime.parse(json['start_time'] + 'Z').toLocal(),
-      endTime: DateTime.parse(json['end_time'] + 'Z').toLocal(),
-      positionX: double.parse(json['position_x']),
-      positionY: double.parse(json['position_y']),
-    );
-  }
+  // factory A10.fromJsonUTC(Map<String, dynamic> json) {
+  //   return A10(
+  //     deNumber: json['deNumber'],
+  //     centerSn: json['centerSn'],
+  //     deName: json['deName'],
+  //     temp: json['temp'],
+  //     hum: json['hum'],
+  //     battery: json['battery'],
+  //     deLocation: json['deLocation'],
+  //     tempLow: json['tempLow'],
+  //     tempHigh: json['tempHigh'],
+  //     humLow: json['humLow'],
+  //     humHigh: json['humHigh'],
+  //     timeStamp: DateTime.parse(json['start_time'] + 'Z').toLocal(),
+  //     positionX: double.parse(json['positionX']),
+  //     positionY: double.parse(json['positionY']),
+  //   );
+  // }
 
   A10(
-      {required this.deNumber,
+      {required this.id,
+      required this.parentCenterSn,
       required this.centerSn,
+      required this.centerNm,
+      required this.deNumber,
       required this.deName,
+      required this.deLocation,
       required this.temp,
       required this.hum,
       required this.battery,
-      required this.deLocation,
+      required this.timeStamp,
+      required this.description,
+      required this.positionX,
+      required this.positionY,
       required this.tempLow,
       required this.tempHigh,
       required this.humLow,
-      required this.humHigh,
-      required this.datetime,
-      required this.startTime,
-      required this.endTime,
-      required this.positionX,
-      required this.positionY});
+      required this.humHigh});
 
   A10 copyWith({
+    int? id,
+    int? parentCenterSn,
+    int? centerSn,
+    String? centerNn,
     String? deNumber,
-    String? centerSn,
     String? deName,
-    String? temp,
-    String? hum,
-    String? battery,
     String? deLocation,
-    String? tempLow,
-    String? tempHigh,
-    String? humLow,
-    String? humHigh,
-    DateTime? datetime,
-    DateTime? startTime,
-    DateTime? endTime,
+    double? temp,
+    double? hum,
+    int? battery,
+    DateTime? timeStamp,
+    String? description,
     double? positionX,
     double? positionY,
+    double? tempLow,
+    double? tempHigh,
+    double? humLow,
+    double? humHigh,
   }) {
     return A10(
-      deNumber: deNumber ?? this.deNumber,
+      id: id ?? this.id,
+      parentCenterSn: parentCenterSn ?? this.parentCenterSn,
       centerSn: centerSn ?? this.centerSn,
+      centerNm: centerNn ?? this.centerNm,
+      deNumber: deNumber ?? this.deNumber,
       deName: deName ?? this.deName,
+      deLocation: deLocation ?? this.deLocation,
       temp: temp ?? this.temp,
       hum: hum ?? this.hum,
       battery: battery ?? this.battery,
-      deLocation: deLocation ?? this.deLocation,
+      timeStamp: timeStamp ?? this.timeStamp,
+      description: description ?? this.description,
+      positionX: positionX ?? this.positionX,
+      positionY: positionY ?? this.positionY,
       tempLow: tempLow ?? this.tempLow,
       tempHigh: tempHigh ?? this.tempHigh,
       humLow: humLow ?? this.humLow,
       humHigh: humHigh ?? this.humHigh,
-      datetime: datetime ?? this.datetime,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      positionX: positionX ?? this.positionX,
-      positionY: positionY ?? this.positionY,
     );
   }
 
   @override
   String toString() {
-    return 'A10(deNumber: $deNumber, centerSn: $centerSn, deName: $deName, temp: $temp, hum: $hum, battery: $battery, deLocation: $deLocation, tempLow: $tempLow, tempHigh: $tempHigh, humLow: $humLow, humHigh: $humHigh, datetime: $datetime, startTime: $startTime, endTime: $endTime, positionX: $positionX, positionY: $positionY)';
+    return 'A10(id: $id, parentCenterSn: $parentCenterSn, centerSn: $centerSn, centerNn: $centerNm, deNumber: $deNumber, deName: $deName, deLocation: $deLocation, temp: $temp, hum: $hum, battery: $battery, timeStamp: $timeStamp, description: $description, positionX: $positionX, positionY: $positionY, tempLow: $tempLow, tempHigh: $tempHigh, humLow: $humLow, humHigh: $humHigh)';
   }
 }

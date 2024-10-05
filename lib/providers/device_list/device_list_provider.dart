@@ -16,7 +16,7 @@ class DeviceListProvider with ChangeNotifier {
   final DeviceListRepositories centerListRepositories;
 
   Future<void> getDeviceList({
-    required int centerSn,
+    required int id,
     required String company,
     required String token,
   }) async {
@@ -25,7 +25,7 @@ class DeviceListProvider with ChangeNotifier {
 
     try {
       final centerListInfo = await centerListRepositories.getDeviceList(
-          centerSn: centerSn,company: company,token: token);
+          id: id,company: company,token: token);
       _state = _state.copyWith(
           centerListStatus: DeviceListStatus.success,
           centerListInfo: centerListInfo);
@@ -44,83 +44,83 @@ class DeviceListProvider with ChangeNotifier {
  * [type] = 0, startTime 
  * [type] = 1, endTime
  */
-  void modifyDate({
-    required A10 device,
-    required int type,
-    required DateTime dateTime,
-  }) {
-    final newDevices = _state.centerListInfo.devices;
+  // void modifyDate({
+  //   required A10 device,
+  //   required int type,
+  //   required DateTime dateTime,
+  // }) {
+  //   final newDevices = _state.centerListInfo.devices;
 
-    /// StartTime
-    if (type == 0) {
-      for (int i = 0; i < newDevices.length; i++) {
-        if (newDevices[i].deNumber == device.deNumber) {
-          newDevices[i] = newDevices[i].copyWith(startTime: dateTime);
-          break;
-        }
-      }
-    }
+  //   /// StartTime
+  //   if (type == 0) {
+  //     for (int i = 0; i < newDevices.length; i++) {
+  //       if (newDevices[i].deNumber == device.deNumber) {
+  //         newDevices[i] = newDevices[i].copyWith(startTime: dateTime);
+  //         break;
+  //       }
+  //     }
+  //   }
 
-    /// EndTime
-    else if (type == 1) {
-      for (int i = 0; i < newDevices.length; i++) {
-        if (newDevices[i].deNumber == device.deNumber) {
-          newDevices[i] = newDevices[i].copyWith(endTime: dateTime);
-          break;
-        }
-      }
-    }
+  //   /// EndTime
+  //   else if (type == 1) {
+  //     for (int i = 0; i < newDevices.length; i++) {
+  //       if (newDevices[i].deNumber == device.deNumber) {
+  //         newDevices[i] = newDevices[i].copyWith(endTime: dateTime);
+  //         break;
+  //       }
+  //     }
+  //   }
 
-    DeviceListInfo centerListInfo =
-        _state.centerListInfo.copyWith(devices: newDevices);
+  //   DeviceListInfo centerListInfo =
+  //       _state.centerListInfo.copyWith(devices: newDevices);
 
-    _state = _state.copyWith(centerListInfo: centerListInfo);
-    notifyListeners();
-  }
+  //   _state = _state.copyWith(centerListInfo: centerListInfo);
+  //   notifyListeners();
+  // }
 
   /**
  * [type] = 0, startTime 
  * [type] = 1, endTime
  */
-  void modifyTime({
-    required A10 device,
-    required int type,
-    required TimeOfDay time,
-  }) {
-    final newDevices = _state.centerListInfo.devices;
+  // void modifyTime({
+  //   required A10 device,
+  //   required int type,
+  //   required TimeOfDay time,
+  // }) {
+  //   final newDevices = _state.centerListInfo.devices;
 
-    /// StartTime
-    if (type == 0) {
-      for (int i = 0; i < newDevices.length; i++) {
-        if (newDevices[i].deNumber == device.deNumber) {
-          final startTime = newDevices[i].startTime;
-          final newStartTime = DateTime(startTime.year, startTime.month,
-              startTime.day, time.hour, time.minute);
+  //   /// StartTime
+  //   if (type == 0) {
+  //     for (int i = 0; i < newDevices.length; i++) {
+  //       if (newDevices[i].deNumber == device.deNumber) {
+  //         final startTime = newDevices[i].timeStamp;
+  //         final newStartTime = DateTime(startTime.year, startTime.month,
+  //             startTime.day, time.hour, time.minute);
 
-          newDevices[i] = newDevices[i].copyWith(startTime: newStartTime);
-          break;
-        }
-      }
-    }
+  //         newDevices[i] = newDevices[i].copyWith(startTime: newStartTime);
+  //         break;
+  //       }
+  //     }
+  //   }
 
-    /// EndTime
-    else if (type == 1) {
-      for (int i = 0; i < newDevices.length; i++) {
-        if (newDevices[i].deNumber == device.deNumber) {
-          final endTime = newDevices[i].endTime;
-          final newEndTime = DateTime(
-              endTime.year, endTime.month, endTime.day, time.hour, time.minute);
+  //   /// EndTime
+  //   else if (type == 1) {
+  //     for (int i = 0; i < newDevices.length; i++) {
+  //       if (newDevices[i].deNumber == device.deNumber) {
+  //         final endTime = newDevices[i].endTime;
+  //         final newEndTime = DateTime(
+  //             endTime.year, endTime.month, endTime.day, time.hour, time.minute);
 
-          newDevices[i] = newDevices[i].copyWith(startTime: newEndTime);
-          break;
-        }
-      }
-    }
+  //         newDevices[i] = newDevices[i].copyWith(startTime: newEndTime);
+  //         break;
+  //       }
+  //     }
+  //   }
 
-    DeviceListInfo centerListInfo =
-        _state.centerListInfo.copyWith(devices: newDevices);
+  //   DeviceListInfo centerListInfo =
+  //       _state.centerListInfo.copyWith(devices: newDevices);
 
-    _state = _state.copyWith(centerListInfo: centerListInfo);
-    notifyListeners();
-  }
+  //   _state = _state.copyWith(centerListInfo: centerListInfo);
+  //   notifyListeners();
+  // }
 }

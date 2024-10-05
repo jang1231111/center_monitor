@@ -109,9 +109,9 @@ class dataChart extends StatelessWidget {
 
     return SfCartesianChart(
       primaryYAxis: NumericAxis(
-          maximum: double.parse(device.tempHigh) + 10,
+          maximum: device.tempHigh + 10,
           interval: 5,
-          minimum: double.parse(device.tempLow) - 10,
+          minimum: device.tempLow - 10,
           plotBands: <PlotBand>[
             PlotBand(
               horizontalTextAlignment: TextAnchor.end,
@@ -120,8 +120,8 @@ class dataChart extends StatelessWidget {
               textStyle: TextStyle(
                   color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
               isVisible: true,
-              start: double.parse(device.tempLow),
-              end: double.parse(device.tempLow),
+              start: device.tempLow,
+              end: device.tempLow,
               borderWidth: 2,
               borderColor: Colors.red,
             ),
@@ -132,8 +132,8 @@ class dataChart extends StatelessWidget {
               textStyle: TextStyle(
                   color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
               isVisible: true,
-              start: double.parse(device.tempHigh),
-              end: double.parse(device.tempHigh),
+              start: device.tempHigh,
+              end: device.tempHigh,
               borderWidth: 2,
               borderColor: Colors.red,
             )
@@ -172,8 +172,8 @@ class logInformation extends StatefulWidget {
 
 class _logInformationState extends State<logInformation> {
   late A10 device = ModalRoute.of(context)!.settings.arguments as A10;
-  late DateTime startDateTime = device.startTime;
-  late DateTime endDateTime = device.endTime;
+  late DateTime startDateTime = device.timeStamp;
+  // late DateTime endDateTime = device.endTime;
 
   @override
   void initState() {
@@ -181,8 +181,8 @@ class _logInformationState extends State<logInformation> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         // device = ModalRoute.of(context)!.settings.arguments as A10;
-        startDateTime = device.startTime;
-        endDateTime = device.endTime;
+        startDateTime = device.timeStamp;
+        // endDateTime = device.endTime;
       },
     );
   }
@@ -309,50 +309,53 @@ class _logInformationState extends State<logInformation> {
                                 flex: 1,
                                 child: Padding(
                                   padding: const EdgeInsets.all(2.0),
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      await showDatePicker(
-                                        context: context,
-                                        initialDate: endDateTime,
-                                        firstDate: DateTime.now()
-                                            .subtract(Duration(days: 30)),
-                                        lastDate: DateTime.now(),
-                                      ).then(
-                                        (DateTime? endDate) {
-                                          if (endDate != null) {
-                                            endDateTime = endDate;
-                                          }
-                                        },
-                                      );
+                                  // child: 
+                                  // ElevatedButton(
+                                  //   onPressed: () async {
+                                  //     await showDatePicker(
+                                  //       context: context,
+                                  //       // initialDate: endDateTime,
+                                  //       firstDate: DateTime.now()
+                                  //           .subtract(Duration(days: 30)),
+                                  //       lastDate: DateTime.now(),
+                                  //     ).then(
+                                  //       (DateTime? endDate) {
+                                  //         // if (endDate != null) {
+                                  //         //   endDateTime = endDate;
+                                  //         // }
+                                  //       },
+                                  //     );
 
-                                      await showTimePicker(
-                                        context: context,
-                                        initialTime:
-                                            TimeOfDay(hour: 22, minute: 10),
-                                      ).then(
-                                        (TimeOfDay? endDate) {
-                                          if (endDate != null) {
-                                            final newEndTime = DateTime(
-                                                endDateTime.year,
-                                                endDateTime.month,
-                                                endDateTime.day,
-                                                endDate.hour,
-                                                endDate.minute);
+                                  //     await showTimePicker(
+                                  //       context: context,
+                                  //       initialTime:
+                                  //           TimeOfDay(hour: 22, minute: 10),
+                                  //     ).then(
+                                  //       (TimeOfDay? endDate) {
+                                  //         if (endDate != null) {
+                                  //           // final newEndTime = DateTime(
+                                  //           //     endDateTime.year,
+                                  //           //     endDateTime.month,
+                                  //           //     endDateTime.day,
+                                  //           //     endDate.hour,
+                                  //           //     endDate.minute);
 
-                                            endDateTime = newEndTime;
-                                          }
-                                          setState(() {});
-                                        },
-                                      );
-                                    },
-                                    child: Text(
-                                      DateFormat("MM월 dd일 HH:mm")
-                                          .format(endDateTime),
-                                      textAlign: TextAlign.center,
-                                      style: subTitle(context),
-                                    ),
-                                  ),
-                                )),
+                                  //           // endDateTime = newEndTime;
+                                  //         }
+                                  //         setState(() {});
+                                  //       },
+                                  //     );
+                                  //   },
+                                  //   // child: 
+                                  //   // Text(
+                                  //     // DateFormat("MM월 dd일 HH:mm")
+                                  //     //     .format(endDateTime),
+                                  //   //   textAlign: TextAlign.center,
+                                  //   //   style: subTitle(context),
+                                  //   // ),
+                                  // ),
+                                ),
+                                ),
                           ],
                         ),
                       ),
@@ -471,16 +474,16 @@ class _logInformationState extends State<logInformation> {
                         ),
                       ),
                       onPressed: () {
-                        A10 newDevice = device.copyWith(
-                            startTime: startDateTime, endTime: endDateTime);
+                        // A10 newDevice = device.copyWith(
+                        //     startTime: startDateTime, endTime: endDateTime);
 
                         String _loginNumber = context
                             .read<LoginNumberProvider>()
                             .state
                             .phoneNumber;
                         try {
-                          context.read<DeviceDataProvider>().getCenterData(
-                              device: newDevice, loginNumber: _loginNumber);
+                          // context.read<DeviceDataProvider>().getCenterData(
+                          //     device: newDevice, loginNumber: _loginNumber);
                         } catch (e) {
                           errorDialog(context, e.toString());
                         }

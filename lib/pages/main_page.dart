@@ -252,7 +252,7 @@ class CenterPlan extends StatelessWidget {
                                 Image.asset('assets/images/ic_humidity.png',
                                     width: 10, height: 10, fit: BoxFit.fill),
                                 Text(
-                                  '${double.parse(device.hum).floor()}',
+                                  '${device.hum.floor()}',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 10),
                                 ),
@@ -626,12 +626,12 @@ class DeviceItem extends StatelessWidget {
                                                 .state
                                                 .phoneNumber;
                                             try {
-                                              await context
-                                                  .read<DeviceDataProvider>()
-                                                  .getCenterData(
-                                                      device: device,
-                                                      loginNumber:
-                                                          _loginNumber);
+                                              // await context
+                                              //     .read<DeviceDataProvider>()
+                                              //     .getCenterData(
+                                              //         device: device,
+                                              //         loginNumber:
+                                              //             _loginNumber);
                                               Navigator.pop(context);
                                               Navigator.pushNamed(
                                                   context, DetailPage.routeName,
@@ -713,7 +713,7 @@ class DeviceItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               getbatteryImage(
-                                  context, int.parse(device.battery)),
+                                  context, device.battery),
                               Text(
                                 '${device.battery}%',
                                 style: Temp(context),

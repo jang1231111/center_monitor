@@ -98,13 +98,15 @@ centerButton(BuildContext context, CenterInfo center) {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [mainbox()],
       ),
-      child: TextButton(
+      child: TextButton( 
         onPressed: () async {
-          final selectedInfo =
-              context.read<CenterListProvider>().state.selectedCenterInfo;
+          context.read<CenterListProvider>().changeSelectedCenterInfo(center);
 
-          await context.read<DeviceListProvider>().getDeviceList( 
-              centerSn: center.centerSn, 
+          final selectedInfo =
+              context.read<CenterListProvider>().state.loginInfo; 
+
+          await context.read<DeviceListProvider>().getDeviceList(
+              id: center.id,
               token: selectedInfo.token,
               company: selectedInfo.company);
 
