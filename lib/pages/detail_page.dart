@@ -1,11 +1,12 @@
 import 'package:center_monitor/constants/style.dart';
+import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/device/device_logdata_info.dart';
-import 'package:center_monitor/providers/device_data/device_data_provider.dart';
-import 'package:center_monitor/providers/device_data/device_data_state.dart';
+import 'package:center_monitor/providers/center_list/center_list_provider.dart';
+import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
+import 'package:center_monitor/providers/device_log_data/device_log_data_state.dart';
 import 'package:center_monitor/providers/device_report/device_report_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_state.dart';
-import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,7 +48,7 @@ class DetailPage extends StatelessWidget {
                   dataChart(),
                   SizedBox(
                     height: 10,
-                  ),
+                  ), 
                   Text(
                     '온도 데이터 상세 정보',
                     style: TextStyle(
@@ -87,8 +88,8 @@ class DetailHeader extends StatelessWidget {
           '상세 정보',
           style: TextStyle(fontSize: 25.0),
         ),
-        Text(
-          '${device.deName}',
+        Text( 
+          '${device.centerNm} - ${device.deName}',
           style: TextStyle(
             fontSize: 15.0,
             color: Color.fromARGB(255, 241, 140, 31),
@@ -105,7 +106,8 @@ class dataChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     A10 device = ModalRoute.of(context)!.settings.arguments as A10;
-    CenterDataState centerDataProv = context.watch<DeviceDataProvider>().state;
+    DeviceLogDataState centerDataProv =
+        context.watch<DeviceLogDataProvider>().state;
 
     return SfCartesianChart(
       primaryYAxis: NumericAxis(
@@ -153,9 +155,9 @@ class dataChart extends StatelessWidget {
       series: <LineSeries<LogData, DateTime>>[
         LineSeries<LogData, DateTime>(
           // Bind data source
-          dataSource: centerDataProv.centerDataInfo.logDatas,
+          dataSource: centerDataProv.deviceLogDataInfo.logDatas,
           xValueMapper: (LogData logData, _) => logData.dateTime,
-          yValueMapper: (LogData logData, _) => double.parse(logData.temp),
+          yValueMapper: (LogData logData, _) => logData.temp,
           name: '온도 데이터',
         )
       ],
@@ -172,8 +174,8 @@ class logInformation extends StatefulWidget {
 
 class _logInformationState extends State<logInformation> {
   late A10 device = ModalRoute.of(context)!.settings.arguments as A10;
-  late DateTime startDateTime = device.timeStamp;
-  // late DateTime endDateTime = device.endTime;
+  late DateTime startDateTime = device.startTime.toLocal();
+  late DateTime endDateTime = device.timeStamp.toLocal();
 
   @override
   void initState() {
@@ -181,8 +183,8 @@ class _logInformationState extends State<logInformation> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         // device = ModalRoute.of(context)!.settings.arguments as A10;
-        startDateTime = device.timeStamp;
-        // endDateTime = device.endTime;
+        startDateTime = device.startTime;
+        endDateTime = device.timeStamp;
       },
     );
   }
@@ -191,9 +193,10 @@ class _logInformationState extends State<logInformation> {
   Widget build(BuildContext context) {
     DeviceReportState centerReportState =
         context.watch<DeviceReportProvider>().state;
-    CenterDataState centerDataProv = context.watch<DeviceDataProvider>().state;
+    DeviceLogDataState centerDataProv =
+        context.watch<DeviceLogDataProvider>().state;
 
-    return centerDataProv.centerDataStatus == DeviceDataStatus.submitting
+    return centerDataProv.deviceLogDataStatus == DeviceLogDataStatus.submitting
         ? Center(
             child: CircularProgressIndicator(),
           )
@@ -306,56 +309,54 @@ class _logInformationState extends State<logInformation> {
                                   style: subTitle(context),
                                 )),
                             Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  // child: 
-                                  // ElevatedButton(
-                                  //   onPressed: () async {
-                                  //     await showDatePicker(
-                                  //       context: context,
-                                  //       // initialDate: endDateTime,
-                                  //       firstDate: DateTime.now()
-                                  //           .subtract(Duration(days: 30)),
-                                  //       lastDate: DateTime.now(),
-                                  //     ).then(
-                                  //       (DateTime? endDate) {
-                                  //         // if (endDate != null) {
-                                  //         //   endDateTime = endDate;
-                                  //         // }
-                                  //       },
-                                  //     );
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: endDateTime,
+                                      firstDate: DateTime.now()
+                                          .subtract(Duration(days: 30)),
+                                      lastDate: DateTime.now(),
+                                    ).then(
+                                      (DateTime? endDate) {
+                                        if (endDate != null) {
+                                          endDateTime = endDate;
+                                        }
+                                      },
+                                    );
 
-                                  //     await showTimePicker(
-                                  //       context: context,
-                                  //       initialTime:
-                                  //           TimeOfDay(hour: 22, minute: 10),
-                                  //     ).then(
-                                  //       (TimeOfDay? endDate) {
-                                  //         if (endDate != null) {
-                                  //           // final newEndTime = DateTime(
-                                  //           //     endDateTime.year,
-                                  //           //     endDateTime.month,
-                                  //           //     endDateTime.day,
-                                  //           //     endDate.hour,
-                                  //           //     endDate.minute);
+                                    await showTimePicker(
+                                      context: context,
+                                      initialTime:
+                                          TimeOfDay(hour: 22, minute: 10),
+                                    ).then(
+                                      (TimeOfDay? endDate) {
+                                        if (endDate != null) {
+                                          final newEndTime = DateTime(
+                                              endDateTime.year,
+                                              endDateTime.month,
+                                              endDateTime.day,
+                                              endDate.hour,
+                                              endDate.minute);
 
-                                  //           // endDateTime = newEndTime;
-                                  //         }
-                                  //         setState(() {});
-                                  //       },
-                                  //     );
-                                  //   },
-                                  //   // child: 
-                                  //   // Text(
-                                  //     // DateFormat("MM월 dd일 HH:mm")
-                                  //     //     .format(endDateTime),
-                                  //   //   textAlign: TextAlign.center,
-                                  //   //   style: subTitle(context),
-                                  //   // ),
-                                  // ),
+                                          endDateTime = newEndTime;
+                                        }
+                                        setState(() {});
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    DateFormat("MM월 dd일 HH:mm")
+                                        .format(endDateTime),
+                                    textAlign: TextAlign.center,
+                                    style: subTitle(context),
+                                  ),
                                 ),
-                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -475,16 +476,28 @@ class _logInformationState extends State<logInformation> {
                       ),
                       onPressed: () {
                         // A10 newDevice = device.copyWith(
+                        //   startTime: DateTime.utc(device.timeStamp.year,
+                        //       device.timeStamp.month, device.timeStamp.day),
+                        // );
+
+                        // A10 newDevice = device.copyWith(
                         //     startTime: startDateTime, endTime: endDateTime);
 
-                        String _loginNumber = context
-                            .read<LoginNumberProvider>()
-                            .state
-                            .phoneNumber;
+                        final selectedCenterInfo =
+                            context.read<CenterListProvider>().state.loginInfo;
+
                         try {
-                          // context.read<DeviceDataProvider>().getCenterData(
-                          //     device: newDevice, loginNumber: _loginNumber);
-                        } catch (e) {
+                          A10 newDevice = device.copyWith(
+                              startTime: startDateTime.toUtc(),
+                              timeStamp: endDateTime.toUtc());
+
+                          context
+                              .read<DeviceLogDataProvider>()
+                              .getDeviceLogData(
+                                  device: newDevice,
+                                  token: selectedCenterInfo.token,
+                                  company: selectedCenterInfo.company);
+                        } on CustomError catch (e) {
                           errorDialog(context, e.toString());
                         }
                       },

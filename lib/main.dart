@@ -4,7 +4,7 @@ import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/pages/signin_page.dart';
 import 'package:center_monitor/pages/splash_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/device_data/device_data_provider.dart';
+import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_provider.dart';
@@ -64,16 +64,16 @@ class MyApp extends StatelessWidget {
             centerListRepositories: context.read<DeviceListRepositories>(),
           ),
         ),
-        ChangeNotifierProvider<DeviceDataProvider>(
-          create: (context) => DeviceDataProvider(
+        ChangeNotifierProvider<DeviceLogDataProvider>(
+          create: (context) => DeviceLogDataProvider(
             centerDataRepositories: context.read<DeviceDataRepostiories>(),
           ),
         ),
         ChangeNotifierProvider<DeviceFilterProvider>(
           create: (context) => DeviceFilterProvider(),
         ),
-        ProxyProvider<DeviceDataProvider, DeviceReportProvider>(
-          update: (BuildContext context, DeviceDataProvider centerDataProvider,
+        ProxyProvider<DeviceLogDataProvider, DeviceReportProvider>(
+          update: (BuildContext context, DeviceLogDataProvider centerDataProvider,
                   DeviceReportProvider? _) =>
               DeviceReportProvider(centerDataProvider: centerDataProvider),
         ),

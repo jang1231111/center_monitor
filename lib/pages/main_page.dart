@@ -5,7 +5,7 @@ import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/filter/device_filter.dart';
 import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/device_data/device_data_provider.dart';
+import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
@@ -217,7 +217,7 @@ class CenterPlan extends StatelessWidget {
               color: Colors.white,
               // child: Image.asset('assets/images/center.png'),
               child: Image.network(
-                '$khttpUri$company$centerPlanUri1$company/${centerSn}$centerPlanUri2',
+                '$khttpUri$company$kcenterPlanUri1$company/${centerSn}$kcenterPlanUri2',
                 fit: BoxFit.fill,
                 width: 400,
                 height: 300,
@@ -570,7 +570,7 @@ class DeviceItem extends StatelessWidget {
                                 );
                               },
                               child: Text(
-                                device.deName,
+                                '${device.centerNm} - ${device.deName}',
                                 style: Locate(context),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -617,21 +617,32 @@ class DeviceItem extends StatelessWidget {
                                         ),
                                         TextButton(
                                           onPressed: () async {
-                                            String _loginNumber = context
-                                                .read<LoginNumberProvider>()
+                                            final selectedCenterInfo = context
+                                                .read<CenterListProvider>()
                                                 .state
-                                                .phoneNumber;
+                                                .loginInfo;
+
                                             try {
-                                              // await context
-                                              //     .read<DeviceDataProvider>()
-                                              //     .getCenterData(
-                                              //         device: device,
-                                              //         loginNumber:
-                                              //             _loginNumber);
+                                              A10 newDevice = device.copyWith(
+                                                startTime: DateTime.utc(
+                                                    device.timeStamp.year,
+                                                    device.timeStamp.month,
+                                                    device.timeStamp.day),
+                                              );
+
+                                              await context
+                                                  .read<DeviceLogDataProvider>()
+                                                  .getDeviceLogData(
+                                                      device: newDevice,
+                                                      token: selectedCenterInfo
+                                                          .token,
+                                                      company:
+                                                          selectedCenterInfo
+                                                              .company);
                                               Navigator.pop(context);
                                               Navigator.pushNamed(
                                                   context, DetailPage.routeName,
-                                                  arguments: device.copyWith());
+                                                  arguments: newDevice.copyWith());
                                             } on CustomError catch (e) {
                                               errorDialog(
                                                   context, e.toString());

@@ -5,7 +5,6 @@ import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/device/device_logdata_info.dart';
 import 'package:center_monitor/serivices/http_error_handler.dart';
 import 'package:http/http.dart' as http;
-import 'package:mysql_client/mysql_client.dart';
 
 class ApiServices {
   final http.Client httpClient;
@@ -82,7 +81,7 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
-    print('centerList Uri $uri');
+    // print('centerList Uri $uri');
 
     try {
       final http.Response response = await client.post(uri, headers: {
@@ -132,7 +131,7 @@ class ApiServices {
       final utfResponseBody = utf8.decode(response.bodyBytes);
       final List<dynamic> responseBody = json.decode(utfResponseBody);
 
-      print('getDeviceList $responseBody');
+      // print('getDeviceList $responseBody'); 
 
       final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
       return deviceList;
@@ -141,6 +140,61 @@ class ApiServices {
     }
   }
 
+  Future<List<LogData>> getDeviceLogData(
+    A10 selectedDevice,
+    String company,
+    String token,
+  ) async {
+    var client = http.Client();
+    var uri = Uri.parse('$khttpUri$company$kdeviceDataUri');
+
+    // print('getDeviceLogData Uri : ${uri.toString()}');
+
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+
+    data['id'] = selectedDevice.id;
+    data["deNumber"] = selectedDevice.deNumber;
+    data["startTime"] =selectedDevice.startTime.toString().replaceAll(" ", "T");
+    data["endTime"] = selectedDevice.timeStamp.toString().replaceAll(" ", "T");;
+    data["dataType"] =  "C";
+    data["timezone"] = "string";
+    data["timeBased"] = true; 
+
+    print(' data ${data}');
+
+    try {
+      final http.Response response = await client.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(data));
+
+      if (response.statusCode != 200) {
+        throw Exception(httpErrorHandler(response));
+      }
+
+      final utfResponseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> responseBody = json.decode(utfResponseBody);
+
+      // print('getDeviceLogData $responseBody');
+
+      final logDatas = responseBody.map((i) => LogData.fromJsonLocal(i)).toList();
+      return logDatas;
+    } catch (e) {
+      rethrow;
+    }
+  }
+// {
+//   "id": 0,
+//   "deNumber": "string",
+//   "startTime": "2024-10-05T11:17:44.957Z",
+//   "endTime": "2024-10-05T11:17:44.957Z",
+//   "dataType": "C",
+//   "timezone": "string",
+//   "timeBased": true
+// }
   /// 인성 1501 , 보령 1601
   /// MNB 1101 , BCS 1301
 

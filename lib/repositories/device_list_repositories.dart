@@ -21,7 +21,7 @@ class DeviceListRepositories {
       DeviceListInfo centerListInfo =
           DeviceListInfo(devices: deviceList, updateTime: currentTime);
 
-      print(centerListInfo);
+      // print(centerListInfo);
 
       return centerListInfo;
     } catch (e) {

@@ -34,6 +34,7 @@ class A10 {
   final double temp;
   final double hum;
   final int battery;
+  final DateTime startTime;
   final DateTime timeStamp;
   final String? description;
   final double positionX;
@@ -43,11 +44,33 @@ class A10 {
   final double humLow;
   final double humHigh;
 
+  A10({
+    required this.id,
+    required this.parentCenterSn,
+    required this.centerSn,
+    required this.centerNm,
+    required this.deNumber,
+    required this.deName,
+    required this.deLocation,
+    required this.temp,
+    required this.hum,
+    required this.battery,
+    required this.startTime,
+    required this.timeStamp,
+    required this.description,
+    required this.positionX,
+    required this.positionY,
+    required this.tempLow,
+    required this.tempHigh,
+    required this.humLow,
+    required this.humHigh,
+  });
+
   factory A10.fromJsonLocal(Map<String, dynamic> json) {
-    print(json.toString());
+    // print(json.toString());
     return A10(
       id: json['id'],
-      parentCenterSn:  json['parentCenterSn'],
+      parentCenterSn: json['parentCenterSn'],
       centerSn: json['centerSn'],
       centerNm: json['centerNm'],
       deNumber: json['deNumber'],
@@ -56,6 +79,7 @@ class A10 {
       temp: json['temp'],
       hum: json['hum'],
       battery: json['battery'],
+      startTime: DateTime.now(),
       timeStamp: DateTime.parse(json['timestamp']),
       description: json['description'],
       positionX: json['positionX'],
@@ -86,37 +110,18 @@ class A10 {
   //   );
   // }
 
-  A10(
-      {required this.id,
-      required this.parentCenterSn,
-      required this.centerSn,
-      required this.centerNm,
-      required this.deNumber,
-      required this.deName,
-      required this.deLocation,
-      required this.temp,
-      required this.hum,
-      required this.battery,
-      required this.timeStamp,
-      required this.description,
-      required this.positionX,
-      required this.positionY,
-      required this.tempLow,
-      required this.tempHigh,
-      required this.humLow,
-      required this.humHigh});
-
   A10 copyWith({
     int? id,
     int? parentCenterSn,
     int? centerSn,
-    String? centerNn,
+    String? centerNm,
     String? deNumber,
     String? deName,
     String? deLocation,
     double? temp,
     double? hum,
     int? battery,
+    DateTime? startTime,
     DateTime? timeStamp,
     String? description,
     double? positionX,
@@ -130,13 +135,14 @@ class A10 {
       id: id ?? this.id,
       parentCenterSn: parentCenterSn ?? this.parentCenterSn,
       centerSn: centerSn ?? this.centerSn,
-      centerNm: centerNn ?? this.centerNm,
+      centerNm: centerNm ?? this.centerNm,
       deNumber: deNumber ?? this.deNumber,
       deName: deName ?? this.deName,
       deLocation: deLocation ?? this.deLocation,
       temp: temp ?? this.temp,
       hum: hum ?? this.hum,
       battery: battery ?? this.battery,
+      startTime: startTime ?? this.startTime,
       timeStamp: timeStamp ?? this.timeStamp,
       description: description ?? this.description,
       positionX: positionX ?? this.positionX,
@@ -150,6 +156,6 @@ class A10 {
 
   @override
   String toString() {
-    return 'A10(id: $id, parentCenterSn: $parentCenterSn, centerSn: $centerSn, centerNn: $centerNm, deNumber: $deNumber, deName: $deName, deLocation: $deLocation, temp: $temp, hum: $hum, battery: $battery, timeStamp: $timeStamp, description: $description, positionX: $positionX, positionY: $positionY, tempLow: $tempLow, tempHigh: $tempHigh, humLow: $humLow, humHigh: $humHigh)';
+    return 'A10(id: $id, parentCenterSn: $parentCenterSn, centerSn: $centerSn, centerNm: $centerNm, deNumber: $deNumber, deName: $deName, deLocation: $deLocation, temp: $temp, hum: $hum, battery: $battery, startTime: $startTime, timeStamp: $timeStamp, description: $description, positionX: $positionX, positionY: $positionY, tempLow: $tempLow, tempHigh: $tempHigh, humLow: $humLow, humHigh: $humHigh)';
   }
 }
