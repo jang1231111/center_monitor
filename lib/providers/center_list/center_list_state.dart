@@ -1,5 +1,5 @@
-import 'package:center_monitor/models/center/center_info.dart';
 import 'package:center_monitor/models/center/center_list_info.dart';
+import 'package:center_monitor/models/center/selected_center_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 
 enum CenterListStatus {
@@ -12,39 +12,39 @@ enum CenterListStatus {
 class CenterListState {
   final CenterListStatus centerListStatus;
   final CenterListInfo centerListInfo;
-  final CenterInfo centerInfo;
+  final SelectedCenterInfo selectedCenterInfo;
   final CustomError error;
 
   CenterListState(
       {required this.centerListStatus,
       required this.centerListInfo,
-      required this.centerInfo,
+      required this.selectedCenterInfo,
       required this.error});
 
   factory CenterListState.initial() {
     return CenterListState(
-        centerInfo: CenterInfo.initial(),
         centerListStatus: CenterListStatus.initial,
         centerListInfo: CenterListInfo.initial(),
+        selectedCenterInfo: SelectedCenterInfo.initial(),
         error: CustomError());
   }
 
   CenterListState copyWith({
     CenterListStatus? centerListStatus,
     CenterListInfo? centerListInfo,
-    CenterInfo? centerInfo,
+    SelectedCenterInfo? selectedCenterInfo,
     CustomError? error,
   }) {
     return CenterListState(
       centerListStatus: centerListStatus ?? this.centerListStatus,
       centerListInfo: centerListInfo ?? this.centerListInfo,
-      centerInfo: centerInfo ?? this.centerInfo,
+      selectedCenterInfo: selectedCenterInfo ?? this.selectedCenterInfo,
       error: error ?? this.error,
     );
   }
 
   @override
   String toString() {
-    return 'CenterListState(centerListStatus: $centerListStatus, centerListInfo: $centerListInfo, centerInfo: $centerInfo, error: $error)';
+    return 'CenterListState(centerListStatus: $centerListStatus, centerListInfo: $centerListInfo, selectedCenterInfo: $selectedCenterInfo, error: $error)';
   }
 }

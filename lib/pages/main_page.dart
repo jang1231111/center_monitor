@@ -317,9 +317,9 @@ class ShowUpdateTime extends StatelessWidget {
 
                     try {
                       Navigator.pop(context);
-                      await context
-                          .read<DeviceListProvider>()
-                          .getDeviceList(phoneNumber: _phoneNumber);
+                      // await context
+                      //     .read<DeviceListProvider>()
+                      //     .getDeviceList(phoneNumber: _phoneNumber);
                     } on CustomError catch (e) {
                       errorDialog(buildContext, e.toString());
                     }
@@ -587,7 +587,7 @@ class DeviceItem extends StatelessWidget {
                           flex: 1,
                           child: TextButton(
                               style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(
+                                  backgroundColor: MaterialStateProperty.all(
                                       Color.fromARGB(255, 38, 94, 176))),
                               onPressed: () {
                                 showDialog(

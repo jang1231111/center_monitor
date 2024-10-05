@@ -1,3 +1,4 @@
+import 'package:center_monitor/models/center/center_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
@@ -27,7 +28,7 @@ class CenterListProvider with ChangeNotifier {
       _state = _state.copyWith(
           centerListStatus: CenterListStatus.success,
           centerListInfo: newCenterListState.centerListInfo,
-          centerInfo: newCenterListState.centerInfo);
+          selectedCenterInfo: newCenterListState.selectedCenterInfo);
 
       // print(_state.centerListInfo);
       notifyListeners();
@@ -37,5 +38,19 @@ class CenterListProvider with ChangeNotifier {
       notifyListeners();
       rethrow;
     }
+  }
+
+  void changeToken(String newToken) {
+    _state = _state.copyWith(
+        selectedCenterInfo:
+            _state.selectedCenterInfo.copyWith(token: newToken));
+    notifyListeners();
+  }
+
+  void changeSelectedCenterInfo(CenterInfo newSelectedCenterInfo) {
+    _state = _state.copyWith(
+        selectedCenterInfo: _state.selectedCenterInfo
+            .copyWith(selectedConter: newSelectedCenterInfo));
+    notifyListeners();
   }
 }

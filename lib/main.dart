@@ -52,12 +52,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        ChangeNotifierProvider<LoginNumberProvider>(
+          create: (context) => LoginNumberProvider(),
+        ),
         ChangeNotifierProvider<CenterListProvider>(
           create: (context) => CenterListProvider(
               centerListRepositories: context.read<CenterListRepositories>()),
-        ),
-        ChangeNotifierProvider<LoginNumberProvider>(
-          create: (context) => LoginNumberProvider(),
         ),
         ChangeNotifierProvider<DeviceListProvider>(
           create: (context) => DeviceListProvider(

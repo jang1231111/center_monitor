@@ -78,7 +78,7 @@ class ApiServices {
     }
   }
 
-  Future<List<Center>> getCenterList(String token, String center) async {
+  Future<List<CenterInfo>> getCenterList(String token, String center) async {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
@@ -98,8 +98,42 @@ class ApiServices {
 
       // print('getCenterList ${responseBody.toString()}');
 
-      final centerList = responseBody.map((i) => Center.fromJson(i)).toList();
+      final centerList =
+          responseBody.map((i) => CenterInfo.fromJson(i)).toList();
       return centerList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<A10>> getDeviceList(
+    int centerSn,
+    String company,
+    String token,
+  ) async {
+    var client = http.Client();
+    var uri = Uri.parse('$khttpUri$company$kdeviceListUri$centerSn');
+
+    print('getDeviceList Uri : ${uri.toString()}');
+
+    try {
+      final http.Response response = await client.post(uri, headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      if (response.statusCode != 200) {
+        throw Exception(httpErrorHandler(response));
+      }
+
+      final utfResponseBody = utf8.decode(response.bodyBytes);
+      final List<dynamic> responseBody = json.decode(utfResponseBody);
+
+      print('getDeviceList ${responseBody.toString()}');
+
+      final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
+      return deviceList;
     } catch (e) {
       rethrow;
     }

@@ -1,12 +1,12 @@
 import 'package:center_monitor/constants/style.dart';
-import 'package:center_monitor/models/center/center_list_info.dart' as center;
+import 'package:center_monitor/models/center/center_list_info.dart';
 import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void showCenterChoiceDialog(BuildContext context, List<center.Center> centers) {
+void showCenterChoiceDialog(BuildContext context, List<CenterInfo> centers) {
   // if (Platform.isIOS) {
   //   showCupertinoDialog(
   //     context: context,
@@ -42,7 +42,7 @@ void showCenterChoiceDialog(BuildContext context, List<center.Center> centers) {
 }
 // }
 
-showCenters(BuildContext context, List<center.Center> centers) {
+showCenters(BuildContext context, List<CenterInfo> centers) {
   return Container(
     height: 350,
     decoration: BoxDecoration(
@@ -80,7 +80,7 @@ showCenters(BuildContext context, List<center.Center> centers) {
               );
             },
             itemBuilder: (BuildContext context, int index) {
-              return centerButton(context, centers[index].centerNm);
+              return centerButton(context, centers[index]);
             },
           ),
         ],
@@ -89,7 +89,7 @@ showCenters(BuildContext context, List<center.Center> centers) {
   );
 }
 
-centerButton(BuildContext context, String centerName) {
+centerButton(BuildContext context, CenterInfo center) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: Container(
@@ -100,11 +100,15 @@ centerButton(BuildContext context, String centerName) {
       ),
       child: TextButton(
         onPressed: () async {
-          await context
-              .read<DeviceListProvider>()
-              .getDeviceList(phoneNumber: phoneNumber);
-          // await
-          Navigator.pushNamed(
+          final selectedInfo =
+              context.read<CenterListProvider>().state.selectedCenterInfo;
+
+          await context.read<DeviceListProvider>().getDeviceList( 
+              centerSn: center.centerSn, 
+              token: selectedInfo.token,
+              company: selectedInfo.company);
+
+          await Navigator.pushNamed(
             context,
             MainPage.routeName,
           );
@@ -121,7 +125,7 @@ centerButton(BuildContext context, String centerName) {
           // }
         },
         child: Text(
-          '${centerName}',
+          '${center.centerNm}',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20.0,

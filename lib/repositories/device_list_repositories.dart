@@ -7,20 +7,14 @@ class DeviceListRepositories {
 
   DeviceListRepositories({required this.apiServices});
 
-  Future<DeviceListInfo> getDeviceList({required String phoneNumber}) async {
+  Future<DeviceListInfo> getDeviceList({
+    required int centerSn,
+    required String company,
+    required String token,
+  }) async {
     try {
       List<A10> deviceList;
-      if (phoneNumber == '010-9999-9999') {
-        deviceList = await apiServices.selectInSungCenterList();
-      } else if (phoneNumber == '010-8888-8888') {
-        deviceList = await apiServices.selectBrCenterList();
-      } else if (phoneNumber == '010-7777-7777') {
-        deviceList = await apiServices.selectMnbCenterList();
-      } else if (phoneNumber == '010-6666-6666') {
-        deviceList = await apiServices.selectBcsCenterList();
-      } else {
-        throw CustomError(errMsg: '전화번호를 확인해주세요.');
-      }
+      deviceList = await apiServices.getDeviceList(centerSn,company,token);
 
       final DateTime currentTime = DateTime.now();
 

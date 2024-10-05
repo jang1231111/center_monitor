@@ -43,10 +43,10 @@ class _SigninPageState extends State<SigninPage> {
       showCenterChoiceDialog(context,
           context.read<CenterListProvider>().state.centerListInfo.centers);
     } on CustomError catch (e) {
-      errorDialog(context, e.toString());
+      errorDialog(context, e.toString()); 
     }
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     final centerListState = context.watch<DeviceListProvider>().state;
