@@ -188,7 +188,7 @@ class _MainPageState extends State<MainPage> {
 //   }
 // }
 
-class CenterPlan extends StatelessWidget { 
+class CenterPlan extends StatelessWidget {
   const CenterPlan({super.key});
 
   @override
@@ -196,8 +196,13 @@ class CenterPlan extends StatelessWidget {
     final devices =
         context.watch<DeviceListProvider>().state.centerListInfo.devices;
 
-        final company = context.read<CenterListProvider>().state.loginInfo.company;
-        final centerSn = context.read<CenterListProvider>().state.loginInfo.selectedCenter.centerSn;
+    final company = context.read<CenterListProvider>().state.loginInfo.company;
+    final centerSn = context
+        .read<CenterListProvider>()
+        .state
+        .loginInfo
+        .selectedCenter
+        .centerSn;
 
     return
         // GestureDetector(
@@ -215,7 +220,7 @@ class CenterPlan extends StatelessWidget {
                 '$khttpUri$company$centerPlanUri1$company/${centerSn}$centerPlanUri2',
                 fit: BoxFit.fill,
                 width: 400,
-                height: 300, 
+                height: 300,
               )),
           for (var device in devices)
             Positioned(
@@ -304,14 +309,20 @@ class ShowUpdateTime extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
-                    String _phoneNumber =
-                        context.read<LoginNumberProvider>().state.phoneNumber;
+                    final selectedInfo =
+                        context.read<CenterListProvider>().state.loginInfo;
+                    final selectedCenterInfo = context
+                        .read<CenterListProvider>()
+                        .state
+                        .loginInfo
+                        .selectedCenter;
 
                     try {
                       Navigator.pop(context);
-                      // await context
-                      //     .read<DeviceListProvider>()
-                      //     .getDeviceList(phoneNumber: _phoneNumber);
+                      await context.read<DeviceListProvider>().getDeviceList(
+                          id: selectedCenterInfo.id,
+                          token: selectedInfo.token,
+                          company: selectedInfo.company);
                     } on CustomError catch (e) {
                       errorDialog(buildContext, e.toString());
                     }

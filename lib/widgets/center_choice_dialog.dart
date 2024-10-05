@@ -1,8 +1,10 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/center/center_list_info.dart';
+import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -98,33 +100,27 @@ centerButton(BuildContext context, CenterInfo center) {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [mainbox()],
       ),
-      child: TextButton( 
+      child: TextButton(
         onPressed: () async {
           context.read<CenterListProvider>().changeSelectedCenterInfo(center);
 
           final selectedInfo =
-              context.read<CenterListProvider>().state.loginInfo; 
+              context.read<CenterListProvider>().state.loginInfo;
 
-          await context.read<DeviceListProvider>().getDeviceList(
-              id: center.id,
-              token: selectedInfo.token,
-              company: selectedInfo.company);
+          try {
+            await context.read<DeviceListProvider>().getDeviceList(
+                id: center.id,
+                token: selectedInfo.token,
+                company: selectedInfo.company);
 
-          await Navigator.pushNamed(
-            context,
-            MainPage.routeName,
-          );
-          // String _loginNumber =context.read<LoginNumberProvider>().state.phoneNumber;
-          // try {
-          //   await context
-          //       .read<CenterDataProvider>()
-          //       .getCenterData(device: device, loginNumber: _loginNumber);
-          //   Navigator.pop(context);
-          //   Navigator.pushNamed(context, DetailPage.routeName,
-          //       arguments: device.copyWith());
-          // } on CustomError catch (e) {
-          //   errorDialog(context, e.toString());
-          // }
+            Navigator.pop(context);
+            await Navigator.pushNamed(
+              context,
+              MainPage.routeName,
+            );
+          } on CustomError catch (e) {
+            errorDialog(context, e.toString());
+          }
         },
         child: Text(
           '${center.centerNm}',
