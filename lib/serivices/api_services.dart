@@ -131,7 +131,7 @@ class ApiServices {
       final utfResponseBody = utf8.decode(response.bodyBytes);
       final List<dynamic> responseBody = json.decode(utfResponseBody);
 
-      // print('getDeviceList $responseBody'); 
+      // print('getDeviceList $responseBody');
 
       final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
       return deviceList;
@@ -154,11 +154,13 @@ class ApiServices {
 
     data['id'] = selectedDevice.id;
     data["deNumber"] = selectedDevice.deNumber;
-    data["startTime"] =selectedDevice.startTime.toString().replaceAll(" ", "T");
-    data["endTime"] = selectedDevice.timeStamp.toString().replaceAll(" ", "T");;
-    data["dataType"] =  "C";
+    data["startTime"] =
+        selectedDevice.startTime.toString().replaceAll(" ", "T");
+    data["endTime"] = selectedDevice.timeStamp.toString().replaceAll(" ", "T");
+    ;
+    data["dataType"] = "C";
     data["timezone"] = "string";
-    data["timeBased"] = true; 
+    data["timeBased"] = true;
 
     print(' data ${data}');
 
@@ -180,7 +182,8 @@ class ApiServices {
 
       // print('getDeviceLogData $responseBody');
 
-      final logDatas = responseBody.map((i) => LogData.fromJsonLocal(i)).toList();
+      final logDatas =
+          responseBody.map((i) => LogData.fromJsonLocal(i)).toList();
       return logDatas;
     } catch (e) {
       rethrow;

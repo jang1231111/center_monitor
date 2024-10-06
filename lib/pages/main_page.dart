@@ -642,7 +642,8 @@ class DeviceItem extends StatelessWidget {
                                               Navigator.pop(context);
                                               Navigator.pushNamed(
                                                   context, DetailPage.routeName,
-                                                  arguments: newDevice.copyWith());
+                                                  arguments:
+                                                      newDevice.copyWith());
                                             } on CustomError catch (e) {
                                               errorDialog(
                                                   context, e.toString());

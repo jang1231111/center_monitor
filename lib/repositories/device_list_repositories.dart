@@ -14,7 +14,7 @@ class DeviceListRepositories {
   }) async {
     try {
       List<A10> deviceList;
-      deviceList = await apiServices.getDeviceList(id,company,token);
+      deviceList = await apiServices.getDeviceList(id, company, token);
 
       final DateTime currentTime = DateTime.now();
 
