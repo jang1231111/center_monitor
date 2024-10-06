@@ -1,6 +1,5 @@
-import 'package:center_monitor/models/center/center_list_info.dart';
-import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
+import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/repositories/device_list_repositories.dart';
 import 'package:flutter/material.dart';
@@ -15,28 +14,53 @@ class DeviceListProvider with ChangeNotifier {
 
   final DeviceListRepositories centerListRepositories;
 
-  Future<void> getDeviceList({
+    Future<void> getDeviceList({
     required int id,
     required String company,
     required String token,
   }) async {
-    _state = _state.copyWith(centerListStatus: DeviceListStatus.submitting);
+    _state = _state.copyWith(deviceListStatus: DeviceListStatus.submitting);
     notifyListeners();
 
     try {
-      final centerListInfo = await centerListRepositories.getDeviceList(
-          id: id,company: company,token: token);
-      _state = _state.copyWith(
-          centerListStatus: DeviceListStatus.success,
-          centerListInfo: centerListInfo);
+      final deviceListInfo = await centerListRepositories.getDeviceList(
+          id: id, company: company, token: token);
 
-      print(_state.centerListInfo);
+      deviceListSort(deviceListInfo.devices);
+      _state = _state.copyWith(
+          deviceListStatus: DeviceListStatus.success,
+          deviceListInfo: deviceListInfo);
+
+      // print(_state.centerListInfo);
       notifyListeners();
     } on CustomError catch (e) {
       _state =
-          _state.copyWith(centerListStatus: DeviceListStatus.error, error: e);
+          _state.copyWith(deviceListStatus: DeviceListStatus.error, error: e);
       notifyListeners();
       rethrow;
+    }
+  }
+
+  void deviceListSort(List<A10> deviceList) {
+    A10 temp;
+
+    for (int i = 0; i < deviceList.length - 1; i++) {
+      for (int j = 1; j < deviceList.length - i; j++) {
+        if (deviceList[j].centerNm.compareTo(deviceList[j - 1].centerNm) < 0) {
+          temp = deviceList[j - 1];
+          deviceList[j - 1] = deviceList[j];
+          deviceList[j] = temp;
+        } else if (deviceList[j]
+                .centerNm
+                .compareTo(deviceList[j - 1].centerNm) ==
+            0) {
+          if (deviceList[j].deName.compareTo(deviceList[j - 1].deName) < 0) {
+            temp = deviceList[j - 1];
+            deviceList[j - 1] = deviceList[j];
+            deviceList[j] = temp;
+          }
+        }
+      }
     }
   }
 

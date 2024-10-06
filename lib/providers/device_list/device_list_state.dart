@@ -9,34 +9,34 @@ enum DeviceListStatus {
 }
 
 class DeviceListState {
-  final DeviceListStatus centerListStatus;
-  final DeviceListInfo centerListInfo;
+  final DeviceListStatus deviceListStatus;
+  final DeviceListInfo deviceListInfo;
   final CustomError error;
 
   factory DeviceListState.initial() {
     return DeviceListState(
-        centerListStatus: DeviceListStatus.initial,
-        centerListInfo: DeviceListInfo.initial(),
+        deviceListStatus: DeviceListStatus.initial,
+        deviceListInfo: DeviceListInfo.initial(),
         error: CustomError());
   }
 
   DeviceListState(
-      {required this.centerListStatus,
-      required this.centerListInfo,
+      {required this.deviceListStatus,
+      required this.deviceListInfo,
       required this.error});
 
   @override
   String toString() =>
-      'CenterListState(signinStatus: $centerListStatus, centerListInfo: $centerListInfo, error: $error)';
+      'CenterListState(signinStatus: $deviceListStatus, centerListInfo: $deviceListInfo, error: $error)';
 
   DeviceListState copyWith({
-    DeviceListStatus? centerListStatus,
-    DeviceListInfo? centerListInfo,
+    DeviceListStatus? deviceListStatus,
+    DeviceListInfo? deviceListInfo,
     CustomError? error,
   }) {
     return DeviceListState(
-      centerListStatus: centerListStatus ?? this.centerListStatus,
-      centerListInfo: centerListInfo ?? this.centerListInfo,
+      deviceListStatus: deviceListStatus ?? this.deviceListStatus,
+      deviceListInfo: deviceListInfo ?? this.deviceListInfo,
       error: error ?? this.error,
     );
   }

@@ -161,11 +161,11 @@ class _SigninPageState extends State<SigninPage> {
                           height: 30.0,
                         ),
                         ElevatedButton(
-                          onPressed: centerListState.centerListStatus ==
+                          onPressed: centerListState.deviceListStatus ==
                                   DeviceListStatus.submitting
                               ? null
                               : _submit,
-                          child: Text(centerListState.centerListStatus ==
+                          child: Text(centerListState.deviceListStatus ==
                                   DeviceListStatus.submitting
                               ? 'Loading...'
                               : 'Sign in'),

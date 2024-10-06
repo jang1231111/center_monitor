@@ -13,7 +13,7 @@ class FilteredDeviceProvider {
 
   FilteredDeviceState get state {
     List<A10> _filteredCenterList;
-    List<A10> _centerList = centerListProvider.state.centerListInfo.devices;
+    List<A10> _centerList = centerListProvider.state.deviceListInfo.devices;
 
     switch (centerFilterProvider.state.filter) {
       case Filter.all:

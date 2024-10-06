@@ -194,7 +194,7 @@ class CenterPlan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final devices =
-        context.watch<DeviceListProvider>().state.centerListInfo.devices;
+        context.watch<DeviceListProvider>().state.deviceListInfo.devices;
 
     final company = context.read<CenterListProvider>().state.loginInfo.company;
     final centerSn = context
@@ -273,7 +273,7 @@ class ShowUpdateTime extends StatelessWidget {
     final updateTime = buildContext
         .watch<DeviceListProvider>()
         .state
-        .centerListInfo
+        .deviceListInfo
         .updateTime;
 
     return ElevatedButton.icon(
@@ -475,7 +475,7 @@ class _ShowDevicesState extends State<ShowDevices> {
 
     DeviceListState centerListState = context.watch<DeviceListProvider>().state;
 
-    return centerListState.centerListStatus == DeviceListStatus.submitting
+    return centerListState.deviceListStatus == DeviceListStatus.submitting
         ? Center(
             child: CircularProgressIndicator(),
           )

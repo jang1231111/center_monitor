@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  wakelock: ^0.6.2
   photo_view: ^0.15.0
   equatable: ^2.0.3
   provider: ^6.0.1
