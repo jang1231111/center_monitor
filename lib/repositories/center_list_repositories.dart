@@ -23,7 +23,7 @@ class CenterListRepositories {
       // print('login Token Test $token');
 
       centerList = await apiServices.getCenterList(token, company);
-      print('getCenterList deviceList Test $centerList');
+      // print('getCenterList deviceList Test $centerList');
 
       CenterListInfo centerListInfo = CenterListInfo(centers: centerList);
 

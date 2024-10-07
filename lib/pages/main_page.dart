@@ -217,7 +217,7 @@ class CenterPlan extends StatelessWidget {
               color: Colors.white,
               // child: Image.asset('assets/images/center.png'),
               child: Image.network(
-                '$khttpUri$company$kcenterPlanUri1$company/${centerSn}$kcenterPlanUri2',
+                '$khttpUri$company$kcenterPlanUri1$company/${centerSn}.png',
                 fit: BoxFit.fill,
                 width: 400,
                 height: 300,
@@ -547,7 +547,7 @@ class DeviceItem extends StatelessWidget {
                                         softWrap: false,
                                       ),
                                       content: Text(
-                                        '센터 : ${device.deName}\n기기 정보 : ${device.deNumber}',
+                                        '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
                                         style: End(context),
                                         overflow: TextOverflow.ellipsis,
                                       ),
