@@ -48,7 +48,7 @@ class DetailPage extends StatelessWidget {
                   dataChart(),
                   SizedBox(
                     height: 10,
-                  ), 
+                  ),
                   Text(
                     '온도 데이터 상세 정보',
                     style: TextStyle(
@@ -88,7 +88,7 @@ class DetailHeader extends StatelessWidget {
           '상세 정보',
           style: TextStyle(fontSize: 25.0),
         ),
-        Text( 
+        Text(
           '${device.centerNm} - ${device.deName}',
           style: TextStyle(
             fontSize: 15.0,
@@ -180,13 +180,13 @@ class _logInformationState extends State<logInformation> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        // device = ModalRoute.of(context)!.settings.arguments as A10;
-        startDateTime = device.startTime;
-        endDateTime = device.timeStamp;
-      },
-    );
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) async {
+    //     // device = ModalRoute.of(context)!.settings.arguments as A10;
+    //     startDateTime = device.startTime;
+    //     endDateTime = device.timeStamp;
+    //   },
+    // );
   }
 
   @override

@@ -21,27 +21,27 @@ class FilteredDeviceProvider {
         break;
       case Filter.a:
         _filteredCenterList = _centerList.where((A10 device) {
-          return device.deName.contains('가');
+          return device.deName!.contains('가');
         }).toList();
         break;
       case Filter.b:
         _filteredCenterList = _centerList.where((A10 device) {
-          return device.deName.contains('나');
+          return device.deName!.contains('나');
         }).toList();
         break;
       case Filter.c:
         _filteredCenterList = _centerList.where((A10 device) {
-          return device.deName.contains('다');
+          return device.deName!.contains('다');
         }).toList();
         break;
       case Filter.d:
         _filteredCenterList = _centerList.where((A10 device) {
-          return device.deName.contains('라');
+          return device.deName!.contains('라');
         }).toList();
         break;
       case Filter.e:
         _filteredCenterList = _centerList.where((A10 device) {
-          return device.deName.contains('마');
+          return device.deName!.contains('마');
         }).toList();
         break;
     }

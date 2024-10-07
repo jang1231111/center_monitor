@@ -14,7 +14,7 @@ class DeviceListProvider with ChangeNotifier {
 
   final DeviceListRepositories centerListRepositories;
 
-    Future<void> getDeviceList({
+  Future<void> getDeviceList({
     required int id,
     required String company,
     required String token,

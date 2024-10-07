@@ -131,7 +131,7 @@ class ApiServices {
       final utfResponseBody = utf8.decode(response.bodyBytes);
       final List<dynamic> responseBody = json.decode(utfResponseBody);
 
-      // print('getDeviceList $responseBody');
+      print('getDeviceList $responseBody');
 
       final deviceList = responseBody.map((i) => A10.fromJsonLocal(i)).toList();
       return deviceList;

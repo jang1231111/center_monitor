@@ -43,17 +43,17 @@ class _SigninPageState extends State<SigninPage> {
       showCenterChoiceDialog(context,
           context.read<CenterListProvider>().state.centerListInfo.centers);
     } on CustomError catch (e) {
-      errorDialog(context, e.toString()); 
+      errorDialog(context, e.toString());
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     final centerListState = context.watch<DeviceListProvider>().state;
 
     return Container(
       color: Colors.white,
-      child: SafeArea( 
+      child: SafeArea(
         child: PopScope(
           canPop: false,
           child: GestureDetector(
@@ -96,19 +96,19 @@ class _SigninPageState extends State<SigninPage> {
                             border: OutlineInputBorder(),
                             filled: true,
                             labelText: '아이디',
-                            prefixIcon: Icon(Icons.login), 
+                            prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
-                            // if (value == null || value.trim().isEmpty) {
-                            //   return '아이디를 입려하세요';
-                            // }
+                            if (value == null || value.trim().isEmpty) {
+                              return '아이디를 입려하세요';
+                            }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputID) {
                             _ID = inputID;
-                            _ID = 'insung';
+                            // _ID = 'insung';
                           },
                         ),
                         SizedBox(
@@ -126,16 +126,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.password),
                           ),
                           validator: (String? value) {
-                            // if (value == null || value.trim().isEmpty) {
-                            //   return '비밀번호를 입려하세요';
-                            // }
+                            if (value == null || value.trim().isEmpty) {
+                              return '비밀번호를 입려하세요';
+                            }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputPassword) {
                             _Password = inputPassword;
-                            _Password = 'insung123';
+                            // _Password = 'insung123';
                           },
                         ),
                         SizedBox(
