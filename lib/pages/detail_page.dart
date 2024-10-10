@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:excel/excel.dart' as ex;
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
@@ -10,7 +12,9 @@ import 'package:center_monitor/providers/device_report/device_report_state.dart'
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DetailPage extends StatelessWidget {
@@ -502,6 +506,63 @@ class _logInformationState extends State<logInformation> {
                         }
                       },
                       child: Text('조 회')),
+                ),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 31, 103, 60),
+                        foregroundColor: Colors.white,
+                        textStyle: TextStyle(
+                          fontSize: 15.0,
+                        ),
+                      ),
+                      onPressed: () async {
+                        A10 device =
+                            ModalRoute.of(context)!.settings.arguments as A10;
+                        List<LogData> logDatas = context
+                            .read<DeviceLogDataProvider>()
+                            .state
+                            .deviceLogDataInfo
+                            .logDatas;
+
+                        var excel = ex.Excel.createExcel();
+                        ex.Sheet sheetObject = excel['Result'];
+                        excel.delete('Sheet1');
+
+                        sheetObject.appendRow([
+                          ex.TextCellValue('No.'),
+                          ex.TextCellValue('Temp'),
+                          ex.TextCellValue('DateTime')
+                        ]);
+                        for (int i = 0; i < logDatas.length; i++) {
+                          sheetObject.appendRow([
+                            ex.TextCellValue((i + 1).toString()),
+                            ex.TextCellValue(logDatas[i].temp.toString()),
+                            ex.TextCellValue(
+                                logDatas[i].dateTime.toLocal().toString())
+                          ]);
+                        }
+                        var fileBytes = excel.save();
+                        final dir = await getExternalStorageDirectory();
+
+                        // print("dir $dir");
+                        String filepath = dir!.path;
+                        String now = DateFormat('yyyyMMddHHmmss')
+                            .format(DateTime.now().toLocal());
+                        File f =
+                            File('$filepath/${device.deNumber}Excel_$now.xlsx');
+                        f.writeAsBytesSync(fileBytes!);
+
+                        Share.shareXFiles([XFile(f.path)], text: 'Excel');
+                      },
+                      child: Text('엑 셀')),
                 ),
               ),
             ],
