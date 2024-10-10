@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excel/excel.dart' as ex;
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
@@ -44,7 +45,7 @@ class DetailPage extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    '온도 그래프',
+                    'temperatureGraph',
                     style: TextStyle(
                         color: Color.fromARGB(255, 38, 94, 176),
                         fontSize: 15.0),
@@ -54,11 +55,11 @@ class DetailPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    '온도 데이터 상세 정보',
+                    'temperatureDataDetail',
                     style: TextStyle(
                         color: Color.fromARGB(255, 38, 94, 176),
                         fontSize: 15.0),
-                  ),
+                  ).tr(),
                   SizedBox(
                     height: 10,
                   ),
@@ -89,9 +90,9 @@ class DetailHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '상세 정보',
+          'detailInfo',
           style: TextStyle(fontSize: 25.0),
-        ),
+        ).tr(),
         Text(
           '${device.centerNm} - ${device.deName}',
           style: TextStyle(
@@ -244,10 +245,10 @@ class _logInformationState extends State<logInformation> {
                             Expanded(
                               flex: 1,
                               child: Text(
-                                '시작 시간',
+                                'startTime',
                                 textAlign: TextAlign.center,
                                 style: subTitle(context),
-                              ),
+                              ).tr(),
                             ),
                             Expanded(
                                 flex: 1,
@@ -291,7 +292,7 @@ class _logInformationState extends State<logInformation> {
                                       );
                                     },
                                     child: Text(
-                                      DateFormat("MM월 dd일 HH:mm")
+                                      DateFormat("MM-dd HH:mm")
                                           .format(startDateTime),
                                       textAlign: TextAlign.center,
                                       style: subTitle(context),
@@ -308,10 +309,10 @@ class _logInformationState extends State<logInformation> {
                             Expanded(
                                 flex: 1,
                                 child: Text(
-                                  '종료 시간',
+                                  'endTime',
                                   textAlign: TextAlign.center,
                                   style: subTitle(context),
-                                )),
+                                ).tr()),
                             Expanded(
                               flex: 1,
                               child: Padding(
@@ -353,7 +354,7 @@ class _logInformationState extends State<logInformation> {
                                     );
                                   },
                                   child: Text(
-                                    DateFormat("MM월 dd일 HH:mm")
+                                    DateFormat("MM-dd HH:mm")
                                         .format(endDateTime),
                                     textAlign: TextAlign.center,
                                     style: subTitle(context),
@@ -372,17 +373,17 @@ class _logInformationState extends State<logInformation> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '데이터가 없습니다.',
+                                      'noData',
                                       style: TextStyle(
                                         color: Colors.red[600],
                                       ),
-                                    ),
+                                    ).tr(),
                                     Text(
-                                      '시간 범위를 확인해주세요.',
+                                      'timeCheckMsg',
                                       style: TextStyle(
                                         color: Colors.red[600],
                                       ),
-                                    ),
+                                    ).tr(),
                                   ],
                                 ))
                               : Column(
@@ -394,10 +395,10 @@ class _logInformationState extends State<logInformation> {
                                           Expanded(
                                               flex: 1,
                                               child: Text(
-                                                '최고 온도',
+                                                'maxTemp',
                                                 textAlign: TextAlign.center,
                                                 style: subTitle(context),
-                                              )),
+                                              ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
@@ -408,10 +409,10 @@ class _logInformationState extends State<logInformation> {
                                           Expanded(
                                               flex: 1,
                                               child: Text(
-                                                '최저 온도',
+                                                'minTemp',
                                                 textAlign: TextAlign.center,
                                                 style: subTitle(context),
-                                              )),
+                                              ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
@@ -429,10 +430,10 @@ class _logInformationState extends State<logInformation> {
                                           Expanded(
                                               flex: 1,
                                               child: Text(
-                                                '최고 습도',
+                                                'maxHum',
                                                 textAlign: TextAlign.center,
                                                 style: subTitle(context),
-                                              )),
+                                              ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
@@ -443,10 +444,10 @@ class _logInformationState extends State<logInformation> {
                                           Expanded(
                                               flex: 1,
                                               child: Text(
-                                                '최저 습도',
+                                                'minHum',
                                                 textAlign: TextAlign.center,
                                                 style: subTitle(context),
-                                              )),
+                                              ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
@@ -505,7 +506,7 @@ class _logInformationState extends State<logInformation> {
                           errorDialog(context, e.toString());
                         }
                       },
-                      child: Text('조 회')),
+                      child: Text('select').tr()),
                 ),
               ),
               SizedBox(
@@ -562,7 +563,7 @@ class _logInformationState extends State<logInformation> {
 
                         Share.shareXFiles([XFile(f.path)], text: 'Excel');
                       },
-                      child: Text('엑 셀')),
+                      child: Text('excel').tr()),
                 ),
               ),
             ],
@@ -586,17 +587,17 @@ class OptiloInfo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '(주)옵티로',
+            'optilo',
             style: optilo_name(context),
-          ),
+          ).tr(),
           Text(
-            '인천광역시 연수구 송도미래로 30 스마트밸리 D동',
+            'address',
             style: optilo_info(context),
-          ),
+          ).tr(),
           Text(
-            'H : www.optilo.net  T : 070-5143-8585',
+            'optiloHT',
             style: optilo_info(context),
-          ),
+          ).tr(),
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,14 +58,14 @@ showCenters(BuildContext context, List<CenterInfo> centers) {
         children: [
           Container(
             child: Text(
-              '센터를 선택해주세요',
+              'choiceCenter',
               style: TextStyle(
                 color: Color.fromRGBO(0, 54, 92, 1),
                 fontSize: MediaQuery.of(context).size.width / 17,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'pretend',
               ),
-            ),
+            ).tr(),
           ),
           SizedBox(
             height: 10.0,

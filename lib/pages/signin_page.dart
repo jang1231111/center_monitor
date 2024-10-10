@@ -5,6 +5,7 @@ import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -80,10 +81,10 @@ class _SigninPageState extends State<SigninPage> {
                           height: 80.0,
                         ),
                         Text(
-                          'Login',
+                          'login',
                           textAlign: TextAlign.center,
                           style: loginTitle(context),
-                        ),
+                        ).tr(),
                         SizedBox(
                           height: 30.0,
                         ),
@@ -95,12 +96,12 @@ class _SigninPageState extends State<SigninPage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             filled: true,
-                            labelText: '아이디',
+                            labelText: 'id'.tr(),
                             prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
                             if (value == null || value.trim().isEmpty) {
-                              return '아이디를 입려하세요';
+                              return 'input id'.tr();
                             }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
@@ -122,12 +123,12 @@ class _SigninPageState extends State<SigninPage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             filled: true,
-                            labelText: '비밀번호',
+                            labelText: 'password'.tr(),
                             prefixIcon: Icon(Icons.password),
                           ),
                           validator: (String? value) {
                             if (value == null || value.trim().isEmpty) {
-                              return '비밀번호를 입려하세요';
+                              return 'input password'.tr();
                             }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
@@ -150,7 +151,7 @@ class _SigninPageState extends State<SigninPage> {
                           //             context, SignupPage.routeName);
                           //       },
                           icon: Icon(Icons.question_answer),
-                          label: Text('Forgot Login Number?'),
+                          label: Text('forgot').tr(),
                           style: TextButton.styleFrom(
                               textStyle: TextStyle(
                             fontSize: 10.0,
@@ -166,9 +167,10 @@ class _SigninPageState extends State<SigninPage> {
                               ? null
                               : _submit,
                           child: Text(centerListState.deviceListStatus ==
-                                  DeviceListStatus.submitting
-                              ? 'Loading...'
-                              : 'Sign in'),
+                                      DeviceListStatus.submitting
+                                  ? 'loading'
+                                  : 'sign in')
+                              .tr(),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 38, 94, 176),
                             foregroundColor: Colors.white,
@@ -199,17 +201,17 @@ class _SigninPageState extends State<SigninPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '(주)옵티로',
+                                'optilo',
                                 style: optilo_name(context),
-                              ),
+                              ).tr(),
                               Text(
-                                '인천광역시 연수구 송도미래로 30 스마트밸리 D동',
+                                'address',
                                 style: optilo_info(context),
-                              ),
+                              ).tr(),
                               Text(
-                                'H : www.optilo.net  T : 070-5143-8585',
+                                'optiloHT',
                                 style: optilo_info(context),
-                              ),
+                              ).tr(),
                             ],
                           ),
                         ),

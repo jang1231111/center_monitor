@@ -14,17 +14,27 @@ import 'package:center_monitor/repositories/center_list_repositories.dart';
 import 'package:center_monitor/repositories/device_data_repositories.dart';
 import 'package:center_monitor/repositories/device_list_repositories.dart';
 import 'package:center_monitor/serivices/api_services.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:wakelock/wakelock.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await EasyLocalization.ensureInitialized();
   Wakelock.enable();
 
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      child: const MyApp(),
+      supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en', 'US'),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -77,7 +87,8 @@ class MyApp extends StatelessWidget {
           create: (context) => DeviceFilterProvider(),
         ),
         ProxyProvider<DeviceLogDataProvider, DeviceReportProvider>(
-          update: (BuildContext context, DeviceLogDataProvider centerDataProvider,
+          update: (BuildContext context,
+                  DeviceLogDataProvider centerDataProvider,
                   DeviceReportProvider? _) =>
               DeviceReportProvider(centerDataProvider: centerDataProvider),
         ),
@@ -99,6 +110,9 @@ class MyApp extends StatelessWidget {
         title: 'Center_Monitoring',
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
+        locale: context.locale,
+        supportedLocales: context.supportedLocales,
+        localizationsDelegates: context.localizationDelegates,
         routes: {
           SigninPage.routeName: (context) => SigninPage(),
           MainPage.routeName: (context) => MainPage(),

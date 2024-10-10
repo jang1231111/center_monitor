@@ -12,8 +12,8 @@ import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -80,11 +80,11 @@ class _MainPageState extends State<MainPage> {
                         height: 20,
                       ),
                       Text(
-                        '센터 도면',
+                        'centerPicture',
                         style: TextStyle(
                             color: Color.fromARGB(255, 38, 94, 176),
                             fontSize: 15.0),
-                      ),
+                      ).tr(),
                       SizedBox(height: 10),
                       CenterPlan(),
                       SizedBox(
@@ -94,11 +94,11 @@ class _MainPageState extends State<MainPage> {
                         height: 20,
                       ),
                       Text(
-                        '센터 리스트',
+                        'centerList',
                         style: TextStyle(
                             color: Color.fromARGB(255, 38, 94, 176),
                             fontSize: 15.0),
-                      ),
+                      ).tr(),
                       SizedBox(
                         height: 10,
                       ),
@@ -284,28 +284,27 @@ class ShowUpdateTime extends StatelessWidget {
           builder: (context) {
             return AlertDialog(
               title: Text(
-                '센터 정보',
+                'centerInfo',
                 style: Locate(context),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 softWrap: false,
-              ),
+              ).tr(),
               content: Text(
-                '센터 정보를 새롭게 불러오시겠습니까?',
+                'centerInfoMsg',
                 style: End(context),
-                overflow: TextOverflow.ellipsis,
-              ),
+              ).tr(),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    '아니오',
+                    'no',
                     style: TextStyle(
                       color: Color.fromARGB(255, 38, 94, 176),
                     ),
-                  ),
+                  ).tr(),
                 ),
                 TextButton(
                   onPressed: () async {
@@ -328,11 +327,11 @@ class ShowUpdateTime extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    '예',
+                    'yes',
                     style: TextStyle(
                       color: Color.fromARGB(255, 38, 94, 176),
                     ),
-                  ),
+                  ).tr(),
                 ),
               ],
             );
@@ -366,7 +365,7 @@ class ScanHeader extends StatelessWidget {
           style: TextStyle(fontSize: 25.0),
         ),
         Text(
-          '센터 개수 : ${filteredCenterList.length}',
+          'Number of centers : ${filteredCenterList.length}',
           style: TextStyle(
             fontSize: 15.0,
             color: Color.fromARGB(255, 241, 140, 31),
@@ -411,7 +410,7 @@ class FilterCenter extends StatelessWidget {
       },
       child: Text(
         filter == Filter.all
-            ? '전체'
+            ? 'ALL'
             : filter == Filter.a
                 ? '가동'
                 : filter == Filter.b
@@ -540,29 +539,85 @@ class DeviceItem extends StatelessWidget {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: Text(
-                                        '기기 정보',
+                                        'centerInfo',
                                         style: Locate(context),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         softWrap: false,
+                                      ).tr(),
+                                      content: Container(
+                                        width: 200,
+                                        height: 200,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'center',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ).tr(),
+                                                Text(
+                                                  ': ${device.deName}',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'deviceInfo',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ).tr(),
+                                                Text(
+                                                  ': ${device.deNumber}',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'description',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ).tr(),
+                                                Text(
+                                                  ': ${device.description}',
+                                                  style: End(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      content: Text(
-                                        '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
-                                        style: End(context),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                      // Text(
+                                      //   '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
+                                      //   style: End(context),
+                                      //   overflow: TextOverflow.ellipsis,
+                                      // ),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
                                           child: Text(
-                                            '확인',
+                                            'ok',
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 38, 94, 176),
                                             ),
-                                          ),
+                                          ).tr(),
                                         ),
                                       ],
                                     );
@@ -592,15 +647,27 @@ class DeviceItem extends StatelessWidget {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: Text(
-                                        '데이터 확인',
+                                        'checkData',
                                         style: Locate(context),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         softWrap: false,
-                                      ),
-                                      content: Text(
-                                        '${device.deName} 의 \n데이터를 확인하시겠습니까?',
-                                        style: End(context),
+                                      ).tr(),
+                                      content: Container(
+                                        width: 200,
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '${device.deName}',
+                                              style: End(context),
+                                            ),
+                                            Text(
+                                              'checkDataMsg',
+                                              style: End(context),
+                                            ).tr(),
+                                          ],
+                                        ),
                                       ),
                                       actions: [
                                         TextButton(
@@ -608,12 +675,12 @@ class DeviceItem extends StatelessWidget {
                                             Navigator.pop(context);
                                           },
                                           child: Text(
-                                            '아니오',
+                                            'no',
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 38, 94, 176),
                                             ),
-                                          ),
+                                          ).tr(),
                                         ),
                                         TextButton(
                                           onPressed: () async {
@@ -650,12 +717,12 @@ class DeviceItem extends StatelessWidget {
                                             }
                                           },
                                           child: Text(
-                                            '예',
+                                            'yes',
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 38, 94, 176),
                                             ),
-                                          ),
+                                          ).tr(),
                                         ),
                                       ],
                                     );
@@ -663,9 +730,9 @@ class DeviceItem extends StatelessWidget {
                                 );
                               },
                               child: Text(
-                                '확 인',
+                                'checkData',
                                 style: TextStyle(color: Colors.white),
-                              )),
+                              ).tr()),
                         ),
                       ],
                     ),
