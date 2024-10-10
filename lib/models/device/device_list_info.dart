@@ -25,11 +25,11 @@ class DeviceListInfo {
 
 class A10 {
   final int id;
-  final int parentCenterSn;
-  final int centerSn;
+  final int? parentCenterSn;
+  final int? centerSn;
   final String centerNm;
-  final String deNumber;
-  final String deName;
+  final String? deNumber;
+  final String? deName;
   final String deLocation;
   final double temp;
   final double hum;
@@ -37,8 +37,8 @@ class A10 {
   final DateTime startTime;
   final DateTime timeStamp;
   final String? description;
-  final double positionX;
-  final double positionY;
+  final double? positionX;
+  final double? positionY;
   final double tempLow;
   final double tempHigh;
   final double humLow;

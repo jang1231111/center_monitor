@@ -224,8 +224,8 @@ class CenterPlan extends StatelessWidget {
               )),
           for (var device in devices)
             Positioned(
-              // left: device.positionX * 3.8,
-              // top: device.positionY * 3,
+              left: device.positionX == null ? null : device.positionX! * 3.8,
+              top: device.positionX == null ? null : device.positionY! * 3,
               child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),

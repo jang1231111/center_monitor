@@ -54,10 +54,14 @@ class DeviceListProvider with ChangeNotifier {
                 .centerNm
                 .compareTo(deviceList[j - 1].centerNm) ==
             0) {
-          if (deviceList[j].deName.compareTo(deviceList[j - 1].deName) < 0) {
-            temp = deviceList[j - 1];
-            deviceList[j - 1] = deviceList[j];
-            deviceList[j] = temp;
+          if (deviceList[j].deName != null &&
+              deviceList[j - 1].deName != null) {
+            if (deviceList[j].deName!.compareTo(deviceList[j - 1].deName!) <
+                0) {
+              temp = deviceList[j - 1];
+              deviceList[j - 1] = deviceList[j];
+              deviceList[j] = temp;
+            }
           }
         }
       }
