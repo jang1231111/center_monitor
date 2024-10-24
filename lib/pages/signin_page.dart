@@ -1,12 +1,12 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/device_list/device_list_provider.dart';
-import 'package:center_monitor/providers/device_list/device_list_state.dart';
+import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class SigninPage extends StatefulWidget {
@@ -24,6 +24,7 @@ class _SigninPageState extends State<SigninPage> {
   String? _Password;
 
   void _submit() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       _autovalidateMode = AutovalidateMode.always;
     });
@@ -50,7 +51,7 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    final centerListState = context.watch<DeviceListProvider>().state;
+    final centerListState = context.watch<CenterListProvider>().state;
 
     return Container(
       color: Colors.white,
@@ -78,13 +79,17 @@ class _SigninPageState extends State<SigninPage> {
                           height: 100,
                         ),
                         SizedBox(
-                          height: 80.0,
+                          height: 30.0,
                         ),
-                        Text(
-                          'login',
-                          textAlign: TextAlign.center,
-                          style: loginTitle(context),
-                        ).tr(),
+                        centerListState.centerListStatus ==
+                                CenterListStatus.submitting
+                            ? Lottie.asset('assets/lottie/loading.json',
+                                width: 100, height: 100)
+                            : Text(
+                                'login',
+                                textAlign: TextAlign.center,
+                                style: loginTitle(context),
+                              ).tr(),
                         SizedBox(
                           height: 30.0,
                         ),
@@ -109,7 +114,7 @@ class _SigninPageState extends State<SigninPage> {
                           },
                           onSaved: (String? inputID) {
                             _ID = inputID;
-                            // _ID = 'insung';
+                            // _ID = 'health';
                           },
                         ),
                         SizedBox(
@@ -136,7 +141,7 @@ class _SigninPageState extends State<SigninPage> {
                           },
                           onSaved: (String? inputPassword) {
                             _Password = inputPassword;
-                            // _Password = 'insung123';
+                            // _Password = 'health123';
                           },
                         ),
                         SizedBox(
@@ -162,12 +167,12 @@ class _SigninPageState extends State<SigninPage> {
                           height: 30.0,
                         ),
                         ElevatedButton(
-                          onPressed: centerListState.deviceListStatus ==
-                                  DeviceListStatus.submitting
+                          onPressed: centerListState.centerListStatus ==
+                                  CenterListStatus.submitting
                               ? null
                               : _submit,
-                          child: Text(centerListState.deviceListStatus ==
-                                      DeviceListStatus.submitting
+                          child: Text(centerListState.centerListStatus ==
+                                      CenterListStatus.submitting
                                   ? 'loading'
                                   : 'sign in')
                               .tr(),
