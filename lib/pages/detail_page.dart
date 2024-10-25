@@ -467,103 +467,111 @@ class _logInformationState extends State<logInformation> {
               SizedBox(
                 height: 5,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 38, 94, 176),
-                        foregroundColor: Colors.white,
-                        textStyle: TextStyle(
-                          fontSize: 15.0,
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 38, 94, 176),
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(
+                            fontSize: 15.0,
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        // A10 newDevice = device.copyWith(
-                        //   startTime: DateTime.utc(device.timeStamp.year,
-                        //       device.timeStamp.month, device.timeStamp.day),
-                        // );
+                        onPressed: () {
+                          // A10 newDevice = device.copyWith(
+                          //   startTime: DateTime.utc(device.timeStamp.year,
+                          //       device.timeStamp.month, device.timeStamp.day),
+                          // );
 
-                        // A10 newDevice = device.copyWith(
-                        //     startTime: startDateTime, endTime: endDateTime);
+                          // A10 newDevice = device.copyWith(
+                          //     startTime: startDateTime, endTime: endDateTime);
 
-                        final selectedCenterInfo =
-                            context.read<CenterListProvider>().state.loginInfo;
+                          final selectedCenterInfo = context
+                              .read<CenterListProvider>()
+                              .state
+                              .loginInfo;
 
-                        try {
-                          A10 newDevice = device.copyWith(
-                              startTime: startDateTime.toUtc(),
-                              timeStamp: endDateTime.toUtc());
+                          try {
+                            A10 newDevice = device.copyWith(
+                                startTime: startDateTime.toUtc(),
+                                timeStamp: endDateTime.toUtc());
 
-                          context
-                              .read<DeviceLogDataProvider>()
-                              .getDeviceLogData(
-                                  device: newDevice,
-                                  token: selectedCenterInfo.token,
-                                  company: selectedCenterInfo.company);
-                        } on CustomError catch (e) {
-                          errorDialog(context, e.toString());
-                        }
-                      },
-                      child: Text('select').tr()),
+                            context
+                                .read<DeviceLogDataProvider>()
+                                .getDeviceLogData(
+                                    device: newDevice,
+                                    token: selectedCenterInfo.token,
+                                    company: selectedCenterInfo.company);
+                          } on CustomError catch (e) {
+                            errorDialog(context, e.toString());
+                          }
+                        },
+                        child: Text('select').tr()),
+                  ),
                 ),
               ),
               SizedBox(
                 height: 2,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 31, 103, 60),
-                        foregroundColor: Colors.white,
-                        textStyle: TextStyle(
-                          fontSize: 15.0,
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 31, 103, 60),
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(
+                            fontSize: 15.0,
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        A10 device =
-                            ModalRoute.of(context)!.settings.arguments as A10;
-                        List<LogData> logDatas = context
-                            .read<DeviceLogDataProvider>()
-                            .state
-                            .deviceLogDataInfo
-                            .logDatas;
+                        onPressed: () async {
+                          A10 device =
+                              ModalRoute.of(context)!.settings.arguments as A10;
+                          List<LogData> logDatas = context
+                              .read<DeviceLogDataProvider>()
+                              .state
+                              .deviceLogDataInfo
+                              .logDatas;
 
-                        var excel = ex.Excel.createExcel();
-                        ex.Sheet sheetObject = excel['Result'];
-                        excel.delete('Sheet1');
+                          var excel = ex.Excel.createExcel();
+                          ex.Sheet sheetObject = excel['Result'];
+                          excel.delete('Sheet1');
 
-                        sheetObject.appendRow([
-                          ex.TextCellValue('No.'),
-                          ex.TextCellValue('Temp'),
-                          ex.TextCellValue('DateTime')
-                        ]);
-                        for (int i = 0; i < logDatas.length; i++) {
                           sheetObject.appendRow([
-                            ex.TextCellValue((i + 1).toString()),
-                            ex.TextCellValue(logDatas[i].temp.toString()),
-                            ex.TextCellValue(
-                                logDatas[i].dateTime.toLocal().toString())
+                            ex.TextCellValue('No.'),
+                            ex.TextCellValue('Temp'),
+                            ex.TextCellValue('DateTime')
                           ]);
-                        }
-                        var fileBytes = excel.save();
-                        final dir = await getExternalStorageDirectory();
+                          for (int i = 0; i < logDatas.length; i++) {
+                            sheetObject.appendRow([
+                              ex.TextCellValue((i + 1).toString()),
+                              ex.TextCellValue(logDatas[i].temp.toString()),
+                              ex.TextCellValue(
+                                  logDatas[i].dateTime.toLocal().toString())
+                            ]);
+                          }
+                          var fileBytes = excel.save();
+                          final dir = await getExternalStorageDirectory();
 
-                        // print("dir $dir");
-                        String filepath = dir!.path;
-                        String now = DateFormat('yyyyMMddHHmmss')
-                            .format(DateTime.now().toLocal());
-                        File f =
-                            File('$filepath/${device.deNumber}Excel_$now.xlsx');
-                        f.writeAsBytesSync(fileBytes!);
+                          // print("dir $dir");
+                          String filepath = dir!.path;
+                          String now = DateFormat('yyyyMMddHHmmss')
+                              .format(DateTime.now().toLocal());
+                          File f = File(
+                              '$filepath/${device.deNumber}Excel_$now.xlsx');
+                          f.writeAsBytesSync(fileBytes!);
 
-                        Share.shareXFiles([XFile(f.path)], text: 'Excel');
-                      },
-                      child: Text('excel').tr()),
+                          Share.shareXFiles([XFile(f.path)], text: 'Excel');
+                        },
+                        child: Text('excel').tr()),
+                  ),
                 ),
               ),
             ],
