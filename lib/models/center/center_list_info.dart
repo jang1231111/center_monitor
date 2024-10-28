@@ -27,6 +27,7 @@ class CenterInfo {
   final int inactive;
   final int tempWarn;
   final int humWarn;
+  final String imageBaseUrl;
 
   CenterInfo(
       {required this.id,
@@ -35,7 +36,8 @@ class CenterInfo {
       required this.total,
       required this.inactive,
       required this.tempWarn,
-      required this.humWarn});
+      required this.humWarn,
+      required this.imageBaseUrl});
 
   factory CenterInfo.initial() {
     return CenterInfo(
@@ -46,6 +48,7 @@ class CenterInfo {
       inactive: 0,
       tempWarn: 0,
       humWarn: 0,
+      imageBaseUrl: '',
     );
   }
   factory CenterInfo.fromJson(Map<String, dynamic> json) {
@@ -57,6 +60,7 @@ class CenterInfo {
       inactive: json['inactive'],
       tempWarn: json['tempWarn'],
       humWarn: json['humWarn'],
+      imageBaseUrl: json['imageBaseUrl'],
     );
   }
 
@@ -73,15 +77,16 @@ class CenterInfo {
     int? inactive,
     int? tempWarn,
     int? humWarn,
+    String? imageBaseUrl,
   }) {
     return CenterInfo(
-      id: id ?? this.id,
-      centerSn: centerSn ?? this.centerSn,
-      centerNm: centerNm ?? this.centerNm,
-      total: total ?? this.total,
-      inactive: inactive ?? this.inactive,
-      tempWarn: tempWarn ?? this.tempWarn,
-      humWarn: humWarn ?? this.humWarn,
-    );
+        id: id ?? this.id,
+        centerSn: centerSn ?? this.centerSn,
+        centerNm: centerNm ?? this.centerNm,
+        total: total ?? this.total,
+        inactive: inactive ?? this.inactive,
+        tempWarn: tempWarn ?? this.tempWarn,
+        humWarn: humWarn ?? this.humWarn,
+        imageBaseUrl: imageBaseUrl ?? this.imageBaseUrl);
   }
 }

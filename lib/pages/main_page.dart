@@ -1,4 +1,4 @@
-import 'package:center_monitor/constants/constants.dart';
+import 'dart:convert';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
@@ -130,13 +130,12 @@ class CenterPlan extends StatelessWidget {
     final devices =
         context.watch<DeviceListProvider>().state.deviceListInfo.devices;
 
-    final company = context.read<CenterListProvider>().state.loginInfo.company;
-    final centerSn = context
+    final String imageBase64 = context
         .read<CenterListProvider>()
         .state
         .loginInfo
         .selectedCenter
-        .centerSn;
+        .imageBaseUrl;
 
     return
         // GestureDetector(
@@ -151,9 +150,8 @@ class CenterPlan extends StatelessWidget {
               children: [
                 Container(
                     color: Colors.white,
-                    // child: Image.asset('assets/images/center.png'),
-                    child: Image.network(
-                      '$khttpUri$company$kcenterPlanUri1$company/${centerSn}.png',
+                    child: Image.memory(
+                      base64Decode(imageBase64),
                       fit: BoxFit.fill,
                       width: 400,
                       height: 300,

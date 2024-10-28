@@ -30,7 +30,7 @@ class CenterListProvider with ChangeNotifier {
           centerListInfo: newCenterListState.centerListInfo,
           loginInfo: newCenterListState.loginInfo);
 
-      // print(_state.centerListInfo);
+      print(_state.centerListInfo);
       notifyListeners();
     } on CustomError catch (e) {
       _state =
@@ -41,16 +41,15 @@ class CenterListProvider with ChangeNotifier {
   }
 
   void changeToken(String newToken) {
-    _state = _state.copyWith(
-        loginInfo:
-            _state.loginInfo.copyWith(token: newToken));
+    _state =
+        _state.copyWith(loginInfo: _state.loginInfo.copyWith(token: newToken));
     notifyListeners();
   }
 
   void changeSelectedCenterInfo(CenterInfo newSelectedCenterInfo) {
     _state = _state.copyWith(
-        loginInfo: _state.loginInfo
-            .copyWith(selectedCenter: newSelectedCenterInfo));
+        loginInfo:
+            _state.loginInfo.copyWith(selectedCenter: newSelectedCenterInfo));
     notifyListeners();
   }
 }
