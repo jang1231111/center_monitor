@@ -1,4 +1,4 @@
-package net.optilo.center_monitor
+package net.optilo.warehouse
 
 import io.flutter.embedding.android.FlutterActivity
 

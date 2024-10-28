@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.optilo.center_monitor">
+    package="net.optilo.warehouse">
 
         <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:label="center_monitor"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/background">
         <activity
             android:name=".MainActivity"
             android:exported="true"
