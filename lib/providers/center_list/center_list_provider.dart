@@ -30,7 +30,7 @@ class CenterListProvider with ChangeNotifier {
           centerListInfo: newCenterListState.centerListInfo,
           loginInfo: newCenterListState.loginInfo);
 
-      print(_state.centerListInfo);
+      // print(_state.centerListInfo);
       notifyListeners();
     } on CustomError catch (e) {
       _state =

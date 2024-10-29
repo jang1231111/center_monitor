@@ -448,230 +448,255 @@ class DeviceItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [mainbox()],
               ),
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.25,
               width: MediaQuery.of(context).size.width * 0.95,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Expanded(
+                  //     flex: 5,
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //             color: Color.fromARGB(255, 38, 94, 176),
+                  //             borderRadius: const BorderRadius.only(
+                  //                 topLeft: Radius.circular(10),
+                  //                 topRight: Radius.circular(10))),
+                  //         width: MediaQuery.of(context).size.width * 1,
+                  //         height: MediaQuery.of(context).size.height / 80)),
                   Expanded(
-                      flex: 5,
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 38, 94, 176),
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          width: MediaQuery.of(context).size.width * 1,
-                          height: MediaQuery.of(context).size.height / 80)),
-                  Expanded(
-                    flex: 40,
+                    flex: 2,
                     child: Row(
                       children: [
                         Expanded(
                           flex: 2,
                           child: Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        'centerInfo',
-                                        style: Locate(context),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        softWrap: false,
-                                      ).tr(),
-                                      content: Container(
-                                        width: 200,
-                                        height: 200,
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'center',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ).tr(),
-                                                Text(
-                                                  ': ${device.deName}',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'deviceInfo',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ).tr(),
-                                                Text(
-                                                  ': ${device.deNumber}',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'description',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ).tr(),
-                                                Text(
-                                                  ': ${device.description}',
-                                                  style: End(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      // Text(
-                                      //   '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
-                                      //   style: End(context),
-                                      //   overflow: TextOverflow.ellipsis,
-                                      // ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            'ok',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 38, 94, 176),
-                                            ),
-                                          ).tr(),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Text(
-                                '${device.centerNm} - ${device.deName}',
-                                style: Locate(context),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                softWrap: false,
+                            child: Text(
+                              '${device.centerNm} - ${device.deName}',
+                              style: TextStyle(
+                                color: Color.fromRGBO(0, 54, 92, 1),
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 28,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'pretend',
                               ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: false,
                             ),
+
+                            //  ElevatedButton(
+                            //   onPressed: () {
+                            //     showDialog(
+                            //       context: context,
+                            //       barrierDismissible: false,
+                            //       builder: (context) {
+                            //         return AlertDialog(
+                            //           title: Text(
+                            //             'centerInfo',
+                            //             style: Locate(context),
+                            //             overflow: TextOverflow.ellipsis,
+                            //             maxLines: 1,
+                            //             softWrap: false,
+                            //           ).tr(),
+                            //           content: Container(
+                            //             width: 200,
+                            //             height: 200,
+                            //             child: Column(
+                            //               children: [
+                            //                 Row(
+                            //                   children: [
+                            //                     Text(
+                            //                       'center',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     ).tr(),
+                            //                     Text(
+                            //                       ': ${device.deName}',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     )
+                            //                   ],
+                            //                 ),
+                            //                 Row(
+                            //                   children: [
+                            //                     Text(
+                            //                       'deviceInfo',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     ).tr(),
+                            //                     Text(
+                            //                       ': ${device.deNumber}',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     )
+                            //                   ],
+                            //                 ),
+                            //                 Row(
+                            //                   children: [
+                            //                     Text(
+                            //                       'description',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     ).tr(),
+                            //                     Text(
+                            //                       ': ${device.description}',
+                            //                       style: End(context),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     )
+                            //                   ],
+                            //                 )
+                            //               ],
+                            //             ),
+                            //           ),
+                            //           // Text(
+                            //           //   '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
+                            //           //   style: End(context),
+                            //           //   overflow: TextOverflow.ellipsis,
+                            //           // ),
+                            //           actions: [
+                            //             TextButton(
+                            //               onPressed: () {
+                            //                 Navigator.pop(context);
+                            //               },
+                            //               child: Text(
+                            //                 'ok',
+                            //                 style: TextStyle(
+                            //                   color: Color.fromARGB(
+                            //                       255, 38, 94, 176),
+                            //                 ),
+                            //               ).tr(),
+                            //             ),
+                            //           ],
+                            //         );
+                            //       },
+                            //     );
+                            //   },
+                            //   child: Text(
+                            //     '${device.centerNm} - ${device.deName}',
+                            //     style: TextStyle(
+                            //       color: Color.fromRGBO(0, 54, 92, 1),
+                            //       fontSize:
+                            //           MediaQuery.of(context).size.width / 30,
+                            //       fontWeight: FontWeight.w700,
+                            //       fontFamily: 'pretend',
+                            //     ),
+                            //     overflow: TextOverflow.ellipsis,
+                            //     maxLines: 1,
+                            //     softWrap: false,
+                            //   ),
+                            // ),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Color.fromARGB(255, 38, 94, 176))),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        'checkData',
-                                        style: Locate(context),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        softWrap: false,
-                                      ).tr(),
-                                      content: Container(
-                                        width: 200,
-                                        height: 100,
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              '${device.deName}',
-                                              style: End(context),
-                                            ),
-                                            Text(
-                                              'checkDataMsg',
-                                              style: End(context),
-                                            ).tr(),
-                                          ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: WidgetStateProperty.all(
+                                        Color.fromARGB(255, 38, 94, 176))),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'checkData',
+                                          style: Locate(context),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          softWrap: false,
+                                        ).tr(),
+                                        content: Container(
+                                          width: 200,
+                                          height: 100,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${device.deName}',
+                                                style: End(context),
+                                              ),
+                                              Text(
+                                                'checkDataMsg',
+                                                style: End(context),
+                                              ).tr(),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            'no',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 38, 94, 176),
-                                            ),
-                                          ).tr(),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            final selectedCenterInfo = context
-                                                .read<CenterListProvider>()
-                                                .state
-                                                .loginInfo;
-
-                                            try {
-                                              A10 newDevice = device.copyWith(
-                                                startTime: DateTime.utc(
-                                                    device.timeStamp.year,
-                                                    device.timeStamp.month,
-                                                    device.timeStamp.day),
-                                              );
-
-                                              await context
-                                                  .read<DeviceLogDataProvider>()
-                                                  .getDeviceLogData(
-                                                      device: newDevice,
-                                                      token: selectedCenterInfo
-                                                          .token,
-                                                      company:
-                                                          selectedCenterInfo
-                                                              .company);
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
                                               Navigator.pop(context);
-                                              Navigator.pushNamed(
-                                                  context, DetailPage.routeName,
-                                                  arguments:
-                                                      newDevice.copyWith());
-                                            } on CustomError catch (e) {
-                                              errorDialog(
-                                                  context, e.toString());
-                                            }
-                                          },
-                                          child: Text(
-                                            'yes',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 38, 94, 176),
-                                            ),
-                                          ).tr(),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Text(
-                                'checkData',
-                                style: TextStyle(color: Colors.white),
-                              ).tr()),
+                                            },
+                                            child: Text(
+                                              'no',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 38, 94, 176),
+                                              ),
+                                            ).tr(),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              final selectedCenterInfo = context
+                                                  .read<CenterListProvider>()
+                                                  .state
+                                                  .loginInfo;
+
+                                              try {
+                                                A10 newDevice = device.copyWith(
+                                                  startTime: DateTime.utc(
+                                                      device.timeStamp.year,
+                                                      device.timeStamp.month,
+                                                      device.timeStamp.day),
+                                                );
+
+                                                await context
+                                                    .read<
+                                                        DeviceLogDataProvider>()
+                                                    .getDeviceLogData(
+                                                        device: newDevice,
+                                                        token:
+                                                            selectedCenterInfo
+                                                                .token,
+                                                        company:
+                                                            selectedCenterInfo
+                                                                .company);
+                                                Navigator.pop(context);
+                                                Navigator.pushNamed(context,
+                                                    DetailPage.routeName,
+                                                    arguments:
+                                                        newDevice.copyWith());
+                                              } on CustomError catch (e) {
+                                                errorDialog(
+                                                    context, e.toString());
+                                              }
+                                            },
+                                            child: Text(
+                                              'yes',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 38, 94, 176),
+                                              ),
+                                            ).tr(),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  'checkData',
+                                  style: TextStyle(color: Colors.white),
+                                ).tr()),
+                          ),
                         ),
                       ],
                     ),
@@ -683,53 +708,76 @@ class DeviceItem extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 40,
+                    flex: 5,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          flex: 3,
-                          child: Row(
+                          flex: 1,
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Image.asset('assets/images/temp_ic.png',
-                                    fit: BoxFit.fill),
+                              Image(
+                                image: AssetImage('assets/images/temp_ic.png'),
+                                fit: BoxFit.contain,
+                                width: MediaQuery.of(context).size.width * 0.08,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.08,
                               ),
                               Text(
                                 '${device.temp}°C',
-                                style: Temp(context),
+                                style: TextStyle(
+                                  color: Color.fromRGBO(230, 76, 76, 1),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 23,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'pretend',
+                                ),
                               )
                             ],
                           ),
                         ),
                         Expanded(
-                          flex: 3,
-                          child: Row(
+                          flex: 1,
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Image.asset(
-                                    'assets/images/ic_humidity.png',
-                                    fit: BoxFit.fill),
+                              Image(
+                                image:
+                                    AssetImage('assets/images/ic_humidity.png'),
+                                fit: BoxFit.contain,
+                                width: MediaQuery.of(context).size.width * 0.08,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.08,
                               ),
                               Text(
                                 '${device.hum}%',
-                                style: Temp(context),
+                                style: TextStyle(
+                                  color: Color.fromRGBO(72, 151, 219, 1),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 23,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'pretend',
+                                ),
                               )
                             ],
                           ),
                         ),
                         Expanded(
-                          flex: 3,
-                          child: Row(
+                          flex: 1,
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               getbatteryImage(context, device.battery),
                               Text(
                                 '${device.battery}%',
-                                style: Temp(context),
+                                style: TextStyle(
+                                  color: Color.fromRGBO(35, 136, 79, 1),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 23,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'pretend',
+                                ),
                               )
                             ],
                           ),
@@ -737,6 +785,58 @@ class DeviceItem extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                    child: Divider(
+                      height: 10,
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '권장 온도 : ${device.deLocation} (${device.tempLow}°C~${device.tempHigh}°C)',
+                                    style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width /
+                                                40,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'pretend',
+                                        color: Color.fromRGBO(90, 90, 90, 1)),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '비고: ${device.description}',
+                                    style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width /
+                                                40,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'pretend',
+                                        color: Color.fromRGBO(90, 90, 90, 1)),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
                 ],
               )),
         ],
