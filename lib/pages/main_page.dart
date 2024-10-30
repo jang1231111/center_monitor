@@ -155,6 +155,7 @@ class CenterPlan extends StatelessWidget {
                       fit: BoxFit.fill,
                       width: 400,
                       height: 300,
+                      gaplessPlayback: true,
                     )),
                 for (var device in devices)
                   Positioned(
