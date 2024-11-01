@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:bitmap/bitmap.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/filter/device_filter.dart';
+import 'package:center_monitor/pages/center_plan_page.dart';
 import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
@@ -14,6 +16,7 @@ import 'package:center_monitor/providers/login_number/login_number_provider.dart
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -29,10 +32,7 @@ final events = [];
 bool canScroll = false;
 
 class _MainPageState extends State<MainPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  final repaintBoundary = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -61,220 +61,285 @@ class _MainPageState extends State<MainPage> {
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   expandedHeight: size.height * 0.4,
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   // pinned: false,
-                  // floating: false,
-                  // snap: false,
+                  // floating: true,
+                  // snap: true,
                   flexibleSpace: FlexibleSpaceBar(
                     // centerTitle: true,
                     background: Column(
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                                color: Colors.white,
-                                child: Image.memory(
-                                  base64Decode(imageBase64),
-                                  fit: BoxFit.cover,
-                                  width: width,
-                                  height: height * 0.3,
-                                  gaplessPlayback: true,
-                                )),
-                            for (var device in devices)
-                              Positioned(
-                                left: device.positionX == null
-                                    ? null
-                                    : (device.positionX! * width) / 100,
-                                // : device.positionX! * 6,
-                                top: device.positionX == null
-                                    ? null
-                                    : (device.positionY! * height * 0.3) / 100,
-                                // : device.positionY! * 3,
-                                child: InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            '${device.centerNm}',
-                                            style: Locate(context),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            softWrap: false,
-                                          ),
-                                          content: Container(
-                                            width: 200,
-                                            height: 100,
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '${device.deName}',
-                                                  style: End(context),
-                                                ),
-                                                Text(
-                                                  'checkDataMsg',
-                                                  style: End(context),
-                                                ).tr(),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'no',
-                                                style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 38, 94, 176),
-                                                ),
-                                              ).tr(),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                final selectedCenterInfo =
-                                                    context
-                                                        .read<
-                                                            CenterListProvider>()
-                                                        .state
-                                                        .loginInfo;
+                        InkWell(
+                          onLongPress: () async {
+                            final boundary = repaintBoundary.currentContext!
+                                .findRenderObject() as RenderRepaintBoundary;
+                            final image = await boundary.toImage(pixelRatio: 2);
 
-                                                try {
-                                                  A10 newDevice =
-                                                      device.copyWith(
-                                                    startTime: DateTime.utc(
-                                                        device.timeStamp.year,
-                                                        device.timeStamp.month,
-                                                        device.timeStamp.day),
-                                                  );
+                            final bytedata = await image.toByteData();
+                            Bitmap bitmap = Bitmap.fromHeadless(image.width,
+                                image.height, bytedata!.buffer.asUint8List());
 
-                                                  await context
-                                                      .read<
-                                                          DeviceLogDataProvider>()
-                                                      .getDeviceLogData(
-                                                          device: newDevice,
-                                                          token:
-                                                              selectedCenterInfo
-                                                                  .token,
-                                                          company:
-                                                              selectedCenterInfo
-                                                                  .company);
-                                                  Navigator.pop(context);
-                                                  Navigator.pushNamed(context,
-                                                      DetailPage.routeName,
-                                                      arguments:
-                                                          newDevice.copyWith());
-                                                } on CustomError catch (e) {
-                                                  errorDialog(
-                                                      context, e.toString());
-                                                }
-                                              },
-                                              child: Text(
-                                                'yes',
-                                                style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 38, 94, 176),
-                                                ),
-                                              ).tr(),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Color.fromARGB(255, 91, 91, 91),
-                                    ),
-                                    width: 23,
-                                    height: 23,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                                'assets/images/temp_ic.png',
-                                                width: 7,
-                                                height: 7,
-                                                fit: BoxFit.fill),
-                                            Text(
-                                              '${device.temp.toStringAsFixed(1)}',
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 7),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                                'assets/images/ic_humidity.png',
-                                                width: 7,
-                                                height: 7,
-                                                fit: BoxFit.fill),
-                                            Text(
-                                              '${device.hum.floor()}%',
-                                              style: TextStyle(
-                                                  color: Colors.blue,
-                                                  fontSize: 7),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        SizedBox(
-                          child: Divider(
-                            height: 5,
-                          ),
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            Navigator.pushNamed(
+                                context, CenterPlanPage.routeName,
+                                arguments: bitmap);
+                          },
+                          child: RepaintBoundary(
+                            key: repaintBoundary,
                             child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.7),
-                                        blurRadius: 5.0,
-                                        spreadRadius: 0.0,
-                                        offset: const Offset(0, 7),
-                                      )
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    children: [
-                                      ScanHeader(),
-                                      ShowUpdateTime(),
-                                    ],
+                              width: width,
+                              height: height * 0.4,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      color: Colors.white,
+                                      child: Image.memory(
+                                        base64Decode(imageBase64),
+                                        fit: BoxFit.cover,
+                                        width: width,
+                                        height: height * 0.3,
+                                        gaplessPlayback: true,
+                                      )),
+                                  for (var device in devices)
+                                    Positioned(
+                                      left: device.positionX == null
+                                          ? null
+                                          : (device.positionX! * width) / 100,
+                                      top: device.positionX == null
+                                          ? null
+                                          : (device.positionY! * height * 0.3) /
+                                              100,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  '${device.centerNm}',
+                                                  style: Locate(context),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                ),
+                                                content: Container(
+                                                  width: 200,
+                                                  height: 100,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '${device.deName}',
+                                                        style: End(context),
+                                                      ),
+                                                      Text(
+                                                        'checkDataMsg',
+                                                        style: End(context),
+                                                      ).tr(),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      'no',
+                                                      style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255, 38, 94, 176),
+                                                      ),
+                                                    ).tr(),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      final selectedCenterInfo =
+                                                          context
+                                                              .read<
+                                                                  CenterListProvider>()
+                                                              .state
+                                                              .loginInfo;
+                                                      try {
+                                                        A10 newDevice =
+                                                            device.copyWith(
+                                                          startTime:
+                                                              DateTime.utc(
+                                                                  device
+                                                                      .timeStamp
+                                                                      .year,
+                                                                  device
+                                                                      .timeStamp
+                                                                      .month,
+                                                                  device
+                                                                      .timeStamp
+                                                                      .day),
+                                                        );
+
+                                                        await context
+                                                            .read<
+                                                                DeviceLogDataProvider>()
+                                                            .getDeviceLogData(
+                                                                device:
+                                                                    newDevice,
+                                                                token:
+                                                                    selectedCenterInfo
+                                                                        .token,
+                                                                company:
+                                                                    selectedCenterInfo
+                                                                        .company);
+                                                        Navigator.pop(context);
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            DetailPage
+                                                                .routeName,
+                                                            arguments: newDevice
+                                                                .copyWith());
+                                                      } on CustomError catch (e) {
+                                                        errorDialog(context,
+                                                            e.toString());
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      'yes',
+                                                      style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255, 38, 94, 176),
+                                                      ),
+                                                    ).tr(),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color:
+                                                Color.fromARGB(255, 91, 91, 91),
+                                          ),
+                                          width: 23,
+                                          height: 23,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                      'assets/images/temp_ic.png',
+                                                      width: 7,
+                                                      height: 7,
+                                                      fit: BoxFit.fill),
+                                                  Text(
+                                                    '${device.temp.toStringAsFixed(1)}',
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: 7),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                      'assets/images/ic_humidity.png',
+                                                      width: 7,
+                                                      height: 7,
+                                                      fit: BoxFit.fill),
+                                                  Text(
+                                                    '${device.hum.floor()}%',
+                                                    style: TextStyle(
+                                                        color: Colors.blue,
+                                                        fontSize: 7),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  Positioned(
+                                    left: width * 0.25,
+                                    top: height * 0.29,
+                                    child: Container(
+                                      width: width * 0.5,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.7),
+                                              blurRadius: 5.0,
+                                              spreadRadius: 0.0,
+                                              offset: const Offset(0, 7),
+                                            )
+                                          ]),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Column(
+                                          children: [
+                                            ScanHeader(),
+                                            ShowUpdateTime(),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                )),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
+                        // SizedBox(
+                        //   child: Divider(
+                        //     height: 5,
+                        //   ),
+                        //   height: 10,
+                        // ),
+                        // Expanded(
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(5),
+                        //           color: Colors.white,
+                        //           boxShadow: [
+                        //             BoxShadow(
+                        //               color: Colors.grey.withOpacity(0.7),
+                        //               blurRadius: 5.0,
+                        //               spreadRadius: 0.0,
+                        //               offset: const Offset(0, 7),
+                        //             )
+                        //           ]),
+                        //       child: Padding(
+                        //         padding:
+                        //             const EdgeInsets.symmetric(horizontal: 20),
+                        //         child: Column(
+                        //           children: [
+                        //             ScanHeader(),
+                        //             ShowUpdateTime(),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -289,33 +354,11 @@ class _MainPageState extends State<MainPage> {
                           ),
                           child: Column(
                             children: [
-                              // ScanHeader(),
-                              // SizedBox(
-                              //   child: Divider(height: 5),
-                              //   height: 20,
-                              // ),
-                              // Text(
-                              //   'centerPicture',
-                              //   style: TextStyle(
-                              //       color: Color.fromARGB(255, 38, 94, 176),
-                              //       fontSize: 15.0),
-                              // ).tr(),
-                              // SizedBox(height: 10),
-                              // CenterPlan(),
                               SizedBox(
                                 child: Divider(
                                   height: 5,
                                 ),
-                                height: 10,
-                              ),
-                              // Text(
-                              //   'centerList',
-                              //   style: TextStyle(
-                              //       color: Color.fromARGB(255, 38, 94, 176),
-                              //       fontSize: 15.0),
-                              // ).tr(),
-                              SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               FilterCenter(),
                               ShowDevices(),
@@ -335,89 +378,89 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class CenterPlan extends StatelessWidget {
-  const CenterPlan({super.key});
+// class CenterPlan extends StatelessWidget {
+//   const CenterPlan({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final deviceListState = context.watch<DeviceListProvider>().state;
-    final devices =
-        context.watch<DeviceListProvider>().state.deviceListInfo.devices;
+//   @override
+//   Widget build(BuildContext context) {
+//     final deviceListState = context.watch<DeviceListProvider>().state;
+//     final devices =
+//         context.watch<DeviceListProvider>().state.deviceListInfo.devices;
 
-    final String imageBase64 = context
-        .read<CenterListProvider>()
-        .state
-        .loginInfo
-        .selectedCenter
-        .imageBaseUrl;
+//     final String imageBase64 = context
+//         .read<CenterListProvider>()
+//         .state
+//         .loginInfo
+//         .selectedCenter
+//         .imageBaseUrl;
 
-    return
-        // GestureDetector(
-        //     onTap: () {
-        //       Navigator.pushNamed(context, CenterPlanPage.routeName);
-        //     },
-        //     child:
-        InteractiveViewer(
-      child: deviceListState.deviceListStatus == DeviceListStatus.submitting
-          ? SizedBox()
-          : Stack(
-              children: [
-                Container(
-                    color: Colors.white,
-                    child: Image.memory(
-                      base64Decode(imageBase64),
-                      fit: BoxFit.fill,
-                      width: 400,
-                      height: 300,
-                      gaplessPlayback: true,
-                    )),
-                for (var device in devices)
-                  Positioned(
-                    left: device.positionX == null
-                        ? null
-                        : device.positionX! * 3.8,
-                    top:
-                        device.positionX == null ? null : device.positionY! * 3,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 91, 91, 91),
-                        ),
-                        width: 35,
-                        height: 35,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset('assets/images/temp_ic.png',
-                                    width: 10, height: 10, fit: BoxFit.fill),
-                                Text(
-                                  '${device.temp.toStringAsFixed(1)}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/images/ic_humidity.png',
-                                    width: 10, height: 10, fit: BoxFit.fill),
-                                Text(
-                                  '${device.hum.floor()}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
-                  ),
-              ],
-            ),
-    );
-    // );
-  }
-}
+//     return
+//         // GestureDetector(
+//         //     onTap: () {
+//         //       Navigator.pushNamed(context, CenterPlanPage.routeName);
+//         //     },
+//         //     child:
+//         InteractiveViewer(
+//       child: deviceListState.deviceListStatus == DeviceListStatus.submitting
+//           ? SizedBox()
+//           : Stack(
+//               children: [
+//                 Container(
+//                     color: Colors.white,
+//                     child: Image.memory(
+//                       base64Decode(imageBase64),
+//                       fit: BoxFit.fill,
+//                       width: 400,
+//                       height: 300,
+//                       gaplessPlayback: true,
+//                     )),
+//                 for (var device in devices)
+//                   Positioned(
+//                     left: device.positionX == null
+//                         ? null
+//                         : device.positionX! * 3.8,
+//                     top:
+//                         device.positionX == null ? null : device.positionY! * 3,
+//                     child: Container(
+//                         decoration: BoxDecoration(
+//                           borderRadius: BorderRadius.circular(10),
+//                           color: Color.fromARGB(255, 91, 91, 91),
+//                         ),
+//                         width: 35,
+//                         height: 35,
+//                         child: Column(
+//                           children: [
+//                             Row(
+//                               children: [
+//                                 Image.asset('assets/images/temp_ic.png',
+//                                     width: 10, height: 10, fit: BoxFit.fill),
+//                                 Text(
+//                                   '${device.temp.toStringAsFixed(1)}',
+//                                   style: TextStyle(
+//                                       color: Colors.white, fontSize: 10),
+//                                 ),
+//                               ],
+//                             ),
+//                             Row(
+//                               children: [
+//                                 Image.asset('assets/images/ic_humidity.png',
+//                                     width: 10, height: 10, fit: BoxFit.fill),
+//                                 Text(
+//                                   '${device.hum.floor()}',
+//                                   style: TextStyle(
+//                                       color: Colors.white, fontSize: 10),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         )),
+//                   ),
+//               ],
+//             ),
+//     );
+//     // );
+//   }
+// }
 
 class ShowUpdateTime extends StatelessWidget {
   const ShowUpdateTime({super.key});
@@ -511,8 +554,8 @@ class ScanHeader extends StatelessWidget {
     final filteredCenterList =
         context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           '${context.read<CenterListProvider>().state.loginInfo.company}',
@@ -535,24 +578,9 @@ class FilterCenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phoneNumber = context.read<LoginNumberProvider>().state.phoneNumber;
     return Column(
       children: [
         filterButton(context, Filter.all),
-        phoneNumber == '010-9999-9999'
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  filterButton(context, Filter.a),
-                  filterButton(context, Filter.b),
-                  filterButton(context, Filter.c),
-                  filterButton(context, Filter.d),
-                  filterButton(context, Filter.e),
-                ],
-              )
-            : SizedBox(
-                height: 5,
-              )
       ],
     );
   }
@@ -633,6 +661,7 @@ class _ShowDevicesState extends State<ShowDevices> {
             child: Lottie.asset('assets/lottie/loading.json'),
           )
         : ListView.separated(
+            padding: EdgeInsets.zero,
             primary: false,
             shrinkWrap: true,
             itemCount: filteredCenterList.length,

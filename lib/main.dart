@@ -16,7 +16,6 @@ import 'package:center_monitor/repositories/device_list_repositories.dart';
 import 'package:center_monitor/serivices/api_services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:wakelock/wakelock.dart';
