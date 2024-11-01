@@ -12,7 +12,6 @@ import 'package:center_monitor/providers/device_filter/device_filter_provider.da
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
-import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -69,102 +68,116 @@ class _MainPageState extends State<MainPage> {
                     // centerTitle: true,
                     background: Column(
                       children: [
-                        InkWell(
-                          onLongPress: () async {
-                            final boundary = repaintBoundary.currentContext!
-                                .findRenderObject() as RenderRepaintBoundary;
-                            final image = await boundary.toImage(pixelRatio: 2);
+                        Container(
+                          width: width,
+                          height: height * 0.4,
+                          child: Stack(
+                            children: [
+                              RepaintBoundary(
+                                key: repaintBoundary,
+                                child: InkWell(
+                                  onLongPress: () async {
+                                    final boundary = repaintBoundary
+                                            .currentContext!
+                                            .findRenderObject()
+                                        as RenderRepaintBoundary;
+                                    final image =
+                                        await boundary.toImage(pixelRatio: 2);
 
-                            final bytedata = await image.toByteData();
-                            Bitmap bitmap = Bitmap.fromHeadless(image.width,
-                                image.height, bytedata!.buffer.asUint8List());
+                                    final bytedata = await image.toByteData();
+                                    Bitmap bitmap = Bitmap.fromHeadless(
+                                        image.width,
+                                        image.height,
+                                        bytedata!.buffer.asUint8List());
 
-                            Navigator.pushNamed(
-                                context, CenterPlanPage.routeName,
-                                arguments: bitmap);
-                          },
-                          child: RepaintBoundary(
-                            key: repaintBoundary,
-                            child: Container(
-                              width: width,
-                              height: height * 0.4,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                      color: Colors.white,
-                                      child: Image.memory(
-                                        base64Decode(imageBase64),
-                                        fit: BoxFit.cover,
-                                        width: width,
-                                        height: height * 0.3,
-                                        gaplessPlayback: true,
-                                      )),
-                                  for (var device in devices)
-                                    Positioned(
-                                      left: device.positionX == null
-                                          ? null
-                                          : (device.positionX! * width) / 100,
-                                      top: device.positionX == null
-                                          ? null
-                                          : (device.positionY! * height * 0.3) /
-                                              100,
-                                      child: InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: false,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: Text(
-                                                  '${device.centerNm}',
-                                                  style: Locate(context),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                  softWrap: false,
-                                                ),
-                                                content: Container(
-                                                  width: 200,
-                                                  height: 100,
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        '${device.deName}',
-                                                        style: End(context),
+                                    Navigator.pushNamed(
+                                        context, CenterPlanPage.routeName,
+                                        arguments: bitmap);
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                          color: Colors.white,
+                                          child: Image.memory(
+                                            base64Decode(imageBase64),
+                                            fit: BoxFit.cover,
+                                            width: width,
+                                            height: height * 0.3,
+                                            gaplessPlayback: true,
+                                          )),
+                                      for (var device in devices)
+                                        Positioned(
+                                          left: device.positionX == null
+                                              ? null
+                                              : (device.positionX! * width) /
+                                                  100,
+                                          top: device.positionX == null
+                                              ? null
+                                              : (device.positionY! *
+                                                      height *
+                                                      0.3) /
+                                                  100,
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      '${device.centerNm}',
+                                                      style: Locate(context),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      softWrap: false,
+                                                    ),
+                                                    content: Container(
+                                                      width: 200,
+                                                      height: 100,
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            '${device.deName}',
+                                                            style: End(context),
+                                                          ),
+                                                          Text(
+                                                            'checkDataMsg',
+                                                            style: End(context),
+                                                          ).tr(),
+                                                        ],
                                                       ),
-                                                      Text(
-                                                        'checkDataMsg',
-                                                        style: End(context),
-                                                      ).tr(),
-                                                    ],
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                      'no',
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 38, 94, 176),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(
+                                                          'no',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    38,
+                                                                    94,
+                                                                    176),
+                                                          ),
+                                                        ).tr(),
                                                       ),
-                                                    ).tr(),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      final selectedCenterInfo =
-                                                          context
-                                                              .read<
-                                                                  CenterListProvider>()
-                                                              .state
-                                                              .loginInfo;
-                                                      try {
-                                                        A10 newDevice =
-                                                            device.copyWith(
-                                                          startTime:
-                                                              DateTime.utc(
+                                                      TextButton(
+                                                        onPressed: () async {
+                                                          final selectedCenterInfo =
+                                                              context
+                                                                  .read<
+                                                                      CenterListProvider>()
+                                                                  .state
+                                                                  .loginInfo;
+                                                          try {
+                                                            A10 newDevice =
+                                                                device.copyWith(
+                                                              startTime: DateTime.utc(
                                                                   device
                                                                       .timeStamp
                                                                       .year,
@@ -174,136 +187,144 @@ class _MainPageState extends State<MainPage> {
                                                                   device
                                                                       .timeStamp
                                                                       .day),
-                                                        );
+                                                            );
 
-                                                        await context
-                                                            .read<
-                                                                DeviceLogDataProvider>()
-                                                            .getDeviceLogData(
-                                                                device:
-                                                                    newDevice,
-                                                                token:
-                                                                    selectedCenterInfo
+                                                            await context
+                                                                .read<
+                                                                    DeviceLogDataProvider>()
+                                                                .getDeviceLogData(
+                                                                    device:
+                                                                        newDevice,
+                                                                    token: selectedCenterInfo
                                                                         .token,
-                                                                company:
-                                                                    selectedCenterInfo
-                                                                        .company);
-                                                        Navigator.pop(context);
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            DetailPage
-                                                                .routeName,
-                                                            arguments: newDevice
-                                                                .copyWith());
-                                                      } on CustomError catch (e) {
-                                                        errorDialog(context,
-                                                            e.toString());
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      'yes',
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 38, 94, 176),
+                                                                    company:
+                                                                        selectedCenterInfo
+                                                                            .company);
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                DetailPage
+                                                                    .routeName,
+                                                                arguments: newDevice
+                                                                    .copyWith());
+                                                          } on CustomError catch (e) {
+                                                            errorDialog(context,
+                                                                e.toString());
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          'yes',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    38,
+                                                                    94,
+                                                                    176),
+                                                          ),
+                                                        ).tr(),
                                                       ),
-                                                    ).tr(),
-                                                  ),
-                                                ],
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color:
-                                                Color.fromARGB(255, 91, 91, 91),
-                                          ),
-                                          width: 23,
-                                          height: 23,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Row(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Color.fromARGB(
+                                                    255, 91, 91, 91),
+                                              ),
+                                              width: 23,
+                                              height: 23,
+                                              child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                  Image.asset(
-                                                      'assets/images/temp_ic.png',
-                                                      width: 7,
-                                                      height: 7,
-                                                      fit: BoxFit.fill),
-                                                  Text(
-                                                    '${device.temp.toStringAsFixed(1)}',
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontSize: 7),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Image.asset(
+                                                          'assets/images/temp_ic.png',
+                                                          width: 7,
+                                                          height: 7,
+                                                          fit: BoxFit.fill),
+                                                      Text(
+                                                        '${device.temp.toStringAsFixed(1)}',
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 7),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Image.asset(
+                                                          'assets/images/ic_humidity.png',
+                                                          width: 7,
+                                                          height: 7,
+                                                          fit: BoxFit.fill),
+                                                      Text(
+                                                        '${device.hum.floor()}%',
+                                                        style: TextStyle(
+                                                            color: Colors.blue,
+                                                            fontSize: 7),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                      'assets/images/ic_humidity.png',
-                                                      width: 7,
-                                                      height: 7,
-                                                      fit: BoxFit.fill),
-                                                  Text(
-                                                    '${device.hum.floor()}%',
-                                                    style: TextStyle(
-                                                        color: Colors.blue,
-                                                        fontSize: 7),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  Positioned(
-                                    left: width * 0.25,
-                                    top: height * 0.29,
-                                    child: Container(
-                                      width: width * 0.5,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.7),
-                                              blurRadius: 5.0,
-                                              spreadRadius: 0.0,
-                                              offset: const Offset(0, 7),
-                                            )
-                                          ]),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Column(
-                                          children: [
-                                            ScanHeader(),
-                                            ShowUpdateTime(),
-                                          ],
-                                        ),
-                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: width * 0.25,
+                                top: height * 0.29,
+                                child: Container(
+                                  width: width * 0.5,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.7),
+                                          blurRadius: 5.0,
+                                          spreadRadius: 0.0,
+                                          offset: const Offset(0, 7),
+                                        )
+                                      ]),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      children: [
+                                        ScanHeader(),
+                                        ShowUpdateTime(),
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
                         // SizedBox(

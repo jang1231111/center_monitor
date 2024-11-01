@@ -192,7 +192,7 @@ TextStyle Locate(BuildContext context) {
 
 TextStyle End(BuildContext context) {
   return TextStyle(
-      fontSize: MediaQuery.of(context).size.width / 25,
+      fontSize: MediaQuery.of(context).size.width / 27,
       fontWeight: FontWeight.w600,
       fontFamily: 'pretend',
       color: Color.fromRGBO(90, 90, 90, 1));
