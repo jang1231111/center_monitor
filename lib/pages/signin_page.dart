@@ -1,7 +1,10 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
+import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
+import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -38,12 +41,30 @@ class _SigninPageState extends State<SigninPage> {
     form.save();
 
     try {
+      /// 센터 정보 API
       await context
           .read<CenterListProvider>()
           .signIn(ID: _ID!, Password: _Password!);
 
-      showCenterChoiceDialog(context,
+      /// 센터 선택 Dialog
+      final center = await showCenterChoiceDialog(context,
           context.read<CenterListProvider>().state.centerListInfo.centers);
+
+      context.read<CenterListProvider>().changeSelectedCenterInfo(center);
+
+      final selectedInfo = context.read<CenterListProvider>().state.loginInfo;
+
+      /// 기기 정보 API
+      await context.read<DeviceListProvider>().getDeviceList(
+          id: center.id,
+          token: selectedInfo.token,
+          company: selectedInfo.company);
+
+      /// 화면 전환
+      await Navigator.pushNamed(
+        context,
+        MainPage.routeName,
+      );
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
     }
@@ -52,6 +73,7 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     final centerListState = context.watch<CenterListProvider>().state;
+    final deviceListState = context.watch<DeviceListProvider>().state;
 
     return Container(
       color: Colors.white,
@@ -85,11 +107,15 @@ class _SigninPageState extends State<SigninPage> {
                                 CenterListStatus.submitting
                             ? Lottie.asset('assets/lottie/loading.json',
                                 width: 100, height: 100)
-                            : Text(
-                                'login',
-                                textAlign: TextAlign.center,
-                                style: loginTitle(context),
-                              ).tr(),
+                            : deviceListState.deviceListStatus ==
+                                    DeviceListStatus.submitting
+                                ? Lottie.asset('assets/lottie/loading.json',
+                                    width: 100, height: 100)
+                                : Text(
+                                    'login',
+                                    textAlign: TextAlign.center,
+                                    style: loginTitle(context),
+                                  ).tr(),
                         SizedBox(
                           height: 30.0,
                         ),
@@ -105,16 +131,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input id'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input id'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputID) {
                             _ID = inputID;
-                            // _ID = 'health';
+                            _ID = 'health';
                           },
                         ),
                         SizedBox(
@@ -132,16 +158,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.password),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input password'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input password'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputPassword) {
                             _Password = inputPassword;
-                            // _Password = 'health123';
+                            _Password = 'health123';
                           },
                         ),
                         SizedBox(

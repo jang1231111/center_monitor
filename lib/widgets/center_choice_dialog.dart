@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/center/center_list_info.dart';
 import 'package:center_monitor/models/custom_error.dart';
@@ -9,7 +11,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void showCenterChoiceDialog(BuildContext context, List<CenterInfo> centers) {
+Future<CenterInfo> showCenterChoiceDialog(
+    BuildContext context, List<CenterInfo> centers) async {
   // if (Platform.isIOS) {
   //   showCupertinoDialog(
   //     context: context,
@@ -30,7 +33,7 @@ void showCenterChoiceDialog(BuildContext context, List<CenterInfo> centers) {
   //     },
   //   );
   // } else {
-  showDialog(
+  final center = await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
@@ -42,6 +45,7 @@ void showCenterChoiceDialog(BuildContext context, List<CenterInfo> centers) {
       );
     },
   );
+  return center;
 }
 // }
 
@@ -103,25 +107,7 @@ centerButton(BuildContext context, CenterInfo center) {
       ),
       child: TextButton(
         onPressed: () async {
-          context.read<CenterListProvider>().changeSelectedCenterInfo(center);
-
-          final selectedInfo =
-              context.read<CenterListProvider>().state.loginInfo;
-
-          try {
-            await context.read<DeviceListProvider>().getDeviceList(
-                id: center.id,
-                token: selectedInfo.token,
-                company: selectedInfo.company);
-
-            Navigator.pop(context);
-            await Navigator.pushNamed(
-              context,
-              MainPage.routeName,
-            );
-          } on CustomError catch (e) {
-            errorDialog(context, e.toString());
-          }
+          Navigator.pop(context, center);
         },
         child: Text(
           '${center.centerNm}',

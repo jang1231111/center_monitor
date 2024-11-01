@@ -297,10 +297,10 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                               Positioned(
-                                left: width * 0.25,
+                                left: width * 0.1,
                                 top: height * 0.29,
                                 child: Container(
-                                  width: width * 0.5,
+                                  width: width * 0.8,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       color: Colors.white,
