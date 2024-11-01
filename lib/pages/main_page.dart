@@ -30,89 +30,205 @@ bool canScroll = false;
 
 class _MainPageState extends State<MainPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final devices =
+        context.watch<DeviceListProvider>().state.deviceListInfo.devices;
+    final String imageBase64 = context
+        .read<CenterListProvider>()
+        .state
+        .loginInfo
+        .selectedCenter
+        .imageBaseUrl;
+
     return PopScope(
       canPop: false,
       child: Container(
         color: Colors.white,
         child: SafeArea(
+          top: false,
+          bottom: false,
           child: Scaffold(
-            body: SingleChildScrollView(
-              physics: canScroll
-                  ? const ScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10.0,
-                ),
-                child: Listener(
-                  onPointerDown: (event) {
-                    events.add(event.pointer);
-                    print("new event");
-                  },
-                  onPointerUp: (event) {
-                    events.clear();
-                    print("events cleared");
-                    setState(() {
-                      canScroll = true;
-                    });
-                  },
-                  onPointerMove: (event) {
-                    if (events.length == 2) {
-                      setState(() {
-                        canScroll = false;
-                      });
-                      //   int sensitivity = 8;
-                      //   if (event.delta.dy > sensitivity) {
-                      //     // code for two finger swipe up event
-
-                      //   } else if (event.delta.dy < -sensitivity) {
-                      //     // code for two finger swipe down event
-
-                      //   }
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      ScanHeader(),
-                      SizedBox(
-                        child: Divider(height: 5),
-                        height: 20,
-                      ),
-                      Text(
-                        'centerPicture',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 38, 94, 176),
-                            fontSize: 15.0),
-                      ).tr(),
-                      SizedBox(height: 10),
-                      CenterPlan(),
-                      SizedBox(
-                        child: Divider(
-                          height: 5,
+            body: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  expandedHeight: size.height * 0.4,
+                  backgroundColor: Colors.white,
+                  // pinned: false,
+                  // floating: false,
+                  // snap: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    // centerTitle: true,
+                    background: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                                color: Colors.white,
+                                child: Image.memory(
+                                  base64Decode(imageBase64),
+                                  fit: BoxFit.cover,
+                                  width: width,
+                                  height: height * 0.3,
+                                  gaplessPlayback: true,
+                                )),
+                            for (var device in devices)
+                              Positioned(
+                                left: device.positionX == null
+                                    ? null
+                                    : (device.positionX! * width) / 100,
+                                // : device.positionX! * 6,
+                                top: device.positionX == null
+                                    ? null
+                                    : (device.positionY! * height * 0.3) / 100,
+                                // : device.positionY! * 3,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color.fromARGB(255, 91, 91, 91),
+                                  ),
+                                  width: 23,
+                                  height: 23,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              'assets/images/temp_ic.png',
+                                              width: 7,
+                                              height: 7,
+                                              fit: BoxFit.fill),
+                                          Text(
+                                            '${device.temp.toStringAsFixed(1)}',
+                                            style: TextStyle(
+                                                color: Colors.red, fontSize: 7),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              'assets/images/ic_humidity.png',
+                                              width: 7,
+                                              height: 7,
+                                              fit: BoxFit.fill),
+                                          Text(
+                                            '${device.hum.floor()}%',
+                                            style: TextStyle(
+                                                color: Colors.blue,
+                                                fontSize: 7),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                        height: 20,
-                      ),
-                      Text(
-                        'centerList',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 38, 94, 176),
-                            fontSize: 15.0),
-                      ).tr(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      ShowUpdateTime(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      FilterCenter(),
-                      ShowDevices(),
-                    ],
+                        SizedBox(
+                          child: Divider(
+                            height: 5,
+                          ),
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.7),
+                                        blurRadius: 5.0,
+                                        spreadRadius: 0.0,
+                                        offset: const Offset(0, 7),
+                                      )
+                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    children: [
+                                      ScanHeader(),
+                                      ShowUpdateTime(),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 20.0,
+                          ),
+                          child: Column(
+                            children: [
+                              // ScanHeader(),
+                              // SizedBox(
+                              //   child: Divider(height: 5),
+                              //   height: 20,
+                              // ),
+                              // Text(
+                              //   'centerPicture',
+                              //   style: TextStyle(
+                              //       color: Color.fromARGB(255, 38, 94, 176),
+                              //       fontSize: 15.0),
+                              // ).tr(),
+                              // SizedBox(height: 10),
+                              // CenterPlan(),
+                              SizedBox(
+                                child: Divider(
+                                  height: 5,
+                                ),
+                                height: 10,
+                              ),
+                              // Text(
+                              //   'centerList',
+                              //   style: TextStyle(
+                              //       color: Color.fromARGB(255, 38, 94, 176),
+                              //       fontSize: 15.0),
+                              // ).tr(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              FilterCenter(),
+                              ShowDevices(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),

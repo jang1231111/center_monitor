@@ -42,7 +42,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     return MultiProvider(
       providers: [
         Provider<CenterListRepositories>(
