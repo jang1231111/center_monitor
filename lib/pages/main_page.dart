@@ -90,56 +90,154 @@ class _MainPageState extends State<MainPage> {
                                     ? null
                                     : (device.positionY! * height * 0.3) / 100,
                                 // : device.positionY! * 3,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Color.fromARGB(255, 91, 91, 91),
-                                  ),
-                                  width: 23,
-                                  height: 23,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                              'assets/images/temp_ic.png',
-                                              width: 7,
-                                              height: 7,
-                                              fit: BoxFit.fill),
-                                          Text(
-                                            '${device.temp.toStringAsFixed(1)}',
-                                            style: TextStyle(
-                                                color: Colors.red, fontSize: 7),
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            '${device.centerNm}',
+                                            style: Locate(context),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            softWrap: false,
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                              'assets/images/ic_humidity.png',
-                                              width: 7,
-                                              height: 7,
-                                              fit: BoxFit.fill),
-                                          Text(
-                                            '${device.hum.floor()}%',
-                                            style: TextStyle(
-                                                color: Colors.blue,
-                                                fontSize: 7),
+                                          content: Container(
+                                            width: 200,
+                                            height: 100,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '${device.deName}',
+                                                  style: End(context),
+                                                ),
+                                                Text(
+                                                  'checkDataMsg',
+                                                  style: End(context),
+                                                ).tr(),
+                                              ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                    ],
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'no',
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 38, 94, 176),
+                                                ),
+                                              ).tr(),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                final selectedCenterInfo =
+                                                    context
+                                                        .read<
+                                                            CenterListProvider>()
+                                                        .state
+                                                        .loginInfo;
+
+                                                try {
+                                                  A10 newDevice =
+                                                      device.copyWith(
+                                                    startTime: DateTime.utc(
+                                                        device.timeStamp.year,
+                                                        device.timeStamp.month,
+                                                        device.timeStamp.day),
+                                                  );
+
+                                                  await context
+                                                      .read<
+                                                          DeviceLogDataProvider>()
+                                                      .getDeviceLogData(
+                                                          device: newDevice,
+                                                          token:
+                                                              selectedCenterInfo
+                                                                  .token,
+                                                          company:
+                                                              selectedCenterInfo
+                                                                  .company);
+                                                  Navigator.pop(context);
+                                                  Navigator.pushNamed(context,
+                                                      DetailPage.routeName,
+                                                      arguments:
+                                                          newDevice.copyWith());
+                                                } on CustomError catch (e) {
+                                                  errorDialog(
+                                                      context, e.toString());
+                                                }
+                                              },
+                                              child: Text(
+                                                'yes',
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 38, 94, 176),
+                                                ),
+                                              ).tr(),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Color.fromARGB(255, 91, 91, 91),
+                                    ),
+                                    width: 23,
+                                    height: 23,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                                'assets/images/temp_ic.png',
+                                                width: 7,
+                                                height: 7,
+                                                fit: BoxFit.fill),
+                                            Text(
+                                              '${device.temp.toStringAsFixed(1)}',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 7),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                                'assets/images/ic_humidity.png',
+                                                width: 7,
+                                                height: 7,
+                                                fit: BoxFit.fill),
+                                            Text(
+                                              '${device.hum.floor()}%',
+                                              style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontSize: 7),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -725,12 +823,12 @@ class DeviceItem extends StatelessWidget {
                                     builder: (context) {
                                       return AlertDialog(
                                         title: Text(
-                                          'checkData',
+                                          '${device.centerNm}',
                                           style: Locate(context),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           softWrap: false,
-                                        ).tr(),
+                                        ),
                                         content: Container(
                                           width: 200,
                                           height: 100,
