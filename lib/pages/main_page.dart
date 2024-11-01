@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
               slivers: [
                 SliverAppBar(
                   automaticallyImplyLeading: false,
-                  expandedHeight: size.height * 0.4,
+                  expandedHeight: size.height * 0.45,
                   // backgroundColor: Colors.white,
                   // pinned: false,
                   // floating: true,
@@ -70,7 +70,7 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         Container(
                           width: width,
-                          height: height * 0.4,
+                          height: height * 0.45,
                           child: Stack(
                             children: [
                               RepaintBoundary(
