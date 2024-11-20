@@ -237,7 +237,7 @@ class _MainPageState extends State<MainPage> {
                                                 color: Color.fromARGB(
                                                     255, 91, 91, 91),
                                               ),
-                                              width: 23,
+                                              width: 25,
                                               height: 23,
                                               child: Column(
                                                 mainAxisAlignment:
