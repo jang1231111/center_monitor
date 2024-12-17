@@ -152,15 +152,16 @@ class ApiServices {
 
     final Map<String, dynamic> data = new Map<String, dynamic>();
 
-    data['id'] = selectedDevice.id;
+    final idList = [selectedDevice.id];
+
+    data['id'] = idList;
     data["deNumber"] = selectedDevice.deNumber;
     data["startTime"] =
         selectedDevice.startTime.toString().replaceAll(" ", "T");
     data["endTime"] = selectedDevice.timeStamp.toString().replaceAll(" ", "T");
-    ;
     data["dataType"] = "C";
-    data["timezone"] = "string";
-    data["timeBased"] = true;
+    data["timezone"] = "Asia/Seoul";
+    data["isTimeBased"] = true;
 
     print(' data ${data}');
 

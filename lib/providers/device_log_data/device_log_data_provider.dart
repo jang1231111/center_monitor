@@ -4,15 +4,15 @@ import 'package:center_monitor/providers/device_log_data/device_log_data_state.d
 import 'package:center_monitor/repositories/device_data_repositories.dart';
 import 'package:flutter/material.dart';
 
-class DeviceLogDataProvider with ChangeNotifier { 
+class DeviceLogDataProvider with ChangeNotifier {
   DeviceLogDataState _state = DeviceLogDataState.initial();
   DeviceLogDataState get state => _state;
 
+  final DeviceDataRepostiories centerDataRepositories;
+  
   DeviceLogDataProvider({
     required this.centerDataRepositories,
   });
-
-  final DeviceDataRepostiories centerDataRepositories;
 
   Future<void> getDeviceLogData({
     required A10 device,
