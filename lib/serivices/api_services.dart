@@ -39,7 +39,7 @@ class ApiServices {
     } catch (e) {
       print(e.toString());
       rethrow;
-    }
+    } 
   }
 
   Future<String> login(String ID, String Password, String center) async {
@@ -51,7 +51,7 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kLoginUri');
 
-    // print('Login Uri ${uri}');
+    print('Login Uri ${uri}');
 
     try {
       final http.Response response = await client.post(uri,
@@ -81,7 +81,7 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
-    // print('centerList Uri $uri');
+    print('centerList Uri $uri');
 
     try {
       final http.Response response = await client.post(uri, headers: {
@@ -145,7 +145,7 @@ class ApiServices {
     String company,
     String token,
   ) async {
-    var client = http.Client();
+    var client = http.Client(); 
     var uri = Uri.parse('$khttpUri$company$kdeviceDataUri');
 
     // print('getDeviceLogData Uri : ${uri.toString()}');
@@ -153,7 +153,7 @@ class ApiServices {
     final Map<String, dynamic> data = new Map<String, dynamic>();
 
     final idList = [selectedDevice.id];
-
+ 
     data['id'] = idList;
     data["deNumber"] = selectedDevice.deNumber;
     data["startTime"] =

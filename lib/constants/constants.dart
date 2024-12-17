@@ -7,3 +7,13 @@ const kdeviceListUri = '.logithermo.com:8080/api/center/';
 const kcenterPlanUri1 = '.logithermo.com/upload/warehouse/';
 // DeviceData
 const kdeviceDataUri = '.logithermo.com:8080/api/detail/device-data';
+
+
+
+/**
+// LocalTest
+// const kLoginUri = '192.168.0.147:8080/api/auth/login';
+// const kcenterListUri = '192.168.0.147:8080/api/center/list';
+// const kdeviceListUri = '192.168.0.147:8080/api/center/';
+// const kdeviceDataUri = '192.168.0.147:8080/api/detail/device-data';
+**/
