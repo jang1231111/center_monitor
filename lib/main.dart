@@ -10,6 +10,7 @@ import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
+import 'package:center_monitor/providers/user/user_provider.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
 import 'package:center_monitor/repositories/device_data_repositories.dart';
 import 'package:center_monitor/repositories/device_list_repositories.dart';
@@ -65,6 +66,9 @@ class MyApp extends StatelessWidget {
               httpClient: http.Client(),
             ),
           ),
+        ),
+        Provider<UserProvider>(
+          create: (context) => UserProvider(),
         ),
         ChangeNotifierProvider<LoginNumberProvider>(
           create: (context) => LoginNumberProvider(),
