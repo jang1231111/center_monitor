@@ -1,5 +1,5 @@
-import 'package:geo_j/data/db/db_helper.dart';
-import 'package:geo_j/models/user.dart';
+import 'package:center_monitor/data/db/db_heler.dart';
+import 'package:center_monitor/models/user/user.dart';
 
 class UserRepository {
   final dbHelper = DatabaseHelper.instance;
