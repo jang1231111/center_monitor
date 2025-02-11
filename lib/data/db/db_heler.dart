@@ -34,6 +34,7 @@ class DatabaseHelper {
       CREATE TABLE users (
         id $idType,
         name $textType,
+        password $textType,
         email $textType,
         phone $textType
       )

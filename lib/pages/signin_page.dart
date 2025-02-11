@@ -1,10 +1,12 @@
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
+import 'package:center_monitor/pages/signup_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
+import 'package:center_monitor/providers/user/user_provider.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -41,30 +43,48 @@ class _SigninPageState extends State<SigninPage> {
     form.save();
 
     try {
-      /// 센터 정보 API
-      await context
-          .read<CenterListProvider>()
-          .signIn(ID: _ID!, Password: _Password!);
+      await context.read<UserProvider>().fetchUsers();
+      final users = await context.read<UserProvider>().users;
 
-      /// 센터 선택 Dialog
-      final center = await showCenterChoiceDialog(context,
-          context.read<CenterListProvider>().state.centerListInfo.centers);
+      final id = _ID!.replaceAll('-', '');
+      final isUserExist = users.any((user) {
+        return user.phone == id;
+      });
 
-      context.read<CenterListProvider>().changeSelectedCenterInfo(center);
+      print('내부DB를 통한 로그인 : ${isUserExist}');
 
-      final selectedInfo = context.read<CenterListProvider>().state.loginInfo;
+      if (isUserExist) {
+        // 내부 DB 검색 성공 시, 다음 동작 수행
+        // await context
+        //     .read<SigninProvider>()
+        //     .dbSignin(phoneNumber: _phoneNumber!);
+        Navigator.pushNamed(context, MainPage.routeName, arguments: '내부DB');
+      } else {
+        /// 센터 정보 API
+        await context
+            .read<CenterListProvider>()
+            .signIn(ID: _ID!, Password: _Password!);
 
-      /// 기기 정보 API
-      await context.read<DeviceListProvider>().getDeviceList(
-          id: center.id,
-          token: selectedInfo.token,
-          company: selectedInfo.company);
+        /// 센터 선택 Dialog
+        final center = await showCenterChoiceDialog(context,
+            context.read<CenterListProvider>().state.centerListInfo.centers);
 
-      /// 화면 전환
-      await Navigator.pushNamed(
-        context,
-        MainPage.routeName,
-      );
+        context.read<CenterListProvider>().changeSelectedCenterInfo(center);
+
+        final selectedInfo = context.read<CenterListProvider>().state.loginInfo;
+
+        /// 기기 정보 API
+        await context.read<DeviceListProvider>().getDeviceList(
+            id: center.id,
+            token: selectedInfo.token,
+            company: selectedInfo.company);
+
+        /// 화면 전환
+        await Navigator.pushNamed(
+          context,
+          MainPage.routeName,
+        );
+      }
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
     }
@@ -210,6 +230,23 @@ class _SigninPageState extends State<SigninPage> {
                               fontWeight: FontWeight.w600,
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        TextButton.icon(
+                          onPressed: centerListState.centerListStatus ==
+                                  CenterListStatus.submitting
+                              ? null
+                              : () {
+                                  Navigator.pushNamed(
+                                      context, SignUpPage.routeName);
+                                },
+                          icon: Icon(Icons.person_add),
+                          label: Text(
+                            '회원 가입',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Color.fromRGBO(38, 94, 176, 1)),
                           ),
                         ),
                         SizedBox(

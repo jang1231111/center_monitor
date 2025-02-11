@@ -2,6 +2,7 @@ import 'package:center_monitor/pages/center_plan_page.dart';
 import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/pages/main_page.dart';
 import 'package:center_monitor/pages/signin_page.dart';
+import 'package:center_monitor/pages/signup_page.dart';
 import 'package:center_monitor/pages/splash_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
@@ -119,6 +120,7 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: context.localizationDelegates,
         routes: {
           SigninPage.routeName: (context) => SigninPage(),
+          SignUpPage.routeName: (context) => SignUpPage(),
           MainPage.routeName: (context) => MainPage(),
           DetailPage.routeName: (context) => DetailPage(),
           CenterPlanPage.routeName: (context) => CenterPlanPage(),
