@@ -59,6 +59,25 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/background.jpeg" # 아이콘 이미지 경로 설정
+  adaptive_icon_background: "#ffffff" # 안드로이드 적응형 아이콘 배경색
+  adaptive_icon_foreground: "assets/icons/background.jpeg" # 적응형 아이콘 전경 이미지
+  remove_alpha_ios: true  # iOS 아이콘의 투명 배경 제거!
+
+
+flutter_native_splash:
+  color: "#ffffff"  # 배경색 (흰색)
+  image: "assets/icons/background.jpeg"  # 사용할 스플래시 이미지 (경로 확인!)
+  
+  android: true
+  ios: true
+  fullscreen: true  # 전체 화면 적용
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -73,6 +92,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:  
+    - assets/icons/background.jpeg
     - assets/translations/
     - assets/images/flutter_logo.png
     - assets/images/temp_ic.png
@@ -81,7 +101,6 @@ flutter:
     - assets/images/battery_50.png
     - assets/images/battery_75.png
     - assets/images/battery_100.png
-    - assets/images/background.jpeg
     - assets/images/TEST.jpg
     - assets/images/center.png
     - assets/lottie/loading.json

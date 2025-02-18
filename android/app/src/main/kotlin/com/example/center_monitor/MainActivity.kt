@@ -1,4 +1,4 @@
-package net.optilo.warehouse
+package net.optilo.thermotrack
 
 import io.flutter.embedding.android.FlutterActivity
 
