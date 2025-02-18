@@ -43,48 +43,30 @@ class _SigninPageState extends State<SigninPage> {
     form.save();
 
     try {
-      await context.read<UserProvider>().fetchUsers();
-      final users = await context.read<UserProvider>().users;
+      /// 센터 정보 API
+      await context
+          .read<CenterListProvider>()
+          .signIn(ID: _ID!, Password: _Password!);
 
-      final id = _ID!.replaceAll('-', '');
-      final isUserExist = users.any((user) {
-        return user.phone == id;
-      });
+      /// 센터 선택 Dialog
+      final center = await showCenterChoiceDialog(context,
+          context.read<CenterListProvider>().state.centerListInfo.centers);
 
-      print('내부DB를 통한 로그인 : ${isUserExist}');
+      context.read<CenterListProvider>().changeSelectedCenterInfo(center);
 
-      if (isUserExist) {
-        // 내부 DB 검색 성공 시, 다음 동작 수행
-        // await context
-        //     .read<SigninProvider>()
-        //     .dbSignin(phoneNumber: _phoneNumber!);
-        Navigator.pushNamed(context, MainPage.routeName, arguments: '내부DB');
-      } else {
-        /// 센터 정보 API
-        await context
-            .read<CenterListProvider>()
-            .signIn(ID: _ID!, Password: _Password!);
+      final selectedInfo = context.read<CenterListProvider>().state.loginInfo;
 
-        /// 센터 선택 Dialog
-        final center = await showCenterChoiceDialog(context,
-            context.read<CenterListProvider>().state.centerListInfo.centers);
+      /// 기기 정보 API
+      await context.read<DeviceListProvider>().getDeviceList(
+          id: center.id,
+          token: selectedInfo.token,
+          company: selectedInfo.company);
 
-        context.read<CenterListProvider>().changeSelectedCenterInfo(center);
-
-        final selectedInfo = context.read<CenterListProvider>().state.loginInfo;
-
-        /// 기기 정보 API
-        await context.read<DeviceListProvider>().getDeviceList(
-            id: center.id,
-            token: selectedInfo.token,
-            company: selectedInfo.company);
-
-        /// 화면 전환
-        await Navigator.pushNamed(
-          context,
-          MainPage.routeName,
-        );
-      }
+      /// 화면 전환
+      await Navigator.pushNamed(
+        context,
+        MainPage.routeName,
+      );
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
     }
@@ -249,39 +231,9 @@ class _SigninPageState extends State<SigninPage> {
                                 color: Color.fromRGBO(38, 94, 176, 1)),
                           ),
                         ),
-                        SizedBox(
-                          height: 30.0,
-                          child: Divider(
-                            height: 5,
-                          ),
-                        ),
+                  
                         SizedBox(
                           height: 20.0,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 244, 242, 242),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'optilo',
-                                style: optilo_name(context),
-                              ).tr(),
-                              Text(
-                                'address',
-                                style: optilo_info(context),
-                              ).tr(),
-                              Text(
-                                'optiloHT',
-                                style: optilo_info(context),
-                              ).tr(),
-                            ],
-                          ),
                         ),
                       ],
                     ),
