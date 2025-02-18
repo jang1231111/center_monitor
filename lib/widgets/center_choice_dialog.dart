@@ -55,42 +55,48 @@ showCenters(BuildContext context, List<CenterInfo> centers) {
     decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+        borderRadius: BorderRadius.all(
+            Radius.circular(4))),
     child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            child: Text(
-              'choiceCenter',
-              style: TextStyle(
-                color: Color.fromRGBO(0, 54, 92, 1),
-                fontSize: MediaQuery.of(context).size.width / 17,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'pretend',
-              ),
-            ).tr(),
-          ),
-          SizedBox(
-            height: 10.0,
-            child: Divider(
-              height: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            Container(
+              child: Text(
+                'choiceCenter',
+                style: TextStyle(
+                  color: Color.fromRGBO(0, 54, 92, 1),
+                  fontSize: MediaQuery.of(context).size.width / 17,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'pretend',
+                ),
+              ).tr(),
             ),
-          ),
-          ListView.separated(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: centers.length,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: 10,
-              );
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return centerButton(context, centers[index]);
-            },
-          ),
-        ],
+            SizedBox(
+              height: 10.0,
+              child: Divider(
+                height: 5,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                itemCount: centers.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 10,
+                  );
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return centerButton(context, centers[index]);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );

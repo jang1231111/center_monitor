@@ -113,11 +113,7 @@ class _SigninPageState extends State<SigninPage> {
                                     DeviceListStatus.submitting
                                 ? Lottie.asset('assets/lottie/loading.json',
                                     width: 100, height: 100)
-                                : Text(
-                                    'login',
-                                    textAlign: TextAlign.center,
-                                    style: loginTitle(context),
-                                  ).tr(),
+                                : SizedBox(),
                         SizedBox(
                           height: 30.0,
                         ),
@@ -128,6 +124,11 @@ class _SigninPageState extends State<SigninPage> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 38, 94, 176),
+                                  width: 2.0), // 포커스 시 테두리 색상
+                            ),
                             filled: true,
                             labelText: 'id'.tr(),
                             prefixIcon: Icon(Icons.login),
@@ -145,9 +146,6 @@ class _SigninPageState extends State<SigninPage> {
                             // _ID = 'health';
                           },
                         ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
                         TextFormField(
                           scrollPadding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -155,6 +153,11 @@ class _SigninPageState extends State<SigninPage> {
                           autocorrect: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 38, 94, 176),
+                                  width: 2.0), // 포커스 시 테두리 색상
+                            ),
                             filled: true,
                             labelText: 'password'.tr(),
                             prefixIcon: Icon(Icons.password),
@@ -174,22 +177,6 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                         SizedBox(
                           height: 10.0,
-                        ),
-                        TextButton.icon(
-                          onPressed: null,
-                          // centerListState.signinStatus == CenterListStatus.submitting
-                          //     ? null
-                          //     : () {
-                          //         Navigator.pushNamed(
-                          //             context, SignupPage.routeName);
-                          //       },
-                          icon: Icon(Icons.question_answer),
-                          label: Text('forgot').tr(),
-                          style: TextButton.styleFrom(
-                              textStyle: TextStyle(
-                            fontSize: 10.0,
-                            decoration: TextDecoration.underline,
-                          )),
                         ),
                         SizedBox(
                           height: 30.0,
@@ -212,28 +199,52 @@ class _SigninPageState extends State<SigninPage> {
                               fontWeight: FontWeight.w600,
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(4)), // 네모난 모양으로 만들기
+                            ),
                           ),
                         ),
                         SizedBox(height: 10.0),
-                        TextButton.icon(
-                          onPressed: centerListState.centerListStatus ==
-                                  CenterListStatus.submitting
-                              ? null
-                              : () {
-                                  Navigator.pushNamed(
-                                      context, SignUpPage.routeName);
-                                },
-                          icon: Icon(Icons.person_add),
-                          label: Text(
-                            '회원 가입',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromRGBO(38, 94, 176, 1)),
-                          ),
-                        ),
-                  
-                        SizedBox(
-                          height: 20.0,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                '비밀번호 찾기',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                                    TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                '아이디 찾기',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: centerListState.centerListStatus ==
+                                      CenterListStatus.submitting
+                                  ? null
+                                  : () {
+                                      Navigator.pushNamed(
+                                          context, SignUpPage.routeName);
+                                    },
+                              child: Text(
+                                '회원 가입',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color.fromRGBO(38, 94, 176, 1)),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

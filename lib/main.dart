@@ -112,6 +112,12 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(color: Colors.grey), // 기본 라벨 색상
+            floatingLabelStyle: TextStyle(color: Color.fromARGB(255, 38, 94, 176),), // 포커스 시 라벨 색상
+          ),
+        ),
         title: 'Center_Monitoring',
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
