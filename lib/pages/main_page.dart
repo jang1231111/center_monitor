@@ -425,7 +425,6 @@ class SearchDevice extends StatelessWidget {
               },
             );
           }
-          print('22 $newSearchTerm');
         },
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:center_monitor/constants/constants.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
@@ -7,6 +8,7 @@ import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/providers/user/user_provider.dart';
+import 'package:center_monitor/widgets/WebPageButton.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -209,40 +211,20 @@ class _SigninPageState extends State<SigninPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                '비밀번호 찾기',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
+                            WebPageButton(
+                              text: '비밀번호 찾기',
+                              url: kforgotPasswordUri,
+                              color: Colors.grey[700]!,
                             ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                '아이디 찾기',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: centerListState.centerListStatus ==
-                                      CenterListStatus.submitting
-                                  ? null
-                                  : () {
-                                      Navigator.pushNamed(
-                                          context, SignUpPage.routeName);
-                                    },
-                              child: Text(
-                                '회원 가입',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Color.fromRGBO(38, 94, 176, 1)),
-                              ),
+                            // WebPageButton(
+                            //   text: '아이디 찾기',
+                            //   url: kforgotIdUri,
+                            //   color: Colors.grey[700]!,
+                            // ),
+                            WebPageButton(
+                              text: '회원 가입',
+                              url: ksignUpUri,
+                              color: Color.fromRGBO(38, 94, 176, 1),
                             ),
                           ],
                         ),

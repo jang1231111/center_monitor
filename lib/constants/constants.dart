@@ -9,6 +9,10 @@ const kcenterPlanUri1 = '.logithermo.com/upload/warehouse/';
 const kdeviceDataUri = '.logithermo.com:8080/api/detail/device-data';
 
 
+// Login 화면 WebUrl
+const kforgotIdUri = '';
+const kforgotPasswordUri = 'http://health.logithermo.com/auth/forgot-password';
+const ksignUpUri = 'http://health.logithermo.com/auth/register';
 
 /**
 // LocalTest
