@@ -100,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                                           color: Colors.white,
                                           child: Image.memory(
                                             base64Decode(imageBase64),
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.fill,
                                             width: width,
                                             height: height * 0.3,
                                             gaplessPlayback: true,
