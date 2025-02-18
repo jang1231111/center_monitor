@@ -11,7 +11,9 @@ import 'package:center_monitor/providers/device_log_data/device_log_data_provide
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
+import 'package:center_monitor/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
+import 'package:center_monitor/utils/debounce.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +54,7 @@ class _MainPageState extends State<MainPage> {
       child: Container(
         color: Colors.white,
         child: SafeArea(
-          top: false,
+          top: true,
           bottom: false,
           child: Scaffold(
             body: CustomScrollView(
@@ -233,7 +235,7 @@ class _MainPageState extends State<MainPage> {
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                    BorderRadius.circular(2),
                                                 color: Color.fromARGB(
                                                     255, 91, 91, 91),
                                               ),
@@ -382,6 +384,7 @@ class _MainPageState extends State<MainPage> {
                                 height: 5,
                               ),
                               FilterCenter(),
+                              SearchDevice(),
                               ShowDevices(),
                             ],
                           ),
@@ -399,89 +402,35 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// class CenterPlan extends StatelessWidget {
-//   const CenterPlan({super.key});
+class SearchDevice extends StatelessWidget {
+  SearchDevice({super.key});
+  final debounce = Debounce(millonseconds: 500);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final deviceListState = context.watch<DeviceListProvider>().state;
-//     final devices =
-//         context.watch<DeviceListProvider>().state.deviceListInfo.devices;
-
-//     final String imageBase64 = context
-//         .read<CenterListProvider>()
-//         .state
-//         .loginInfo
-//         .selectedCenter
-//         .imageBaseUrl;
-
-//     return
-//         // GestureDetector(
-//         //     onTap: () {
-//         //       Navigator.pushNamed(context, CenterPlanPage.routeName);
-//         //     },
-//         //     child:
-//         InteractiveViewer(
-//       child: deviceListState.deviceListStatus == DeviceListStatus.submitting
-//           ? SizedBox()
-//           : Stack(
-//               children: [
-//                 Container(
-//                     color: Colors.white,
-//                     child: Image.memory(
-//                       base64Decode(imageBase64),
-//                       fit: BoxFit.fill,
-//                       width: 400,
-//                       height: 300,
-//                       gaplessPlayback: true,
-//                     )),
-//                 for (var device in devices)
-//                   Positioned(
-//                     left: device.positionX == null
-//                         ? null
-//                         : device.positionX! * 3.8,
-//                     top:
-//                         device.positionX == null ? null : device.positionY! * 3,
-//                     child: Container(
-//                         decoration: BoxDecoration(
-//                           borderRadius: BorderRadius.circular(10),
-//                           color: Color.fromARGB(255, 91, 91, 91),
-//                         ),
-//                         width: 35,
-//                         height: 35,
-//                         child: Column(
-//                           children: [
-//                             Row(
-//                               children: [
-//                                 Image.asset('assets/images/temp_ic.png',
-//                                     width: 10, height: 10, fit: BoxFit.fill),
-//                                 Text(
-//                                   '${device.temp.toStringAsFixed(1)}',
-//                                   style: TextStyle(
-//                                       color: Colors.white, fontSize: 10),
-//                                 ),
-//                               ],
-//                             ),
-//                             Row(
-//                               children: [
-//                                 Image.asset('assets/images/ic_humidity.png',
-//                                     width: 10, height: 10, fit: BoxFit.fill),
-//                                 Text(
-//                                   '${device.hum.floor()}',
-//                                   style: TextStyle(
-//                                       color: Colors.white, fontSize: 10),
-//                                 ),
-//                               ],
-//                             ),
-//                           ],
-//                         )),
-//                   ),
-//               ],
-//             ),
-//     );
-//     // );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: 'Search Device',
+          border: InputBorder.none,
+          filled: true,
+          prefixIcon: Icon(Icons.search),
+        ),
+        onChanged: (String? newSearchTerm) {
+          if (newSearchTerm != null) {
+            debounce.run(
+              () {
+                context.read<CenterSearchProvider>().setSearchTerm(newSearchTerm);
+              },
+            );
+          }
+          print('22 $newSearchTerm');
+        },
+      ),
+    );
+  }
+}
 
 class ShowUpdateTime extends StatelessWidget {
   const ShowUpdateTime({super.key});
@@ -710,7 +659,7 @@ class DeviceItem extends StatelessWidget {
           Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 boxShadow: [mainbox()],
               ),
               height: MediaQuery.of(context).size.height * 0.25,
@@ -862,105 +811,116 @@ class DeviceItem extends StatelessWidget {
                           flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
-                            child: TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
-                                        Color.fromARGB(255, 38, 94, 176))),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          '${device.centerNm}',
-                                          style: Locate(context),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          softWrap: false,
+                            child: ElevatedButton(
+                              child: Text(
+                                'checkData',
+                                style: TextStyle(color: Colors.white),
+                              ).tr(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 38, 94, 176),
+                                foregroundColor: Colors.white,
+                                textStyle: TextStyle(
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(8)), // 네모난 모양으로 만들기
+                                ),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        '${device.centerNm}',
+                                        style: Locate(context),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                      ),
+                                      content: Container(
+                                        width: 200,
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '${device.deName}',
+                                              style: End(context),
+                                            ),
+                                            Text(
+                                              'checkDataMsg',
+                                              style: End(context),
+                                            ).tr(),
+                                          ],
                                         ),
-                                        content: Container(
-                                          width: 200,
-                                          height: 100,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                '${device.deName}',
-                                                style: End(context),
-                                              ),
-                                              Text(
-                                                'checkDataMsg',
-                                                style: End(context),
-                                              ).tr(),
-                                            ],
-                                          ),
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'no',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 38, 94, 176),
+                                            ),
+                                          ).tr(),
                                         ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
+                                        TextButton(
+                                          onPressed: () async {
+                                            final selectedCenterInfo = context
+                                                .read<CenterListProvider>()
+                                                .state
+                                                .loginInfo;
+
+                                            try {
+                                              A10 newDevice = device.copyWith(
+                                                startTime: DateTime.utc(
+                                                    device.timeStamp.year,
+                                                    device.timeStamp.month,
+                                                    device.timeStamp.day),
+                                              );
+
+                                              await context
+                                                  .read<DeviceLogDataProvider>()
+                                                  .getDeviceLogData(
+                                                      device: newDevice,
+                                                      token: selectedCenterInfo
+                                                          .token,
+                                                      company:
+                                                          selectedCenterInfo
+                                                              .company);
                                               Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'no',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 38, 94, 176),
-                                              ),
-                                            ).tr(),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              final selectedCenterInfo = context
-                                                  .read<CenterListProvider>()
-                                                  .state
-                                                  .loginInfo;
-
-                                              try {
-                                                A10 newDevice = device.copyWith(
-                                                  startTime: DateTime.utc(
-                                                      device.timeStamp.year,
-                                                      device.timeStamp.month,
-                                                      device.timeStamp.day),
-                                                );
-
-                                                await context
-                                                    .read<
-                                                        DeviceLogDataProvider>()
-                                                    .getDeviceLogData(
-                                                        device: newDevice,
-                                                        token:
-                                                            selectedCenterInfo
-                                                                .token,
-                                                        company:
-                                                            selectedCenterInfo
-                                                                .company);
-                                                Navigator.pop(context);
-                                                Navigator.pushNamed(context,
-                                                    DetailPage.routeName,
-                                                    arguments:
-                                                        newDevice.copyWith());
-                                              } on CustomError catch (e) {
-                                                errorDialog(
-                                                    context, e.toString());
-                                              }
-                                            },
-                                            child: Text(
-                                              'yes',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 38, 94, 176),
-                                              ),
-                                            ).tr(),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Text(
-                                  'checkData',
-                                  style: TextStyle(color: Colors.white),
-                                ).tr()),
+                                              Navigator.pushNamed(
+                                                  context, DetailPage.routeName,
+                                                  arguments:
+                                                      newDevice.copyWith());
+                                            } on CustomError catch (e) {
+                                              errorDialog(
+                                                  context, e.toString());
+                                            }
+                                          },
+                                          child: Text(
+                                            'yes',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 38, 94, 176),
+                                            ),
+                                          ).tr(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ],

@@ -43,7 +43,7 @@ class _SigninPageState extends State<SigninPage> {
     form.save();
 
     try {
-      /// 센터 정보 API
+      /// 센터 정보 API // 아래 수정해야함 테스트용
       await context
           .read<CenterListProvider>()
           .signIn(ID: _ID!, Password: _Password!);
@@ -98,7 +98,7 @@ class _SigninPageState extends State<SigninPage> {
                           height: 130.0,
                         ),
                         Image.asset(
-                          'assets/images/background.jpeg',
+                          'assets/icons/background.jpeg',
                           width: 100,
                           height: 100,
                         ),
@@ -219,7 +219,7 @@ class _SigninPageState extends State<SigninPage> {
                                 ),
                               ),
                             ),
-                                    TextButton(
+                            TextButton(
                               onPressed: () {},
                               child: Text(
                                 '아이디 찾기',

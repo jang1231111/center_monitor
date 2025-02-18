@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class Debounce {
-  int seconds;
+  int millonseconds;
 
   Debounce({
-    this.seconds = 10,
+    this.millonseconds = 500,
   });
 
   Timer? _timer;
@@ -15,6 +15,6 @@ class Debounce {
       _timer!.cancel();
     }
 
-    _timer = Timer(Duration(seconds: seconds), action);
+    _timer = Timer(Duration(milliseconds: millonseconds), action);
   }
 }

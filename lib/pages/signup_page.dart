@@ -62,7 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/images/background.jpeg',
+                      'assets/icons/background.jpeg',
                       width: 80,
                       height: 80,
                     ),

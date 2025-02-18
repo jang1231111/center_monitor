@@ -9,6 +9,7 @@ import 'package:center_monitor/providers/device_log_data/device_log_data_provide
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_report/device_report_provider.dart';
+import 'package:center_monitor/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/providers/user/user_provider.dart';
@@ -91,23 +92,28 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<DeviceFilterProvider>(
           create: (context) => DeviceFilterProvider(),
         ),
+        ChangeNotifierProvider<CenterSearchProvider>(
+          create: (context) => CenterSearchProvider(),
+        ),
         ProxyProvider<DeviceLogDataProvider, DeviceReportProvider>(
           update: (BuildContext context,
                   DeviceLogDataProvider centerDataProvider,
                   DeviceReportProvider? _) =>
               DeviceReportProvider(centerDataProvider: centerDataProvider),
         ),
-        ProxyProvider2<DeviceListProvider, DeviceFilterProvider,
-            FilteredDeviceProvider>(
+        ProxyProvider3<DeviceListProvider, DeviceFilterProvider,
+            CenterSearchProvider, FilteredDeviceProvider>(
           update: (
             BuildContext context,
             DeviceListProvider centerListProvider,
             DeviceFilterProvider centerFilterProvider,
+            CenterSearchProvider deviceSearchProvider,
             FilteredDeviceProvider? _,
           ) =>
               FilteredDeviceProvider(
             centerListProvider: centerListProvider,
             centerFilterProvider: centerFilterProvider,
+            centerSearchProvider: deviceSearchProvider,
           ),
         )
       ],
@@ -115,7 +121,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: TextStyle(color: Colors.grey), // 기본 라벨 색상
-            floatingLabelStyle: TextStyle(color: Color.fromARGB(255, 38, 94, 176),), // 포커스 시 라벨 색상
+            floatingLabelStyle: TextStyle(
+              color: Color.fromARGB(255, 38, 94, 176),
+            ), // 포커스 시 라벨 색상
           ),
         ),
         title: 'Center_Monitoring',

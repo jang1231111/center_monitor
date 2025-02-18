@@ -2,14 +2,18 @@ import 'package:center_monitor/models/device/device_list_info.dart';
 import 'package:center_monitor/models/filter/device_filter.dart';
 import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_state.dart';
 
 class FilteredDeviceProvider {
   final DeviceListProvider centerListProvider;
   final DeviceFilterProvider centerFilterProvider;
+  final CenterSearchProvider centerSearchProvider;
 
   FilteredDeviceProvider(
-      {required this.centerFilterProvider, required this.centerListProvider});
+      {required this.centerListProvider,
+      required this.centerFilterProvider,
+      required this.centerSearchProvider});
 
   FilteredDeviceState get state {
     List<A10> _filteredCenterList;
@@ -46,7 +50,15 @@ class FilteredDeviceProvider {
         break;
     }
 
-    // print('_filteredDevices $_filteredDevices');
+    if (centerSearchProvider.state.searchTerm.isNotEmpty) {
+      _filteredCenterList = _filteredCenterList
+          .where((A10 device) => device.centerNm
+              .toLowerCase()
+              .contains(centerSearchProvider.state.searchTerm))
+          .toList();
+    }
+
+    // print('_filteredDevices $_filteredCenterList');
 
     return FilteredDeviceState(filtereCenterList: _filteredCenterList);
   }
