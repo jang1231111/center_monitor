@@ -419,9 +419,6 @@ class SearchDevice extends StatelessWidget {
   SearchDevice({super.key});
   final debounce = Debounce(millonseconds: 500);
 
-  // 1. textfiled 라운드 넣기
-  // 2. 지도 라운드 넣기 ? 혹은 패딩
-
   @override
   Widget build(BuildContext context) {
     return Padding(
