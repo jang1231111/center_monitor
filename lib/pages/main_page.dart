@@ -96,205 +96,217 @@ class _MainPageState extends State<MainPage> {
                                         context, CenterPlanPage.routeName,
                                         arguments: bitmap);
                                   },
-                                  child: Stack(
-                                    children: [
-                                      Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Stack(
+                                      children: [
+                                        Container(
                                           color: Colors.white,
-                                          child: Image.memory(
-                                            base64Decode(imageBase64),
-                                            fit: BoxFit.fill,
-                                            width: width,
-                                            height: height * 0.3,
-                                            gaplessPlayback: true,
-                                          )),
-                                      for (var device in devices)
-                                        Positioned(
-                                          left: device.positionX == null
-                                              ? null
-                                              : (device.positionX! * width) /
-                                                  100,
-                                          top: device.positionX == null
-                                              ? null
-                                              : (device.positionY! *
-                                                      height *
-                                                      0.3) /
-                                                  100,
-                                          child: InkWell(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                      '${device.centerNm}',
-                                                      style: Locate(context),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                      softWrap: false,
-                                                    ),
-                                                    content: Container(
-                                                      width: 200,
-                                                      height: 100,
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            '${device.deName}',
-                                                            style: End(context),
-                                                          ),
-                                                          Text(
-                                                            'checkDataMsg',
-                                                            style: End(context),
-                                                          ).tr(),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(
-                                                          'no',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    38,
-                                                                    94,
-                                                                    176),
-                                                          ),
-                                                        ).tr(),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          final selectedCenterInfo =
-                                                              context
-                                                                  .read<
-                                                                      CenterListProvider>()
-                                                                  .state
-                                                                  .loginInfo;
-                                                          try {
-                                                            A10 newDevice =
-                                                                device.copyWith(
-                                                              startTime: DateTime.utc(
-                                                                  device
-                                                                      .timeStamp
-                                                                      .year,
-                                                                  device
-                                                                      .timeStamp
-                                                                      .month,
-                                                                  device
-                                                                      .timeStamp
-                                                                      .day),
-                                                            );
-
-                                                            await context
-                                                                .read<
-                                                                    DeviceLogDataProvider>()
-                                                                .getDeviceLogData(
-                                                                    device:
-                                                                        newDevice,
-                                                                    token: selectedCenterInfo
-                                                                        .token,
-                                                                    company:
-                                                                        selectedCenterInfo
-                                                                            .company);
-                                                            Navigator.pop(
-                                                                context);
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                DetailPage
-                                                                    .routeName,
-                                                                arguments: newDevice
-                                                                    .copyWith());
-                                                          } on CustomError catch (e) {
-                                                            errorDialog(context,
-                                                                e.toString());
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          'yes',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    38,
-                                                                    94,
-                                                                    176),
-                                                          ),
-                                                        ).tr(),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
-                                                color: Color.fromARGB(
-                                                    255, 91, 91, 91),
-                                              ),
-                                              width: 25,
-                                              height: 23,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Image.asset(
-                                                          'assets/images/temp_ic.png',
-                                                          width: 7,
-                                                          height: 7,
-                                                          fit: BoxFit.fill),
-                                                      Text(
-                                                        '${device.temp.toStringAsFixed(1)}',
-                                                        style: TextStyle(
-                                                            color: Colors.red,
-                                                            fontSize: 7),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Image.asset(
-                                                          'assets/images/ic_humidity.png',
-                                                          width: 7,
-                                                          height: 7,
-                                                          fit: BoxFit.fill),
-                                                      Text(
-                                                        '${device.hum.floor()}%',
-                                                        style: TextStyle(
-                                                            color: Colors.blue,
-                                                            fontSize: 7),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: Image.memory(
+                                              base64Decode(imageBase64),
+                                              fit: BoxFit.fill,
+                                              width: width,
+                                              height: height * 0.3,
+                                              gaplessPlayback: true,
                                             ),
                                           ),
                                         ),
-                                    ],
+                                        for (var device in devices)
+                                          Positioned(
+                                            left: device.positionX == null
+                                                ? null
+                                                : (device.positionX! * width) /
+                                                    100,
+                                            top: device.positionX == null
+                                                ? null
+                                                : (device.positionY! *
+                                                        height *
+                                                        0.3) /
+                                                    100,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                        '${device.centerNm}',
+                                                        style: Locate(context),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                        softWrap: false,
+                                                      ),
+                                                      content: Container(
+                                                        width: 200,
+                                                        height: 100,
+                                                        child: Column(
+                                                          children: [
+                                                            Text(
+                                                              '${device.deName}',
+                                                              style:
+                                                                  End(context),
+                                                            ),
+                                                            Text(
+                                                              'checkDataMsg',
+                                                              style:
+                                                                  End(context),
+                                                            ).tr(),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            'no',
+                                                            style: TextStyle(
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      38,
+                                                                      94,
+                                                                      176),
+                                                            ),
+                                                          ).tr(),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            final selectedCenterInfo =
+                                                                context
+                                                                    .read<
+                                                                        CenterListProvider>()
+                                                                    .state
+                                                                    .loginInfo;
+                                                            try {
+                                                              A10 newDevice =
+                                                                  device
+                                                                      .copyWith(
+                                                                startTime: DateTime.utc(
+                                                                    device
+                                                                        .timeStamp
+                                                                        .year,
+                                                                    device
+                                                                        .timeStamp
+                                                                        .month,
+                                                                    device
+                                                                        .timeStamp
+                                                                        .day),
+                                                              );
+
+                                                              await context.read<DeviceLogDataProvider>().getDeviceLogData(
+                                                                  device:
+                                                                      newDevice,
+                                                                  token:
+                                                                      selectedCenterInfo
+                                                                          .token,
+                                                                  company:
+                                                                      selectedCenterInfo
+                                                                          .company);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  DetailPage
+                                                                      .routeName,
+                                                                  arguments:
+                                                                      newDevice
+                                                                          .copyWith());
+                                                            } on CustomError catch (e) {
+                                                              errorDialog(
+                                                                  context,
+                                                                  e.toString());
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                            'yes',
+                                                            style: TextStyle(
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      38,
+                                                                      94,
+                                                                      176),
+                                                            ),
+                                                          ).tr(),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                  color: Color.fromARGB(
+                                                      255, 91, 91, 91),
+                                                ),
+                                                width: 25,
+                                                height: 23,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Image.asset(
+                                                            'assets/images/temp_ic.png',
+                                                            width: 7,
+                                                            height: 7,
+                                                            fit: BoxFit.fill),
+                                                        Text(
+                                                          '${device.temp.toStringAsFixed(1)}',
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 7),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Image.asset(
+                                                            'assets/images/ic_humidity.png',
+                                                            width: 7,
+                                                            height: 7,
+                                                            fit: BoxFit.fill),
+                                                        Text(
+                                                          '${device.hum.floor()}%',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontSize: 7),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -304,7 +316,7 @@ class _MainPageState extends State<MainPage> {
                                 child: Container(
                                   width: width * 0.8,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
+                                      borderRadius: BorderRadius.circular(30),
                                       color: Colors.white,
                                       boxShadow: [
                                         BoxShadow(
@@ -385,6 +397,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                               FilterCenter(),
                               SearchDevice(),
+                              SizedBox(height: 10),
                               ShowDevices(),
                             ],
                           ),
@@ -406,14 +419,20 @@ class SearchDevice extends StatelessWidget {
   SearchDevice({super.key});
   final debounce = Debounce(millonseconds: 500);
 
+  // 1. textfiled 라운드 넣기
+  // 2. 지도 라운드 넣기 ? 혹은 패딩
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: TextField(
         decoration: InputDecoration(
-          labelText: 'Search Device',
-          border: InputBorder.none,
+          labelText: 'Search Center',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0)), // 둥근 테두리
+            borderSide: BorderSide.none, // 기본 테두리 제거
+          ),
           filled: true,
           prefixIcon: Icon(Icons.search),
         ),
@@ -421,7 +440,9 @@ class SearchDevice extends StatelessWidget {
           if (newSearchTerm != null) {
             debounce.run(
               () {
-                context.read<CenterSearchProvider>().setSearchTerm(newSearchTerm);
+                context
+                    .read<CenterSearchProvider>()
+                    .setSearchTerm(newSearchTerm);
               },
             );
           }
@@ -581,7 +602,9 @@ class FilterCenter extends StatelessWidget {
 
   Color textColor(BuildContext context, Filter filter) {
     final currentFilter = context.watch<DeviceFilterProvider>().state.filter;
-    return currentFilter == filter ? Colors.blue : Colors.grey;
+    return currentFilter == filter
+        ? Color.fromARGB(255, 38, 94, 176)
+        : Colors.grey;
   }
 }
 

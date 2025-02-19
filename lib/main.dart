@@ -1,6 +1,8 @@
 import 'package:center_monitor/pages/center_plan_page.dart';
 import 'package:center_monitor/pages/detail_page.dart';
 import 'package:center_monitor/pages/main_page.dart';
+import 'package:center_monitor/pages/my_page.dart';
+import 'package:center_monitor/pages/navigation_page.dart';
 import 'package:center_monitor/pages/signin_page.dart';
 import 'package:center_monitor/pages/signup_page.dart';
 import 'package:center_monitor/pages/splash_page.dart';
@@ -129,11 +131,14 @@ class MyApp extends StatelessWidget {
         title: 'Center_Monitoring',
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
+        // home: MyPage(),
         locale: context.locale,
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
         routes: {
           SigninPage.routeName: (context) => SigninPage(),
+          NavigationPage.routeName: (context) => NavigationPage(),
+          MyPage.routeName: (context) => MyPage(),
           SignUpPage.routeName: (context) => SignUpPage(),
           MainPage.routeName: (context) => MainPage(),
           DetailPage.routeName: (context) => DetailPage(),

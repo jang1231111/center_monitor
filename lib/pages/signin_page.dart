@@ -2,6 +2,7 @@ import 'package:center_monitor/constants/constants.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
 import 'package:center_monitor/pages/main_page.dart';
+import 'package:center_monitor/pages/navigation_page.dart';
 import 'package:center_monitor/pages/signup_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
 import 'package:center_monitor/providers/center_list/center_list_state.dart';
@@ -65,10 +66,8 @@ class _SigninPageState extends State<SigninPage> {
           company: selectedInfo.company);
 
       /// 화면 전환
-      await Navigator.pushNamed(
-        context,
-        MainPage.routeName,
-      );
+      await Navigator.pushNamed(context, NavigationPage.routeName);
+      // await Navigator.pushNamed(context,NavigationPage.routeName,);
     } on CustomError catch (e) {
       errorDialog(context, e.toString());
     }
@@ -136,16 +135,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input id'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input id'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputID) {
                             _ID = inputID;
-                            // _ID = 'health';
+                            _ID = 'health';
                           },
                         ),
                         TextFormField(
@@ -165,16 +164,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.password),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input password'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input password'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputPassword) {
                             _Password = inputPassword;
-                            // _Password = 'health123';
+                            _Password = 'health123';
                           },
                         ),
                         SizedBox(
