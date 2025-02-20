@@ -63,7 +63,7 @@ class _MainPageState extends State<MainPage> {
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   expandedHeight: size.height * 0.55,
-                  // backgroundColor: Colors.white,
+                  backgroundColor: Colors.white, // 얘가 없으면 상태바 색상이 안바뀜 
                   // pinned: false,
                   // floating: true,
                   // snap: true,
@@ -469,7 +469,7 @@ class SearchDevice extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: MediaQuery.of(context).size.width * 0.80,
         child: TextField(
           decoration: InputDecoration(
             labelText: 'Search Center',
