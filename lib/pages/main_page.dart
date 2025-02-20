@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:bitmap/bitmap.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
@@ -53,7 +54,7 @@ class _MainPageState extends State<MainPage> {
       canPop: false,
       child: Container(
         child: SafeArea(
-          top: true,
+          top: false,
           bottom: false,
           child: Scaffold(
             backgroundColor: Color.fromRGBO(254, 246, 255, 1),
@@ -61,7 +62,7 @@ class _MainPageState extends State<MainPage> {
               slivers: [
                 SliverAppBar(
                   automaticallyImplyLeading: false,
-                  expandedHeight: size.height * 0.45,
+                  expandedHeight: size.height * 0.55,
                   // backgroundColor: Colors.white,
                   // pinned: false,
                   // floating: true,
@@ -70,6 +71,25 @@ class _MainPageState extends State<MainPage> {
                     // centerTitle: true,
                     background: Column(
                       children: [
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Image.asset(
+                                'assets/images/map.png',
+                                width: 50,
+                                height: 50,
+                              ),
+                            ),
+                            SearchDevice(),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 5),
+
                         Container(
                           width: width,
                           height: height * 0.45,
@@ -336,7 +356,7 @@ class _MainPageState extends State<MainPage> {
                                   width: width * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
-                                    color: Colors.white,
+                                    color: Color.fromRGBO(254, 246, 255, 1),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black26, // 아래쪽 어두운 그림자
@@ -415,14 +435,13 @@ class _MainPageState extends State<MainPage> {
                           ),
                           child: Column(
                             children: [
-                              SizedBox(
-                                child: Divider(
-                                  height: 5,
-                                ),
-                                height: 5,
-                              ),
+                              // SizedBox(
+                              //   child: Divider(
+                              //     height: 5,
+                              //   ),
+                              //   height: 5,
+                              // ),
                               FilterCenter(),
-                              SearchDevice(),
                               SizedBox(height: 10),
                               ShowDevices(),
                             ],
@@ -449,27 +468,30 @@ class SearchDevice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: 'Search Center',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30.0)), // 둥근 테두리
-            borderSide: BorderSide.none, // 기본 테두리 제거
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: TextField(
+          decoration: InputDecoration(
+            labelText: 'Search Center',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0)), // 둥근 테두리
+              borderSide: BorderSide.none, // 기본 테두리 제거
+            ),
+            filled: true,
+            prefixIcon: Icon(Icons.search),
           ),
-          filled: true,
-          prefixIcon: Icon(Icons.search),
+          onChanged: (String? newSearchTerm) {
+            if (newSearchTerm != null) {
+              debounce.run(
+                () {
+                  context
+                      .read<CenterSearchProvider>()
+                      .setSearchTerm(newSearchTerm);
+                },
+              );
+            }
+          },
         ),
-        onChanged: (String? newSearchTerm) {
-          if (newSearchTerm != null) {
-            debounce.run(
-              () {
-                context
-                    .read<CenterSearchProvider>()
-                    .setSearchTerm(newSearchTerm);
-              },
-            );
-          }
-        },
       ),
     );
   }
@@ -704,7 +726,7 @@ class DeviceItem extends StatelessWidget {
         children: [
           Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color.fromRGBO(254, 246, 255, 1),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
