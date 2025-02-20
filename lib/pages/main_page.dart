@@ -52,11 +52,11 @@ class _MainPageState extends State<MainPage> {
     return PopScope(
       canPop: false,
       child: Container(
-        color: Colors.white,
         child: SafeArea(
           top: true,
           bottom: false,
           child: Scaffold(
+            backgroundColor: Color.fromRGBO(254, 246, 255, 1),
             body: CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -73,6 +73,7 @@ class _MainPageState extends State<MainPage> {
                         Container(
                           width: width,
                           height: height * 0.45,
+                          color: Color.fromRGBO(254, 246, 255, 1),
                           child: Stack(
                             children: [
                               RepaintBoundary(
@@ -97,14 +98,32 @@ class _MainPageState extends State<MainPage> {
                                         arguments: bitmap);
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(5.0),
                                     child: Stack(
                                       children: [
                                         Container(
-                                          color: Colors.white,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors
+                                                    .black26, // 아래쪽 어두운 그림자
+                                                offset: Offset(8, 8),
+                                                blurRadius: 16,
+                                                spreadRadius: 2,
+                                              ),
+                                              BoxShadow(
+                                                color: Colors.white70,
+                                                offset: Offset(-8, -8),
+                                                blurRadius: 16,
+                                                spreadRadius: 2,
+                                              ),
+                                            ],
+                                          ),
                                           child: ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(10.0),
+                                                BorderRadius.circular(16.0),
                                             child: Image.memory(
                                               base64Decode(imageBase64),
                                               fit: BoxFit.fill,
@@ -316,16 +335,23 @@ class _MainPageState extends State<MainPage> {
                                 child: Container(
                                   width: width * 0.8,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.7),
-                                          blurRadius: 5.0,
-                                          spreadRadius: 0.0,
-                                          offset: const Offset(0, 7),
-                                        )
-                                      ]),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26, // 아래쪽 어두운 그림자
+                                        offset: Offset(8, 8),
+                                        blurRadius: 16,
+                                        spreadRadius: 2,
+                                      ),
+                                      // BoxShadow(
+                                      //   color: Colors.white70,
+                                      //   offset: Offset(-16, -16),
+                                      //   blurRadius: 16,
+                                      //   spreadRadius: 2,
+                                      // ),
+                                    ],
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
@@ -655,8 +681,9 @@ class _ShowDevicesState extends State<ShowDevices> {
             shrinkWrap: true,
             itemCount: filteredCenterList.length,
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(
-                color: Colors.grey,
+              return SizedBox(
+                height: 40,
+                // color: Colors.grey,
               );
             },
             itemBuilder: (BuildContext context, int index) {
@@ -678,8 +705,24 @@ class DeviceItem extends StatelessWidget {
           Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                boxShadow: [mainbox()],
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white70,
+                    offset: Offset(-8, -8),
+                    blurRadius: 16,
+                    spreadRadius: 2,
+                  ),
+                  BoxShadow(
+                    color: Colors.black26, // 아래쪽 어두운 그림자
+                    offset: Offset(8, 8),
+                    blurRadius: 16,
+                    spreadRadius: 2,
+                  ),
+                ],
+                // color: Colors.white,
+                // borderRadius: BorderRadius.circular(5),
+                // boxShadow: [mainbox()],
               ),
               height: MediaQuery.of(context).size.height * 0.25,
               width: MediaQuery.of(context).size.width * 0.95,
