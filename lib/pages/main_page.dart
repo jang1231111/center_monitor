@@ -49,412 +49,403 @@ class _MainPageState extends State<MainPage> {
         .selectedCenter
         .imageBaseUrl;
 
-    return PopScope(
-      canPop: false,
-      child: Container(
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Scaffold(
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(254, 246, 255, 1),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: size.height * 0.55,
             backgroundColor: Color.fromRGBO(254, 246, 255, 1),
-            body: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  expandedHeight: size.height * 0.55,
-                  backgroundColor: Colors.white, // 얘가 없으면 상태바 색상이 안바뀜
-                  // pinned: false,
-                  // floating: true,
-                  // snap: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    // centerTitle: true,
-                    background: Column(
-                      children: [
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                'assets/images/map.png',
-                                width: 50,
-                                height: 50,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: SearchDevice(),
-                            ),
-                            SizedBox(width: 20)
-                          ],
+            // pinned: false,
+            // floating: true,
+            // snap: true,
+            flexibleSpace: FlexibleSpaceBar(
+              // centerTitle: true,
+              background: Column(
+                children: [
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Image.asset(
+                          'assets/images/map.png',
+                          width: 50,
+                          height: 50,
                         ),
-                        SizedBox(height: 5),
-
-                        Container(
-                          width: width,
-                          height: height * 0.45,
-                          color: Color.fromRGBO(254, 246, 255, 1),
-                          child: Stack(
-                            children: [
-                              RepaintBoundary(
-                                key: repaintBoundary,
-                                child: InkWell(
-                                  onLongPress: () async {
-                                    final boundary = repaintBoundary
-                                            .currentContext!
-                                            .findRenderObject()
-                                        as RenderRepaintBoundary;
-                                    final image =
-                                        await boundary.toImage(pixelRatio: 2);
-
-                                    final bytedata = await image.toByteData();
-                                    Bitmap bitmap = Bitmap.fromHeadless(
-                                        image.width,
-                                        image.height,
-                                        bytedata!.buffer.asUint8List());
-
-                                    Navigator.pushNamed(
-                                        context, CenterPlanPage.routeName,
-                                        arguments: bitmap);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Stack(
-                                      children: [
-                                        Container(
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: SearchDevice(),
+                      ),
+                      SizedBox(width: 20)
+                    ],
+                  ),
+                  SizedBox(height: 5),
+    
+                  Container(
+                    width: width,
+                    height: height * 0.45,
+                    color: Color.fromRGBO(254, 246, 255, 1),
+                    child: Stack(
+                      children: [
+                        RepaintBoundary(
+                          key: repaintBoundary,
+                          child: InkWell(
+                            onLongPress: () async {
+                              final boundary = repaintBoundary
+                                      .currentContext!
+                                      .findRenderObject()
+                                  as RenderRepaintBoundary;
+                              final image =
+                                  await boundary.toImage(pixelRatio: 2);
+    
+                              final bytedata = await image.toByteData();
+                              Bitmap bitmap = Bitmap.fromHeadless(
+                                  image.width,
+                                  image.height,
+                                  bytedata!.buffer.asUint8List());
+    
+                              Navigator.pushNamed(
+                                  context, CenterPlanPage.routeName,
+                                  arguments: bitmap);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(16.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors
+                                              .black26, // 아래쪽 어두운 그림자
+                                          offset: Offset(8, 8),
+                                          blurRadius: 16,
+                                          spreadRadius: 2,
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white70,
+                                          offset: Offset(-8, -8),
+                                          blurRadius: 16,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(16.0),
+                                      child: Image.memory(
+                                        base64Decode(imageBase64),
+                                        fit: BoxFit.fill,
+                                        width: width,
+                                        height: height * 0.3,
+                                        gaplessPlayback: true,
+                                      ),
+                                    ),
+                                  ),
+                                  for (var device in devices)
+                                    Positioned(
+                                      left: device.positionX == null
+                                          ? null
+                                          : (device.positionX! * width) /
+                                              100,
+                                      top: device.positionX == null
+                                          ? null
+                                          : (device.positionY! *
+                                                  height *
+                                                  0.3) /
+                                              100,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  '${device.centerNm}',
+                                                  style: Locate(context),
+                                                  overflow: TextOverflow
+                                                      .ellipsis,
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                ),
+                                                content: Container(
+                                                  width: 200,
+                                                  height: 100,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '${device.deName}',
+                                                        style:
+                                                            End(context),
+                                                      ),
+                                                      Text(
+                                                        'checkDataMsg',
+                                                        style:
+                                                            End(context),
+                                                      ).tr(),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context);
+                                                    },
+                                                    child: Text(
+                                                      'no',
+                                                      style: TextStyle(
+                                                        color: Color
+                                                            .fromARGB(
+                                                                255,
+                                                                38,
+                                                                94,
+                                                                176),
+                                                      ),
+                                                    ).tr(),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      final selectedCenterInfo =
+                                                          context
+                                                              .read<
+                                                                  CenterListProvider>()
+                                                              .state
+                                                              .loginInfo;
+                                                      try {
+                                                        A10 newDevice =
+                                                            device
+                                                                .copyWith(
+                                                          startTime: DateTime.utc(
+                                                              device
+                                                                  .timeStamp
+                                                                  .year,
+                                                              device
+                                                                  .timeStamp
+                                                                  .month,
+                                                              device
+                                                                  .timeStamp
+                                                                  .day),
+                                                        );
+    
+                                                        await context.read<DeviceLogDataProvider>().getDeviceLogData(
+                                                            device:
+                                                                newDevice,
+                                                            token:
+                                                                selectedCenterInfo
+                                                                    .token,
+                                                            company:
+                                                                selectedCenterInfo
+                                                                    .company);
+                                                        Navigator.pop(
+                                                            context);
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            DetailPage
+                                                                .routeName,
+                                                            arguments:
+                                                                newDevice
+                                                                    .copyWith());
+                                                      } on CustomError catch (e) {
+                                                        errorDialog(
+                                                            context,
+                                                            e.toString());
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      'yes',
+                                                      style: TextStyle(
+                                                        color: Color
+                                                            .fromARGB(
+                                                                255,
+                                                                38,
+                                                                94,
+                                                                176),
+                                                      ),
+                                                    ).tr(),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(16.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors
-                                                    .black26, // 아래쪽 어두운 그림자
-                                                offset: Offset(8, 8),
-                                                blurRadius: 16,
-                                                spreadRadius: 2,
+                                                BorderRadius.circular(2),
+                                            color: Color.fromARGB(
+                                                255, 91, 91, 91),
+                                          ),
+                                          width: 25,
+                                          height: 23,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center,
+                                                children: [
+                                                  Image.asset(
+                                                      'assets/images/temp_ic.png',
+                                                      width: 7,
+                                                      height: 7,
+                                                      fit: BoxFit.fill),
+                                                  Text(
+                                                    '${device.temp.toStringAsFixed(1)}',
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: 7),
+                                                  ),
+                                                ],
                                               ),
-                                              BoxShadow(
-                                                color: Colors.white70,
-                                                offset: Offset(-8, -8),
-                                                blurRadius: 16,
-                                                spreadRadius: 2,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center,
+                                                children: [
+                                                  Image.asset(
+                                                      'assets/images/ic_humidity.png',
+                                                      width: 7,
+                                                      height: 7,
+                                                      fit: BoxFit.fill),
+                                                  Text(
+                                                    '${device.hum.floor()}%',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.blue,
+                                                        fontSize: 7),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16.0),
-                                            child: Image.memory(
-                                              base64Decode(imageBase64),
-                                              fit: BoxFit.fill,
-                                              width: width,
-                                              height: height * 0.3,
-                                              gaplessPlayback: true,
-                                            ),
-                                          ),
                                         ),
-                                        for (var device in devices)
-                                          Positioned(
-                                            left: device.positionX == null
-                                                ? null
-                                                : (device.positionX! * width) /
-                                                    100,
-                                            top: device.positionX == null
-                                                ? null
-                                                : (device.positionY! *
-                                                        height *
-                                                        0.3) /
-                                                    100,
-                                            child: InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                        '${device.centerNm}',
-                                                        style: Locate(context),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        maxLines: 1,
-                                                        softWrap: false,
-                                                      ),
-                                                      content: Container(
-                                                        width: 200,
-                                                        height: 100,
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              '${device.deName}',
-                                                              style:
-                                                                  End(context),
-                                                            ),
-                                                            Text(
-                                                              'checkDataMsg',
-                                                              style:
-                                                                  End(context),
-                                                            ).tr(),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Text(
-                                                            'no',
-                                                            style: TextStyle(
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      38,
-                                                                      94,
-                                                                      176),
-                                                            ),
-                                                          ).tr(),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () async {
-                                                            final selectedCenterInfo =
-                                                                context
-                                                                    .read<
-                                                                        CenterListProvider>()
-                                                                    .state
-                                                                    .loginInfo;
-                                                            try {
-                                                              A10 newDevice =
-                                                                  device
-                                                                      .copyWith(
-                                                                startTime: DateTime.utc(
-                                                                    device
-                                                                        .timeStamp
-                                                                        .year,
-                                                                    device
-                                                                        .timeStamp
-                                                                        .month,
-                                                                    device
-                                                                        .timeStamp
-                                                                        .day),
-                                                              );
-
-                                                              await context.read<DeviceLogDataProvider>().getDeviceLogData(
-                                                                  device:
-                                                                      newDevice,
-                                                                  token:
-                                                                      selectedCenterInfo
-                                                                          .token,
-                                                                  company:
-                                                                      selectedCenterInfo
-                                                                          .company);
-                                                              Navigator.pop(
-                                                                  context);
-                                                              Navigator.pushNamed(
-                                                                  context,
-                                                                  DetailPage
-                                                                      .routeName,
-                                                                  arguments:
-                                                                      newDevice
-                                                                          .copyWith());
-                                                            } on CustomError catch (e) {
-                                                              errorDialog(
-                                                                  context,
-                                                                  e.toString());
-                                                            }
-                                                          },
-                                                          child: Text(
-                                                            'yes',
-                                                            style: TextStyle(
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      38,
-                                                                      94,
-                                                                      176),
-                                                            ),
-                                                          ).tr(),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  color: Color.fromARGB(
-                                                      255, 91, 91, 91),
-                                                ),
-                                                width: 25,
-                                                height: 23,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Image.asset(
-                                                            'assets/images/temp_ic.png',
-                                                            width: 7,
-                                                            height: 7,
-                                                            fit: BoxFit.fill),
-                                                        Text(
-                                                          '${device.temp.toStringAsFixed(1)}',
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 7),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Image.asset(
-                                                            'assets/images/ic_humidity.png',
-                                                            width: 7,
-                                                            height: 7,
-                                                            fit: BoxFit.fill),
-                                                        Text(
-                                                          '${device.hum.floor()}%',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontSize: 7),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: width * 0.1,
-                                top: height * 0.29,
-                                child: Container(
-                                  width: width * 0.8,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Color.fromRGBO(254, 246, 255, 1),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black26, // 아래쪽 어두운 그림자
-                                        offset: Offset(8, 8),
-                                        blurRadius: 16,
-                                        spreadRadius: 2,
                                       ),
-                                      // BoxShadow(
-                                      //   color: Colors.white70,
-                                      //   offset: Offset(-16, -16),
-                                      //   blurRadius: 16,
-                                      //   spreadRadius: 2,
-                                      // ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Column(
-                                      children: [
-                                        ScanHeader(),
-                                        ShowUpdateTime(),
-                                      ],
                                     ),
-                                  ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
+                        Positioned(
+                          left: width * 0.1,
+                          top: height * 0.29,
+                          child: Container(
+                            width: width * 0.8,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromRGBO(254, 246, 255, 1),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26, // 아래쪽 어두운 그림자
+                                  offset: Offset(8, 8),
+                                  blurRadius: 16,
+                                  spreadRadius: 2,
+                                ),
+                                // BoxShadow(
+                                //   color: Colors.white70,
+                                //   offset: Offset(-16, -16),
+                                //   blurRadius: 16,
+                                //   spreadRadius: 2,
+                                // ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20),
+                              child: Column(
+                                children: [
+                                  ScanHeader(),
+                                  ShowUpdateTime(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(
+                  //   child: Divider(
+                  //     height: 5,
+                  //   ),
+                  //   height: 10,
+                  // ),
+                  // Expanded(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                  //     child: Container(
+                  //       decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(5),
+                  //           color: Colors.white,
+                  //           boxShadow: [
+                  //             BoxShadow(
+                  //               color: Colors.grey.withOpacity(0.7),
+                  //               blurRadius: 5.0,
+                  //               spreadRadius: 0.0,
+                  //               offset: const Offset(0, 7),
+                  //             )
+                  //           ]),
+                  //       child: Padding(
+                  //         padding:
+                  //             const EdgeInsets.symmetric(horizontal: 20),
+                  //         child: Column(
+                  //           children: [
+                  //             ScanHeader(),
+                  //             ShowUpdateTime(),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 20.0,
+                    ),
+                    child: Column(
+                      children: [
                         // SizedBox(
                         //   child: Divider(
                         //     height: 5,
                         //   ),
-                        //   height: 10,
+                        //   height: 5,
                         // ),
-                        // Expanded(
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                        //     child: Container(
-                        //       decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(5),
-                        //           color: Colors.white,
-                        //           boxShadow: [
-                        //             BoxShadow(
-                        //               color: Colors.grey.withOpacity(0.7),
-                        //               blurRadius: 5.0,
-                        //               spreadRadius: 0.0,
-                        //               offset: const Offset(0, 7),
-                        //             )
-                        //           ]),
-                        //       child: Padding(
-                        //         padding:
-                        //             const EdgeInsets.symmetric(horizontal: 20),
-                        //         child: Column(
-                        //           children: [
-                        //             ScanHeader(),
-                        //             ShowUpdateTime(),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+                        FilterCenter(),
+                        SizedBox(height: 10),
+                        ShowDevices(),
                       ],
                     ),
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.0,
-                          ),
-                          child: Column(
-                            children: [
-                              // SizedBox(
-                              //   child: Divider(
-                              //     height: 5,
-                              //   ),
-                              //   height: 5,
-                              // ),
-                              FilterCenter(),
-                              SizedBox(height: 10),
-                              ShowDevices(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
-          ),
-        ),
+          )
+        ],
       ),
     );
   }

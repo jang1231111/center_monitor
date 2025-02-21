@@ -1,5 +1,5 @@
 import 'package:center_monitor/pages/main_page.dart';
-import 'package:center_monitor/pages/my_page.dart';
+import 'package:center_monitor/pages/setting_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _MainPageState extends State<NavigationPage> {
   // 탭에 따라 다른 화면을 보여주기 위한 리스트
   final List<Widget> _pages = [
     MainPage(), // 메인 화면
-    MyPage(), // 상세 페이지
+    SettingPage(), // 상세 페이지
   ];
 
   void _onItemTapped(int index) {
@@ -31,7 +31,7 @@ class _MainPageState extends State<NavigationPage> {
     return PopScope(
       canPop: false,
       child: Container(
-        color: Colors.white,
+        color: Color.fromRGBO(254, 246, 255, 1),
         child: SafeArea(
           top: true,
           bottom: false,

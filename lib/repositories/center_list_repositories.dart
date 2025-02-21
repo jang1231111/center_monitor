@@ -17,7 +17,7 @@ class CenterListRepositories {
       List<CenterInfo> centerList;
 
       company = await apiServices.intergrationLogin(ID, Password);
-      // print('IntergrationLogin Center Test $center');
+      // print('IntergrationLogin Center Test $company');
 
       token = await apiServices.login(ID, Password, company);
       // print('login Token Test $token');

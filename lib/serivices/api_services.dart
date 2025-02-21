@@ -29,6 +29,7 @@ class ApiServices {
       }
 
       final responseBody = response.body;
+      print('intergrationLogin Response : $responseBody');
       final center = responseBody.toString();
 
       // if (strResponse == '{msg: No Data In MANAGER_INFO, notice: []}') {
