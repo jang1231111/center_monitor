@@ -14,6 +14,9 @@ const kforgotIdUri = '';
 const kforgotPasswordUri = 'http://health.logithermo.com/auth/forgot-password';
 const ksignUpUri = 'http://health.logithermo.com/auth/register';
 
+
+// version
+const kappVersion = '1.0.0';
 /**
 // LocalTest
 // const kLoginUri = '192.168.0.147:8080/api/auth/login';

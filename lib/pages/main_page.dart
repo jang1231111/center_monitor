@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:bitmap/bitmap.dart';
 import 'package:center_monitor/constants/style.dart';
 import 'package:center_monitor/models/custom_error.dart';
@@ -63,7 +62,7 @@ class _MainPageState extends State<MainPage> {
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   expandedHeight: size.height * 0.55,
-                  backgroundColor: Colors.white, // 얘가 없으면 상태바 색상이 안바뀜 
+                  backgroundColor: Colors.white, // 얘가 없으면 상태바 색상이 안바뀜
                   // pinned: false,
                   // floating: true,
                   // snap: true,
@@ -82,10 +81,11 @@ class _MainPageState extends State<MainPage> {
                                 height: 50,
                               ),
                             ),
-                            SearchDevice(),
-                            SizedBox(
-                              width: 20,
-                            )
+                            Expanded(
+                              flex: 3,
+                              child: SearchDevice(),
+                            ),
+                            SizedBox(width: 20)
                           ],
                         ),
                         SizedBox(height: 5),
@@ -466,32 +466,30 @@ class SearchDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.80,
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: 'Search Center',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30.0)), // 둥근 테두리
-              borderSide: BorderSide.none, // 기본 테두리 제거
-            ),
-            filled: true,
-            prefixIcon: Icon(Icons.search),
+    return SizedBox(
+      height: 50,
+      width: MediaQuery.of(context).size.width * 0.80,
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: 'Search Center',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0)), // 둥근 테두리
+            borderSide: BorderSide.none, // 기본 테두리 제거
           ),
-          onChanged: (String? newSearchTerm) {
-            if (newSearchTerm != null) {
-              debounce.run(
-                () {
-                  context
-                      .read<CenterSearchProvider>()
-                      .setSearchTerm(newSearchTerm);
-                },
-              );
-            }
-          },
+          filled: true,
+          prefixIcon: Icon(Icons.search),
         ),
+        onChanged: (String? newSearchTerm) {
+          if (newSearchTerm != null) {
+            debounce.run(
+              () {
+                context
+                    .read<CenterSearchProvider>()
+                    .setSearchTerm(newSearchTerm);
+              },
+            );
+          }
+        },
       ),
     );
   }

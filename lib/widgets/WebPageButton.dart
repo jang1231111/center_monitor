@@ -14,7 +14,6 @@ class WebPageButton extends StatelessWidget {
       {super.key, required this.text, required this.url, required this.color});
 
   Future<void> _launchURL(String url) async {
-    print(url);
     Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri,
@@ -26,8 +25,6 @@ class WebPageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('$text $url');
-
     return TextButton(
       onPressed: () async {
         _launchURL(url);
