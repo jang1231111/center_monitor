@@ -15,6 +15,7 @@ import 'package:center_monitor/providers/device_report/device_report_provider.da
 import 'package:center_monitor/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/providers/login_number/login_number_provider.dart';
+import 'package:center_monitor/providers/theme/theme_provider.dart';
 import 'package:center_monitor/providers/user/user_provider.dart';
 import 'package:center_monitor/repositories/center_list_repositories.dart';
 import 'package:center_monitor/repositories/device_data_repositories.dart';
@@ -33,24 +34,9 @@ void main() async {
   WakelockPlus.enable();
 
   runApp(
-    EasyLocalization(
-      child: const MyApp(),
-      supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    return MultiProvider(
+    MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         Provider<CenterListRepositories>(
           create: (context) => CenterListRepositories(
             apiServices: ApiServices(
@@ -120,33 +106,48 @@ class MyApp extends StatelessWidget {
           ),
         )
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle: TextStyle(color: Colors.grey), // 기본 라벨 색상
-            floatingLabelStyle: TextStyle(
-              color: Color.fromARGB(255, 38, 94, 176),
-            ), // 포커스 시 라벨 색상
-          ),
-        ),
-        title: 'Center_Monitoring',
-        debugShowCheckedModeBanner: false,
-        home: SplashPage(),
-        // home: MyPage(),
-        locale: context.locale,
-        supportedLocales: context.supportedLocales,
-        localizationsDelegates: context.localizationDelegates,
-        routes: {
-          SigninPage.routeName: (context) => SigninPage(),
-          NavigationPage.routeName: (context) => NavigationPage(),
-          SettingPage.routeName: (context) => SettingPage(),
-          MyPage.routeName: (context) => MyPage(),
-          SignUpPage.routeName: (context) => SignUpPage(),
-          MainPage.routeName: (context) => MainPage(),
-          DetailPage.routeName: (context) => DetailPage(),
-          CenterPlanPage.routeName: (context) => CenterPlanPage(),
-        },
+      child: EasyLocalization(
+        child: const MyApp(),
+        supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
       ),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.grey), // 기본 라벨 색상
+          floatingLabelStyle: TextStyle(
+            color: Color.fromARGB(255, 38, 94, 176),
+          ), // 포커스 시 라벨 색상
+        ),
+      ),
+      title: 'Center_Monitoring',
+      debugShowCheckedModeBanner: false,
+      home: SplashPage(),
+      darkTheme: ThemeData.dark(),
+      themeMode: context.watch<ThemeProvider>().themeMode,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      routes: {
+        SigninPage.routeName: (context) => SigninPage(),
+        NavigationPage.routeName: (context) => NavigationPage(),
+        SettingPage.routeName: (context) => SettingPage(),
+        MyPage.routeName: (context) => MyPage(),
+        SignUpPage.routeName: (context) => SignUpPage(),
+        MainPage.routeName: (context) => MainPage(),
+        DetailPage.routeName: (context) => DetailPage(),
+        CenterPlanPage.routeName: (context) => CenterPlanPage(),
+      },
     );
   }
 }

@@ -73,7 +73,7 @@ class _MainPageState extends State<MainPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[900],
+                            color: Colors.grey[800],
                           ),
                         ),
                       ),
@@ -671,7 +671,7 @@ class ShowUpdateTime extends StatelessWidget {
           },
         );
       },
-      icon: Icon(Icons.refresh),
+      icon: Icon(Icons.refresh, color: Color.fromARGB(255, 38, 94, 176)),
       label: Text('${DateFormat("MM/dd hh:mm:ss aa").format(updateTime)}'),
       style: TextButton.styleFrom(
           foregroundColor: Colors.black,
@@ -1182,7 +1182,7 @@ class DeviceItem extends StatelessWidget {
                               Text(
                                 '${device.battery}%',
                                 style: TextStyle(
-                                  color: Color.fromRGBO(35, 136, 79, 1),
+                                  color: getBatteryColor(device.battery),
                                   fontSize:
                                       MediaQuery.of(context).size.width / 23,
                                   fontWeight: FontWeight.w700,

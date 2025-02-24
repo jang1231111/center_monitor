@@ -493,6 +493,18 @@ Widget getbatteryImage(BuildContext context, int battery) {
   }
 }
 
+Color getBatteryColor(int battery) {
+  if (battery >= 75) {
+    return Color.fromARGB(255, 35, 136, 79);
+  } else if (battery >= 50) {
+    return Color.fromARGB(255, 215, 129, 53);
+  } else if (battery >= 35) {
+    return Color.fromARGB(255, 217, 189, 51);
+  } else {
+    return Color.fromARGB(255, 207, 47, 47);
+  }
+}
+
 TextStyle stateStyle(BuildContext context, String input) {
   if (input == '온도센서 스캔 중') {
     return state_searching_blue(context);
