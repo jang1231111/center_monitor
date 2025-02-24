@@ -120,10 +120,10 @@ class Setting extends StatelessWidget {
                 ),
                 child: InkWell(
                   onTap: () {
-                    // Navigator.pushNamed(
-                    //   context,
-                    //   MyPage.routeName,
-                    // );
+                    Navigator.pushNamed(
+                      context,
+                      MyPage.routeName,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),

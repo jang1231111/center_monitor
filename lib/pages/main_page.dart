@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> {
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
-            expandedHeight: size.height * 0.55,
+            expandedHeight: size.height * 0.54,
             backgroundColor: Color.fromRGBO(254, 246, 255, 1),
             // pinned: false,
             // floating: true,
@@ -578,21 +578,25 @@ class ScanHeader extends StatelessWidget {
     final filteredCenterList =
         context.watch<FilteredDeviceProvider>().state.filtereCenterList;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '${context.read<CenterListProvider>().state.loginInfo.company}',
-          style: TextStyle(fontSize: 25.0),
-        ),
-        Text(
-          'Number of centers : ${filteredCenterList.length}',
-          style: TextStyle(
-            fontSize: 15.0,
-            color: Color.fromARGB(255, 241, 140, 31),
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '${context.read<CenterListProvider>().state.loginInfo.selectedCenter.centerNm}',
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
+            
           ),
-        )
-      ],
+          Text(
+            'Number of centers : ${filteredCenterList.length}',
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Color.fromARGB(255, 241, 140, 31),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -731,9 +735,6 @@ class DeviceItem extends StatelessWidget {
                     spreadRadius: 2,
                   ),
                 ],
-                // color: Colors.white,
-                // borderRadius: BorderRadius.circular(5),
-                // boxShadow: [mainbox()],
               ),
               height: MediaQuery.of(context).size.height * 0.25,
               width: MediaQuery.of(context).size.width * 0.95,
