@@ -1,3 +1,4 @@
 {
-    "dart.flutterSdkPath": "~/Desktop/Develop/flutter_windows_3.22.0-stable/flutter"
+    "dart.flutterSdkPath": "~/Desktop/Develop/flutter_windows_3.22.0-stable/flutter",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
