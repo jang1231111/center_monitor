@@ -9,7 +9,7 @@ import 'package:center_monitor/providers/center_list/center_list_state.dart';
 import 'package:center_monitor/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/providers/user/user_provider.dart';
-import 'package:center_monitor/widgets/WebPageButton.dart';
+import 'package:center_monitor/widgets/webPageButton.dart';
 import 'package:center_monitor/widgets/center_choice_dialog.dart';
 import 'package:center_monitor/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';

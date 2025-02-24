@@ -14,6 +14,7 @@ const kforgotIdUri = '';
 const kforgotPasswordUri = 'http://health.logithermo.com/auth/forgot-password';
 const ksignUpUri = 'http://health.logithermo.com/auth/register';
 
+const koptiloPrivacyPolicyUri = 'https://sites.google.com/view/optilo-privacy-policy?pli=1';
 
 // version
 const kappVersion = '1.0.0';

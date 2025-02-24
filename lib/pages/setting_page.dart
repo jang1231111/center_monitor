@@ -1,8 +1,11 @@
 import 'package:center_monitor/constants/constants.dart';
 import 'package:center_monitor/pages/my_page.dart';
+import 'package:center_monitor/pages/signin_page.dart';
 import 'package:center_monitor/providers/center_list/center_list_provider.dart';
+import 'package:center_monitor/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatelessWidget {
   static const String routeName = '/setting';
@@ -106,59 +109,65 @@ class Setting extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '계정 정보',
+                '계정',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey, // 테두리 색상
-                    width: 1.0, // 테두리 두께
-                  ),
-                  borderRadius: BorderRadius.circular(12), // 테두리 둥글게 만들기
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      MyPage.routeName,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      height: 50,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${loginInfo.selectedCenter.centerNm}',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text('${loginInfo.company}'),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              flex: 1, child: Icon(Icons.keyboard_arrow_right))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: Colors.grey, // 테두리 색상
+              //       width: 1.0, // 테두리 두께
+              //     ),
+              //     borderRadius: BorderRadius.circular(12), // 테두리 둥글게 만들기
+              //   ),
+              //   child: InkWell(
+              //     onTap: () {
+              //       Navigator.pushNamed(
+              //         context,
+              //         MyPage.routeName,
+              //       );
+              //     },
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(10.0),
+              //       child: Container(
+              //         height: 50,
+              //         child: Row(
+              //           children: [
+              //             Expanded(
+              //               flex: 3,
+              //               child: Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Text(
+              //                     '${loginInfo.selectedCenter.centerNm}',
+              //                     style: TextStyle(
+              //                         fontSize: 20,
+              //                         fontWeight: FontWeight.bold),
+              //                   ),
+              //                   Text('${loginInfo.company}'),
+              //                 ],
+              //               ),
+              //             ),
+              //             Expanded(
+              //                 flex: 1, child: Icon(Icons.keyboard_arrow_right))
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final result = await logoutDialog(context);
+
+                    if(result == true) {
+                      Navigator.pushNamed(context, SigninPage.routeName);
+                    }
+                  },
                   child: Text('로그아웃'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 239, 129, 28),
@@ -192,6 +201,19 @@ class Setting extends StatelessWidget {
                 title: const Text('버전 체크'),
                 onTap: () {
                   // 로그아웃 기능 추가 가능
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.edit_document),
+                title: const Text('개인정보 처리방침'),
+                onTap: () async {
+                  Uri uri = Uri.parse(koptiloPrivacyPolicyUri);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri,
+                        mode: LaunchMode.externalApplication); // 외부 브라우저에서 열기
+                  } else {
+                    throw 'Could not launch $koptiloPrivacyPolicyUri';
+                  }
                 },
               ),
               const SizedBox(height: 20, child: Divider()),
