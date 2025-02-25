@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.optilo.thermotrack">
+    package="net.optilo.warehouse">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
