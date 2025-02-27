@@ -1,26 +1,30 @@
-import 'package:center_monitor/pages/center_plan_page.dart';
-import 'package:center_monitor/pages/detail_page.dart';
-import 'package:center_monitor/pages/main_page.dart';
-import 'package:center_monitor/pages/my_page.dart';
-import 'package:center_monitor/pages/setting_page.dart';
-import 'package:center_monitor/pages/navigation_page.dart';
-import 'package:center_monitor/pages/signin_page.dart';
-import 'package:center_monitor/pages/signup_page.dart';
-import 'package:center_monitor/pages/splash_page.dart';
-import 'package:center_monitor/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/providers/device_log_data/device_log_data_provider.dart';
-import 'package:center_monitor/providers/device_filter/device_filter_provider.dart';
-import 'package:center_monitor/providers/device_list/device_list_provider.dart';
-import 'package:center_monitor/providers/device_report/device_report_provider.dart';
-import 'package:center_monitor/providers/center_search/center_search_provider.dart';
-import 'package:center_monitor/providers/filtered_device/filtered_device_provider.dart';
-import 'package:center_monitor/providers/login_number/login_number_provider.dart';
-import 'package:center_monitor/providers/theme/theme_provider.dart';
-import 'package:center_monitor/providers/user/user_provider.dart';
-import 'package:center_monitor/repositories/center_list_repositories.dart';
-import 'package:center_monitor/repositories/device_data_repositories.dart';
-import 'package:center_monitor/repositories/device_list_repositories.dart';
-import 'package:center_monitor/serivices/api_services.dart';
+import 'package:center_monitor/data/datasources/remote/remote_data_source.dart';
+import 'package:center_monitor/data/repositories/version_repository_impl.dart';
+import 'package:center_monitor/domain/usecases/check_version_update_usecase.dart';
+import 'package:center_monitor/presentation/pages/center_plan_page.dart';
+import 'package:center_monitor/presentation/pages/detail_page.dart';
+import 'package:center_monitor/presentation/pages/main_page.dart';
+import 'package:center_monitor/presentation/pages/my_page.dart';
+import 'package:center_monitor/presentation/pages/setting_page.dart';
+import 'package:center_monitor/presentation/pages/navigation_page.dart';
+import 'package:center_monitor/presentation/pages/signin_page.dart';
+import 'package:center_monitor/presentation/pages/signup_page.dart';
+import 'package:center_monitor/presentation/pages/splash_page.dart';
+import 'package:center_monitor/presentation/providers/center_list/center_list_provider.dart';
+import 'package:center_monitor/presentation/providers/device_log_data/device_log_data_provider.dart';
+import 'package:center_monitor/presentation/providers/device_filter/device_filter_provider.dart';
+import 'package:center_monitor/presentation/providers/device_list/device_list_provider.dart';
+import 'package:center_monitor/presentation/providers/device_report/device_report_provider.dart';
+import 'package:center_monitor/presentation/providers/center_search/center_search_provider.dart';
+import 'package:center_monitor/presentation/providers/filtered_device/filtered_device_provider.dart';
+import 'package:center_monitor/presentation/providers/login_number/login_number_provider.dart';
+import 'package:center_monitor/presentation/providers/theme/theme_provider.dart';
+import 'package:center_monitor/presentation/providers/user/user_provider.dart';
+import 'package:center_monitor/presentation/providers/version/version_provider.dart';
+import 'package:center_monitor/data/repositories/center_list_repositories.dart';
+import 'package:center_monitor/data/repositories/device_data_repositories.dart';
+import 'package:center_monitor/data/repositories/device_list_repositories.dart';
+import 'package:center_monitor/data/datasources/remote/api_services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +40,24 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        // ✅ 2. RemoteDataSource 등록 (ApiService 필요)
+        Provider<RemoteDataSource>(
+            create: (context) =>
+                RemoteDataSource(ApiServices(httpClient: http.Client()))),
+        // ✅ 3. Repository 등록 (RemoteDataSource 필요)
+        ///** 지금 impl로 설정 수정해야함 abstract class로
+        Provider<VersionRepositoryImpl>(
+            create: (context) =>
+                VersionRepositoryImpl(context.read<RemoteDataSource>())),
+        // ✅ 4. UseCase 등록 (Repository 필요)
+        Provider<CheckVersionUpdateUseCase>(
+            create: (context) => CheckVersionUpdateUseCase(
+                context.read<VersionRepositoryImpl>())),
+        // ✅ 5. ChangeNotifierProvider 등록 (Repository 필요)
+        ChangeNotifierProvider<VersionProvider>(
+            create: (context) => VersionProvider(
+                getVersionUseCase: context.read<CheckVersionUpdateUseCase>())),
+        ////
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         Provider<CenterListRepositories>(
           create: (context) => CenterListRepositories(
@@ -57,9 +79,6 @@ void main() async {
               httpClient: http.Client(),
             ),
           ),
-        ),
-        Provider<UserProvider>(
-          create: (context) => UserProvider(),
         ),
         ChangeNotifierProvider<LoginNumberProvider>(
           create: (context) => LoginNumberProvider(),
