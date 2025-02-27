@@ -9,8 +9,12 @@ class NoticeRepositoryImpl extends NoticeRepository {
 
   @override
   Future<Notice> getNotice() async {
-    final notice = await _remoteDataSource.fetchNotice();
-    return Notice(
-        useYn: notice.useYn, title: notice.title, content: notice.content);
+    final noticeModel = await _remoteDataSource.fetchNotice();
+    return noticeModel == null
+        ? Notice(useYn: 'N', title: '', content: '')
+        : Notice(
+            useYn: noticeModel.useYn,
+            title: noticeModel.title,
+            content: noticeModel.content);
   }
 }

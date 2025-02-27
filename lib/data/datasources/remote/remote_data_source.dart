@@ -13,9 +13,15 @@ class RemoteDataSource {
     return VersionModel.fromMap(response);
   }
 
-  Future<NoticeModel> fetchNotice() async {
+  Future<NoticeModel?> fetchNotice() async {
     final response = await _apiServices.get('$khttpUri$kgetNoticeUri');
     print('NoticeResponse : $response');
-    return NoticeModel.fromMap(response[0]);
+
+    if (response is List && response.isNotEmpty) {
+      return NoticeModel.fromMap(response[0]);
+    } else {
+      print('[fetchNotice] Empty Notice');
+      return null;
+    }
   }
 }

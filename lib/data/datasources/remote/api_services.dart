@@ -23,7 +23,7 @@ class ApiServices {
         throw Exception(httpErrorHandler(response));
       }
 
-      final responseBody = response.body;
+      final responseBody = utf8.decode(response.bodyBytes);
       print('[get] ResponseBody $url : $responseBody');
 
       return jsonDecode(responseBody);
