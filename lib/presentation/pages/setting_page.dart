@@ -1,10 +1,10 @@
 import 'package:center_monitor/config/constants/constants.dart';
 import 'package:center_monitor/presentation/pages/signin_page.dart';
-import 'package:center_monitor/presentation/providers/theme/theme_provider.dart';
+import 'package:center_monitor/presentation/providers/notice/notice_provider.dart';
 import 'package:center_monitor/core/utils/package_info.dart';
 import 'package:center_monitor/presentation/widgets/logout_dialog.dart';
+import 'package:center_monitor/presentation/widgets/notice_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +22,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    
+
     loadAppVersion().then(
       (value) {
         setState(() {
@@ -121,7 +121,7 @@ class Setting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
+    // bool isDark = context.watch<ThemeProvider>().themeMode == ThemeMode.dark;
     return Column(
       children: [
         Padding(
@@ -168,17 +168,23 @@ class Setting extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.announcement),
                 title: const Text('공지 사항'),
-                onTap: () {
-                  // 로그아웃 기능 추가 가능
+                onTap: () async {
+                  final noticeProvider = context.read<NoticeProvider>();
+
+                  await noticeProvider.getNotice();
+                  final notice = noticeProvider.state.notice;
+                  if (notice.useYn == 'Y') {
+                    await showNoticeDialog(context, notice);
+                  }
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.verified_user_outlined),
-                title: const Text('버전 체크'),
-                onTap: () {
-                  // 로그아웃 기능 추가 가능
-                },
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.verified_user_outlined),
+              //   title: const Text('버전 체크'),
+              //   onTap: () {
+              //     // 로그아웃 기능 추가 가능
+              //   },
+              // ),
               ListTile(
                 leading: const Icon(Icons.edit_document),
                 title: const Text('개인정보 처리방침'),

@@ -4,6 +4,7 @@ import 'package:center_monitor/domain/entities/center/center_list_info.dart';
 import 'package:center_monitor/domain/entities/device/device_list_info.dart';
 import 'package:center_monitor/domain/entities/device/device_logdata_info.dart';
 import 'package:center_monitor/data/datasources/remote/http_error_handler.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServices {
@@ -11,7 +12,7 @@ class ApiServices {
 
   ApiServices({required this.httpClient});
 
-  Future<Map<String, dynamic>> get(String url) async {
+  Future<dynamic> get(String url) async {
     var client = http.Client();
     var uri = Uri.parse(url);
     try {
@@ -25,12 +26,9 @@ class ApiServices {
       final responseBody = response.body;
       print('[get] ResponseBody $url : $responseBody');
 
-      // JSON 문자열을 Map으로 변환하는 과정 추가
-      final Map<String, dynamic> data = jsonDecode(responseBody);
-
-      return data;
+      return jsonDecode(responseBody);
     } catch (e) {
-      print('[get] Err $url : $e');
+      debugPrint('[get] Err $url : $e');
       rethrow;
     }
   }

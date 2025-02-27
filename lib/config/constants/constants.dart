@@ -1,6 +1,8 @@
 const khttpUri = 'http://';
 // Version
 const kgetVersionUri = '52.79.145.67/api/version-check';
+// Notice
+const kgetNoticeUri = '52.79.145.67/api/notices';
 // Login
 const kIntergrationLoginUri = '52.79.145.67:8080/api/auth/integration-login';
 const kLoginUri = '.logithermo.com:8080/api/auth/login';
@@ -11,13 +13,13 @@ const kcenterPlanUri1 = '.logithermo.com/upload/warehouse/';
 // DeviceData
 const kdeviceDataUri = '.logithermo.com:8080/api/detail/device-data';
 
-
 // Login 화면 WebUrl
 const kforgotIdUri = '';
 const kforgotPasswordUri = 'http://health.logithermo.com/auth/forgot-password';
 const ksignUpUri = 'http://health.logithermo.com/auth/register';
 
-const koptiloPrivacyPolicyUri = 'https://sites.google.com/view/optilo-privacy-policy?pli=1';
+const koptiloPrivacyPolicyUri =
+    'https://sites.google.com/view/optilo-privacy-policy?pli=1';
 
 // version
 const kappVersion = '1.0.0';

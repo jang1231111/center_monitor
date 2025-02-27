@@ -12,7 +12,6 @@ import 'package:center_monitor/presentation/providers/device_report/device_repor
 import 'package:center_monitor/presentation/providers/device_report/device_report_state.dart';
 import 'package:center_monitor/presentation/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';

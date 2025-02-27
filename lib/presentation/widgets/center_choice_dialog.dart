@@ -2,14 +2,8 @@ import 'dart:async';
 
 import 'package:center_monitor/config/constants/style.dart';
 import 'package:center_monitor/domain/entities/center/center_list_info.dart';
-import 'package:center_monitor/domain/entities/error/custom_error.dart';
-import 'package:center_monitor/presentation/pages/main_page.dart';
-import 'package:center_monitor/presentation/providers/center_list/center_list_provider.dart';
-import 'package:center_monitor/presentation/providers/device_list/device_list_provider.dart';
-import 'package:center_monitor/presentation/widgets/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 Future<CenterInfo> showCenterChoiceDialog(
     BuildContext context, List<CenterInfo> centers) async {
@@ -55,8 +49,7 @@ showCenters(BuildContext context, List<CenterInfo> centers) {
     decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.all(
-            Radius.circular(4))),
+        borderRadius: BorderRadius.all(Radius.circular(4))),
     child: SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15.0),

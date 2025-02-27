@@ -1,7 +1,10 @@
 import 'package:center_monitor/data/datasources/remote/remote_data_source.dart';
-import 'package:center_monitor/data/repositories/version_repository_impl.dart';
+import 'package:center_monitor/data/repositories/notice/notice_repository_impl.dart';
+import 'package:center_monitor/data/repositories/version/version_repository_impl.dart';
+import 'package:center_monitor/domain/repositories/notice_repository.dart';
 import 'package:center_monitor/domain/repositories/version_repository.dart';
-import 'package:center_monitor/domain/usecases/check_version_update_usecase.dart';
+import 'package:center_monitor/domain/usecases/notice/get_notice_usecase.dart';
+import 'package:center_monitor/domain/usecases/version/check_version_update_usecase.dart';
 import 'package:center_monitor/presentation/pages/center_plan_page.dart';
 import 'package:center_monitor/presentation/pages/detail_page.dart';
 import 'package:center_monitor/presentation/pages/main_page.dart';
@@ -19,11 +22,12 @@ import 'package:center_monitor/presentation/providers/device_report/device_repor
 import 'package:center_monitor/presentation/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/presentation/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/presentation/providers/login_number/login_number_provider.dart';
+import 'package:center_monitor/presentation/providers/notice/notice_provider.dart';
 import 'package:center_monitor/presentation/providers/theme/theme_provider.dart';
 import 'package:center_monitor/presentation/providers/version/version_provider.dart';
-import 'package:center_monitor/data/repositories/center_list_repositories.dart';
-import 'package:center_monitor/data/repositories/device_data_repositories.dart';
-import 'package:center_monitor/data/repositories/device_list_repositories.dart';
+import 'package:center_monitor/data/repositories/center/center_list_repositories.dart';
+import 'package:center_monitor/data/repositories/device/device_data_repositories.dart';
+import 'package:center_monitor/data/repositories/device/device_list_repositories.dart';
 import 'package:center_monitor/data/datasources/remote/api_services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -40,22 +44,29 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        // ✅ 2. RemoteDataSource 등록 (ApiService 필요)
+        // Version
         Provider<RemoteDataSource>(
             create: (context) =>
                 RemoteDataSource(ApiServices(httpClient: http.Client()))),
-        // ✅ 3. Repository 등록 (RemoteDataSource 필요)
         Provider<VersionRepository>(
             create: (context) =>
                 VersionRepositoryImpl(context.read<RemoteDataSource>())),
-        // ✅ 4. UseCase 등록 (Repository 필요)
         Provider<CheckVersionUpdateUseCase>(
-            create: (context) => CheckVersionUpdateUseCase(
-                context.read<VersionRepositoryImpl>())),
-        // ✅ 5. ChangeNotifierProvider 등록 (Repository 필요)
+            create: (context) =>
+                CheckVersionUpdateUseCase(context.read<VersionRepository>())),
         ChangeNotifierProvider<VersionProvider>(
             create: (context) => VersionProvider(
                 getVersionUseCase: context.read<CheckVersionUpdateUseCase>())),
+        // Notice
+        Provider<NoticeRepository>(
+            create: (context) =>
+                NoticeRepositoryImpl(context.read<RemoteDataSource>())),
+        Provider<GetNoticeUsecase>(
+            create: (context) =>
+                GetNoticeUsecase(context.read<NoticeRepository>())),
+        ChangeNotifierProvider<NoticeProvider>(
+            create: (context) => NoticeProvider(
+                getNoticeUsecase: context.read<GetNoticeUsecase>())),
         ////
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         Provider<CenterListRepositories>(

@@ -1,7 +1,7 @@
 import 'package:center_monitor/domain/entities/error/custom_error.dart';
 import 'package:center_monitor/domain/entities/device/device_list_info.dart';
 import 'package:center_monitor/presentation/providers/device_log_data/device_log_data_state.dart';
-import 'package:center_monitor/data/repositories/device_data_repositories.dart';
+import 'package:center_monitor/data/repositories/device/device_data_repositories.dart';
 import 'package:flutter/material.dart';
 
 class DeviceLogDataProvider with ChangeNotifier {

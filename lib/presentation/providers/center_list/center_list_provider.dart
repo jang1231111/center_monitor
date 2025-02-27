@@ -1,7 +1,7 @@
 import 'package:center_monitor/domain/entities/center/center_list_info.dart';
 import 'package:center_monitor/domain/entities/error/custom_error.dart';
 import 'package:center_monitor/presentation/providers/center_list/center_list_state.dart';
-import 'package:center_monitor/data/repositories/center_list_repositories.dart';
+import 'package:center_monitor/data/repositories/center/center_list_repositories.dart';
 import 'package:flutter/material.dart';
 
 class CenterListProvider with ChangeNotifier {

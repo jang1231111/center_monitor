@@ -14,7 +14,9 @@ import 'package:center_monitor/presentation/providers/device_list/device_list_st
 import 'package:center_monitor/presentation/providers/center_search/center_search_provider.dart';
 import 'package:center_monitor/presentation/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/core/utils/debounce.dart';
+import 'package:center_monitor/presentation/providers/notice/notice_provider.dart';
 import 'package:center_monitor/presentation/widgets/error_dialog.dart';
+import 'package:center_monitor/presentation/widgets/notice_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,6 +44,18 @@ class _MainPageState extends State<MainPage> {
     final double height = MediaQuery.of(context).size.height;
     final devices =
         context.watch<DeviceListProvider>().state.deviceListInfo.devices;
+
+    final noticeProvider = context.read<NoticeProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await noticeProvider.getNotice();
+        final notice = noticeProvider.state.notice;
+        if (notice.useYn == 'Y') {
+          await showNoticeDialog(context, notice);
+        }
+      },
+    );
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(254, 246, 255, 1),

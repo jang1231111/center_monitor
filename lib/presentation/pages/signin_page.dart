@@ -1,5 +1,4 @@
 import 'package:center_monitor/config/constants/constants.dart';
-import 'package:center_monitor/config/constants/style.dart';
 import 'package:center_monitor/domain/entities/error/custom_error.dart';
 import 'package:center_monitor/presentation/pages/navigation_page.dart';
 import 'package:center_monitor/presentation/providers/center_list/center_list_provider.dart';
@@ -79,9 +78,10 @@ class _SigninPageState extends State<SigninPage> {
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await context.read<VersionProvider>().checkForUpdate();
+        await versionProvider.checkForUpdate();
         if (versionProvider.state.isUpdateRequired) {
-          showVersionUpdateDialog(context, versionProvider.state.downloadLink!);
+          await showVersionUpdateDialog(
+              context, versionProvider.state.downloadLink!);
         }
       },
     );

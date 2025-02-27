@@ -1,5 +1,5 @@
 import 'package:center_monitor/domain/entities/error/custom_error.dart';
-import 'package:center_monitor/domain/usecases/check_version_update_usecase.dart';
+import 'package:center_monitor/domain/usecases/version/check_version_update_usecase.dart';
 import 'package:center_monitor/presentation/providers/version/version_state.dart';
 import 'package:flutter/material.dart';
 

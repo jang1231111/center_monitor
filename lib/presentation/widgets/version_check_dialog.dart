@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void showVersionUpdateDialog(BuildContext context, String downloadLink) {
+Future<void> showVersionUpdateDialog(
+    BuildContext context, String downloadLink) async {
   if (Platform.isIOS) {
     showCupertinoDialog(
       context: context,
@@ -20,9 +21,7 @@ void showVersionUpdateDialog(BuildContext context, String downloadLink) {
                 if (await canLaunchUrl(Uri.parse(downloadLink))) {
                   await launchUrl(Uri.parse(downloadLink),
                       mode: LaunchMode.externalApplication);
-                } else {
-                  throw 'Could not launch $downloadLink';
-                }
+                } 
               },
             )
           ],
