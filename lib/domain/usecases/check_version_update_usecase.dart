@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:center_monitor/data/repositories/version_repository_impl.dart';
 import 'package:center_monitor/domain/entities/version/version.dart';
+import 'package:center_monitor/domain/repositories/version_repository.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class CheckVersionUpdateUseCase {
-  final VersionRepositoryImpl _repository;
+  final VersionRepository _repository;
 
   CheckVersionUpdateUseCase(this._repository);
 

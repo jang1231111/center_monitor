@@ -1,5 +1,6 @@
 import 'package:center_monitor/data/datasources/remote/remote_data_source.dart';
 import 'package:center_monitor/data/repositories/version_repository_impl.dart';
+import 'package:center_monitor/domain/repositories/version_repository.dart';
 import 'package:center_monitor/domain/usecases/check_version_update_usecase.dart';
 import 'package:center_monitor/presentation/pages/center_plan_page.dart';
 import 'package:center_monitor/presentation/pages/detail_page.dart';
@@ -19,7 +20,6 @@ import 'package:center_monitor/presentation/providers/center_search/center_searc
 import 'package:center_monitor/presentation/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/presentation/providers/login_number/login_number_provider.dart';
 import 'package:center_monitor/presentation/providers/theme/theme_provider.dart';
-import 'package:center_monitor/presentation/providers/user/user_provider.dart';
 import 'package:center_monitor/presentation/providers/version/version_provider.dart';
 import 'package:center_monitor/data/repositories/center_list_repositories.dart';
 import 'package:center_monitor/data/repositories/device_data_repositories.dart';
@@ -45,8 +45,7 @@ void main() async {
             create: (context) =>
                 RemoteDataSource(ApiServices(httpClient: http.Client()))),
         // ✅ 3. Repository 등록 (RemoteDataSource 필요)
-        ///** 지금 impl로 설정 수정해야함 abstract class로
-        Provider<VersionRepositoryImpl>(
+        Provider<VersionRepository>(
             create: (context) =>
                 VersionRepositoryImpl(context.read<RemoteDataSource>())),
         // ✅ 4. UseCase 등록 (Repository 필요)
