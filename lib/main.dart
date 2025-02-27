@@ -1,10 +1,4 @@
-import 'package:center_monitor/data/datasources/remote/remote_data_source.dart';
-import 'package:center_monitor/data/repositories/notice/notice_repository_impl.dart';
-import 'package:center_monitor/data/repositories/version/version_repository_impl.dart';
-import 'package:center_monitor/domain/repositories/notice_repository.dart';
-import 'package:center_monitor/domain/repositories/version_repository.dart';
-import 'package:center_monitor/domain/usecases/notice/get_notice_usecase.dart';
-import 'package:center_monitor/domain/usecases/version/check_version_update_usecase.dart';
+import 'package:center_monitor/core/di/service_locator.dart';
 import 'package:center_monitor/presentation/pages/center_plan_page.dart';
 import 'package:center_monitor/presentation/pages/detail_page.dart';
 import 'package:center_monitor/presentation/pages/main_page.dart';
@@ -25,14 +19,9 @@ import 'package:center_monitor/presentation/providers/login_number/login_number_
 import 'package:center_monitor/presentation/providers/notice/notice_provider.dart';
 import 'package:center_monitor/presentation/providers/theme/theme_provider.dart';
 import 'package:center_monitor/presentation/providers/version/version_provider.dart';
-import 'package:center_monitor/data/repositories/center/center_list_repositories.dart';
-import 'package:center_monitor/data/repositories/device/device_data_repositories.dart';
-import 'package:center_monitor/data/repositories/device/device_list_repositories.dart';
-import 'package:center_monitor/data/datasources/remote/api_services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
@@ -41,99 +30,36 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   WakelockPlus.enable();
 
+  setupLocator(); // 🔹 의존성 주입 설정
+
   runApp(
     MultiProvider(
       providers: [
-        // Version
-        Provider<RemoteDataSource>(
-            create: (context) =>
-                RemoteDataSource(ApiServices(httpClient: http.Client()))),
-        Provider<VersionRepository>(
-            create: (context) =>
-                VersionRepositoryImpl(context.read<RemoteDataSource>())),
-        Provider<CheckVersionUpdateUseCase>(
-            create: (context) =>
-                CheckVersionUpdateUseCase(context.read<VersionRepository>())),
-        ChangeNotifierProvider<VersionProvider>(
-            create: (context) => VersionProvider(
-                getVersionUseCase: context.read<CheckVersionUpdateUseCase>())),
-        // Notice
-        Provider<NoticeRepository>(
-            create: (context) =>
-                NoticeRepositoryImpl(context.read<RemoteDataSource>())),
-        Provider<GetNoticeUsecase>(
-            create: (context) =>
-                GetNoticeUsecase(context.read<NoticeRepository>())),
-        ChangeNotifierProvider<NoticeProvider>(
-            create: (context) => NoticeProvider(
-                getNoticeUsecase: context.read<GetNoticeUsecase>())),
-        ////
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        Provider<CenterListRepositories>(
-          create: (context) => CenterListRepositories(
-            apiServices: ApiServices(
-              httpClient: http.Client(),
-            ),
-          ),
-        ),
-        Provider<DeviceListRepositories>(
-          create: (context) => DeviceListRepositories(
-            apiServices: ApiServices(
-              httpClient: http.Client(),
-            ),
-          ),
-        ),
-        Provider<DeviceDataRepostiories>(
-          create: (context) => DeviceDataRepostiories(
-            apiServices: ApiServices(
-              httpClient: http.Client(),
-            ),
-          ),
-        ),
-        ChangeNotifierProvider<LoginNumberProvider>(
-          create: (context) => LoginNumberProvider(),
-        ),
-        ChangeNotifierProvider<CenterListProvider>(
-          create: (context) => CenterListProvider(
-              centerListRepositories: context.read<CenterListRepositories>()),
-        ),
-        ChangeNotifierProvider<DeviceListProvider>(
-          create: (context) => DeviceListProvider(
-            centerListRepositories: context.read<DeviceListRepositories>(),
-          ),
-        ),
-        ChangeNotifierProvider<DeviceLogDataProvider>(
-          create: (context) => DeviceLogDataProvider(
-            centerDataRepositories: context.read<DeviceDataRepostiories>(),
-          ),
-        ),
-        ChangeNotifierProvider<DeviceFilterProvider>(
-          create: (context) => DeviceFilterProvider(),
-        ),
-        ChangeNotifierProvider<CenterSearchProvider>(
-          create: (context) => CenterSearchProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => sl<VersionProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<NoticeProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<ThemeProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<LoginNumberProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<CenterListProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<DeviceListProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<DeviceLogDataProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<DeviceFilterProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<CenterSearchProvider>()),
+
+        // ProxyProvider (다른 Provider 의존성 사용)
         ProxyProvider<DeviceLogDataProvider, DeviceReportProvider>(
-          update: (BuildContext context,
-                  DeviceLogDataProvider centerDataProvider,
-                  DeviceReportProvider? _) =>
+          update: (context, centerDataProvider, _) =>
               DeviceReportProvider(centerDataProvider: centerDataProvider),
         ),
         ProxyProvider3<DeviceListProvider, DeviceFilterProvider,
             CenterSearchProvider, FilteredDeviceProvider>(
-          update: (
-            BuildContext context,
-            DeviceListProvider centerListProvider,
-            DeviceFilterProvider centerFilterProvider,
-            CenterSearchProvider deviceSearchProvider,
-            FilteredDeviceProvider? _,
-          ) =>
+          update: (context, centerListProvider, centerFilterProvider,
+                  deviceSearchProvider, _) =>
               FilteredDeviceProvider(
             centerListProvider: centerListProvider,
             centerFilterProvider: centerFilterProvider,
             centerSearchProvider: deviceSearchProvider,
           ),
-        )
+        ),
       ],
       child: EasyLocalization(
         child: const MyApp(),
