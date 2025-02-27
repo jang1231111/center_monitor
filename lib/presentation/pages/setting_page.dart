@@ -175,6 +175,8 @@ class Setting extends StatelessWidget {
                   final notice = noticeProvider.state.notice;
                   if (notice.useYn == 'Y') {
                     await showNoticeDialog(context, notice);
+                  } else {
+                    await showNoticeEmptyDialog(context);
                   }
                 },
               ),
