@@ -24,10 +24,10 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Color.fromARGB(255, 254, 246, 255),
       child: SafeArea(
         child: Container(
-          color: Color.fromARGB(255, 240, 240, 246),
+          color: Color.fromARGB(255, 254, 246, 255),
           child: Scaffold(
             body: Padding(
               padding: const EdgeInsetsDirectional.symmetric(
@@ -44,7 +44,7 @@ class DetailPage extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'temperatureGraph',
+                    '온도 그래프',
                     style: TextStyle(
                         color: Color.fromARGB(255, 38, 94, 176),
                         fontSize: 15.0),
@@ -88,10 +88,26 @@ class DetailHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'detailInfo',
-          style: TextStyle(fontSize: 25.0),
-        ).tr(),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios),
+              padding: EdgeInsets.zero, // 내부 패딩 없애기
+            ),
+            Text(
+              'detailInfo',
+              style: TextStyle(fontSize: 25.0),
+            ).tr(),
+          ],
+        ),
+
+        // Text(
+        //   'detailInfo',
+        //   style: TextStyle(fontSize: 25.0),
+        // ).tr(),
         Text(
           '${device.centerNm} - ${device.deName}',
           style: TextStyle(
@@ -211,8 +227,22 @@ class _logInformationState extends State<logInformation> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 254, 246, 255),
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white70,
+                        offset: Offset(-8, -8),
+                        blurRadius: 16,
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Colors.black26, // 아래쪽 어두운 그림자
+                        offset: Offset(8, 8),
+                        blurRadius: 16,
+                        spreadRadius: 2,
+                      ),
+                    ],
                   ),
                   child: Column(
                     children: [
@@ -225,14 +255,14 @@ class _logInformationState extends State<logInformation> {
                                 child: Text(
                                   'Serial No',
                                   textAlign: TextAlign.center,
-                                  style: subTitle(context),
+                                  style: graphSubtitle(context),
                                 )),
                             Expanded(
                                 flex: 1,
                                 child: Text(
                                   '${device.deNumber}',
                                   textAlign: TextAlign.center,
-                                  style: subTitle(context),
+                                  style: graphContent(context),
                                 ))
                           ],
                         ),
@@ -246,7 +276,7 @@ class _logInformationState extends State<logInformation> {
                               child: Text(
                                 'startTime',
                                 textAlign: TextAlign.center,
-                                style: subTitle(context),
+                                style: graphSubtitle(context),
                               ).tr(),
                             ),
                             Expanded(
@@ -294,7 +324,7 @@ class _logInformationState extends State<logInformation> {
                                       DateFormat("MM-dd HH:mm")
                                           .format(startDateTime),
                                       textAlign: TextAlign.center,
-                                      style: subTitle(context),
+                                      style: graphContent(context),
                                     ),
                                   ),
                                 )),
@@ -310,7 +340,7 @@ class _logInformationState extends State<logInformation> {
                                 child: Text(
                                   'endTime',
                                   textAlign: TextAlign.center,
-                                  style: subTitle(context),
+                                  style: graphSubtitle(context),
                                 ).tr()),
                             Expanded(
                               flex: 1,
@@ -356,7 +386,7 @@ class _logInformationState extends State<logInformation> {
                                     DateFormat("MM-dd HH:mm")
                                         .format(endDateTime),
                                     textAlign: TextAlign.center,
-                                    style: subTitle(context),
+                                    style: graphContent(context),
                                   ),
                                 ),
                               ),
@@ -396,28 +426,28 @@ class _logInformationState extends State<logInformation> {
                                               child: Text(
                                                 'maxTemp',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphSubtitle(context),
                                               ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 '${centerReportState.tempHigh}°C',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphContent(context),
                                               )),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 'minTemp',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphSubtitle(context),
                                               ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 '${centerReportState.tempLow}°C',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphContent(context),
                                               )),
                                         ],
                                       ),
@@ -431,28 +461,28 @@ class _logInformationState extends State<logInformation> {
                                               child: Text(
                                                 'maxHum',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphSubtitle(context),
                                               ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 '${centerReportState.humHigh}%',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphContent(context),
                                               )),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 'minHum',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphSubtitle(context),
                                               ).tr()),
                                           Expanded(
                                               flex: 1,
                                               child: Text(
                                                 '${centerReportState.humLow}%',
                                                 textAlign: TextAlign.center,
-                                                style: subTitle(context),
+                                                style: graphContent(context),
                                               )),
                                         ],
                                       ),
@@ -464,7 +494,7 @@ class _logInformationState extends State<logInformation> {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 20,
               ),
               Expanded(
                 flex: 1,

@@ -107,7 +107,7 @@ class _SigninPageState extends State<SigninPage> {
                           height: 130.0,
                         ),
                         Image.asset(
-                          'assets/icons/background.jpeg',
+                          'assets/images/optilo_logo.png',
                           width: 100,
                           height: 100,
                         ),
@@ -143,16 +143,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.login),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input id'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input id'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
                             return null;
                           },
                           onSaved: (String? inputID) {
                             _ID = inputID;
-                            // _ID = 'health';
+                            _ID = 'health';
                           },
                         ),
                         TextFormField(
@@ -172,16 +172,16 @@ class _SigninPageState extends State<SigninPage> {
                             prefixIcon: Icon(Icons.password),
                           ),
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'input password'.tr();
-                            }
+                            // if (value == null || value.trim().isEmpty) {
+                            //   return 'input password'.tr();
+                            // }
                             // if (value.trim().length < 11)
                             //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
-                            return null;
+                            // return null;
                           },
                           onSaved: (String? inputPassword) {
                             _Password = inputPassword;
-                            // _Password = 'health123';
+                            _Password = 'health123';
                           },
                         ),
                         SizedBox(

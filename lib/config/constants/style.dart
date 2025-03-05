@@ -216,14 +216,25 @@ TextStyle M_Name(BuildContext context) {
   );
 }
 
-TextStyle subTitle(BuildContext context) {
+TextStyle graphSubtitle(BuildContext context) {
   return TextStyle(
     color: Color.fromRGBO(51, 51, 51, 1),
     fontSize: MediaQuery.of(context).size.width / 35,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w900,
     fontFamily: 'pretend',
   );
 }
+
+TextStyle graphContent(BuildContext context) {
+  return TextStyle(
+    color: Color.fromRGBO(51, 51, 51, 1),
+    fontSize: MediaQuery.of(context).size.width / 35,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'pretend',
+  );
+}
+
+
 
 TextStyle UpLoad(BuildContext context) {
   return TextStyle(

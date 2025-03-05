@@ -62,7 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/icons/background.jpeg',
+                      'assets/images/optilo_logo.png',
                       width: 80,
                       height: 80,
                     ),

@@ -9,4 +9,9 @@ class CenterSearchProvider with ChangeNotifier {
     _state = _state.copyWith(searchTerm: newSearchTerm);
     notifyListeners();
   }
+
+  void toggleSearch() {
+    _state = _state.copyWith(isSearching: !_state.isSearching);
+    notifyListeners();
+  }
 }

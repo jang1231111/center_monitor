@@ -96,7 +96,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:  
     - assets/icons/map.png
-    - assets/icons/background.jpeg
+    - assets/images/optilo_logo.png
     - assets/translations/
     - assets/images/flutter_logo.png
     - assets/images/temp_ic.png
