@@ -88,7 +88,7 @@ class _SigninPageState extends State<SigninPage> {
     );
 
     return Container(
-      color: Colors.white,
+      color: Color.fromRGBO(254, 246, 255, 1),
       child: SafeArea(
         child: PopScope(
           canPop: false,
@@ -223,7 +223,8 @@ class _SigninPageState extends State<SigninPage> {
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w600,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(4)), // 네모난 모양으로 만들기
