@@ -44,39 +44,32 @@ class _SettingPageState extends State<SettingPage> {
             automaticallyImplyLeading: false,
             expandedHeight: size.height * 0.09,
             backgroundColor: Color.fromRGBO(254, 246, 255, 1),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Image.asset(
-                          'assets/images/map.png',
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          '$_appVersion',
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                    ],
+            title: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Image.asset(
+                    'assets/images/map.png',
+                    width: 50,
+                    height: 50,
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    '$_appVersion',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+              ],
             ),
           ),
           SliverList(

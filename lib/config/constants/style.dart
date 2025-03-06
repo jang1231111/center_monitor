@@ -219,8 +219,8 @@ TextStyle M_Name(BuildContext context) {
 TextStyle graphSubtitle(BuildContext context) {
   return TextStyle(
     color: Color.fromRGBO(51, 51, 51, 1),
-    fontSize: MediaQuery.of(context).size.width / 35,
-    fontWeight: FontWeight.w900,
+    fontSize: MediaQuery.of(context).size.width / 30,
+    fontWeight: FontWeight.w600,
     fontFamily: 'pretend',
   );
 }
@@ -228,7 +228,7 @@ TextStyle graphSubtitle(BuildContext context) {
 TextStyle graphContent(BuildContext context) {
   return TextStyle(
     color: Color.fromRGBO(51, 51, 51, 1),
-    fontSize: MediaQuery.of(context).size.width / 35,
+    fontSize: MediaQuery.of(context).size.width / 30,
     fontWeight: FontWeight.w500,
     fontFamily: 'pretend',
   );

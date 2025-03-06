@@ -104,7 +104,7 @@ class _SigninPageState extends State<SigninPage> {
                       shrinkWrap: true,
                       children: [
                         SizedBox(
-                          height: 130.0,
+                          height: 190.0,
                         ),
                         Image.asset(
                           'assets/images/optilo_logo.png',
