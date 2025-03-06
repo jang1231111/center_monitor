@@ -1,3 +1,4 @@
+import 'package:center_monitor/config/constants/style.dart';
 import 'package:center_monitor/core/di/service_locator.dart';
 import 'package:center_monitor/presentation/pages/center_plan_page.dart';
 import 'package:center_monitor/presentation/pages/detail_page.dart';
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.grey), // 기본 라벨 색상
           floatingLabelStyle: TextStyle(
-            color: Color.fromARGB(255, 38, 94, 176),
+            color: optiloBlue,
           ), // 포커스 시 라벨 색상
         ),
       ),

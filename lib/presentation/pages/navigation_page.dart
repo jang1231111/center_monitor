@@ -1,3 +1,4 @@
+import 'package:center_monitor/config/constants/style.dart';
 import 'package:center_monitor/presentation/pages/main_page.dart';
 import 'package:center_monitor/presentation/pages/setting_page.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _MainPageState extends State<NavigationPage> {
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Color.fromARGB(255, 38, 94, 176), // 선택된 아이템 색상
+              selectedItemColor: optiloBlue, // 선택된 아이템 색상
               unselectedItemColor: Colors.grey, // 선택되지 않은 아이템 색상
               onTap: _onItemTapped, // 탭 클릭 시 호출되는 함수
             ),

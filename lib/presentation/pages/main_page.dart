@@ -13,9 +13,10 @@ import 'package:center_monitor/presentation/providers/device_list/device_list_pr
 import 'package:center_monitor/presentation/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/presentation/providers/filtered_device/filtered_device_provider.dart';
 import 'package:center_monitor/presentation/providers/notice/notice_provider.dart';
-import 'package:center_monitor/presentation/widgets/error_dialog.dart';
-import 'package:center_monitor/presentation/widgets/notice_dialog.dart';
-import 'package:center_monitor/presentation/widgets/optilo_appbar.dart';
+import 'package:center_monitor/presentation/widgets/custom_container.dart';
+import 'package:center_monitor/presentation/widgets/dialog/error_dialog.dart';
+import 'package:center_monitor/presentation/widgets/dialog/notice_dialog.dart';
+import 'package:center_monitor/presentation/widgets/dialog/optilo_appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -87,10 +88,8 @@ class _MainPageState extends State<MainPage> {
                               color: Colors.grey[900],
                             ),
                           ),
-                          Container(
-                            width: width,
-                            color: Color.fromRGBO(254, 246, 255, 1),
-                            child: Stack(
+                          greyBorderConatiner(
+                            Stack(
                               children: [
                                 RepaintBoundary(
                                   key: repaintBoundary,
@@ -327,7 +326,6 @@ class _MainPageState extends State<MainPage> {
                           ),
                           CenterInfomation(),
                           SizedBox(height: 10),
-                    
                         ],
                       ),
                     ),
@@ -377,35 +375,32 @@ class CenterImage extends StatelessWidget {
         .selectedCenter
         .imageBaseUrl;
 
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26, // 아래쪽 어두운 그림자
-              offset: Offset(8, 8),
-              blurRadius: 16,
-              spreadRadius: 2,
-            ),
-            BoxShadow(
-              color: Colors.white70,
-              offset: Offset(-8, -8),
-              blurRadius: 16,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
-          child: Image.memory(
-            base64Decode(imageBase64),
-            fit: BoxFit.fill,
-            width: width,
-            height: height * 0.3,
-            gaplessPlayback: true,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26, // 아래쪽 어두운 그림자
+            offset: Offset(8, 8),
+            blurRadius: 16,
+            spreadRadius: 2,
           ),
+          BoxShadow(
+            color: Colors.white70,
+            offset: Offset(-8, -8),
+            blurRadius: 16,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.memory(
+          base64Decode(imageBase64),
+          fit: BoxFit.fill,
+          width: width,
+          height: height * 0.3,
+          gaplessPlayback: true,
         ),
       ),
     );
@@ -419,140 +414,117 @@ class CenterInfomation extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginInfo = context.read<CenterListProvider>().state.loginInfo;
 
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(254, 246, 255, 1),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white70,
-              offset: Offset(-8, -8),
-              blurRadius: 16,
-              spreadRadius: 2,
-            ),
-            BoxShadow(
-              color: Colors.black26, // 아래쪽 어두운 그림자
-              offset: Offset(8, 8),
-              blurRadius: 16,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Column(
+    return greyBorderConatiner(Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.factory,
-                        color: Color.fromARGB(255, 38, 199, 172)),
-                    title: Text(
-                      '센터명',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.centerNm}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.factory,
+                    color: Color.fromARGB(255, 38, 199, 172)),
+                title: Text(
+                  '센터명',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.numbers, color: Colors.black),
-                    title: Text(
-                      '센터 번호',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.centerSn}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                ),
-              ],
+                subtitle: Text("${loginInfo.selectedCenter.centerNm}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.all_inclusive,
-                        color: Color.fromARGB(255, 38, 199, 172)),
-                    title: Text(
-                      '전체',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.total}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.numbers, color: Colors.black),
+                title: Text(
+                  '센터 번호',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.disabled_by_default,
-                        color: Color.fromARGB(255, 249, 177, 0)),
-                    title: Text(
-                      '비활성기기',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.inactive}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.thermostat,
-                        color: Color.fromARGB(255, 252, 145, 175)),
-                    title: Text(
-                      '온도 경고',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.tempWarn}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.water,
-                        color: Color.fromARGB(255, 53, 149, 255)),
-                    title: Text(
-                      '습도 경고',
-                      style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                    ),
-                    subtitle: Text("${loginInfo.selectedCenter.humWarn}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                ),
-              ],
+                subtitle: Text("${loginInfo.selectedCenter.centerSn}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
             ),
           ],
         ),
-      ),
-    );
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.all_inclusive,
+                    color: Color.fromARGB(255, 38, 199, 172)),
+                title: Text(
+                  '전체',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ),
+                subtitle: Text("${loginInfo.selectedCenter.total}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.disabled_by_default,
+                    color: Color.fromARGB(255, 249, 177, 0)),
+                title: Text(
+                  '비활성기기',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ),
+                subtitle: Text("${loginInfo.selectedCenter.inactive}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.thermostat,
+                    color: Color.fromARGB(255, 252, 145, 175)),
+                title: Text(
+                  '온도 경고',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ),
+                subtitle: Text("${loginInfo.selectedCenter.tempWarn}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: const Icon(Icons.water,
+                    color: Color.fromARGB(255, 53, 149, 255)),
+                title: Text(
+                  '습도 경고',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ),
+                subtitle: Text("${loginInfo.selectedCenter.humWarn}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ));
   }
 }
 
@@ -593,7 +565,7 @@ class ShowUpdateTime extends StatelessWidget {
                   child: Text(
                     'no',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 38, 94, 176),
+                      color: optiloBlue,
                     ),
                   ).tr(),
                 ),
@@ -620,7 +592,7 @@ class ShowUpdateTime extends StatelessWidget {
                   child: Text(
                     'yes',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 38, 94, 176),
+                      color: optiloBlue,
                     ),
                   ).tr(),
                 ),
@@ -629,22 +601,19 @@ class ShowUpdateTime extends StatelessWidget {
           },
         );
       },
-      icon: Icon(Icons.refresh, color: Color.fromARGB(255, 38, 94, 176)),
+      icon: Icon(
+        Icons.refresh,
+        color: optiloBlue,
+      ),
       label: Text(
         '${DateFormat("MM/dd hh:mm:ss aa").format(updateTime)}',
-        style: TextStyle(color: Color.fromARGB(255, 38, 94, 176)),
+        style: TextStyle(color: optiloBlue),
       ),
       style: ElevatedButton.styleFrom(
-          side: BorderSide(
-              color: Color.fromARGB(255, 38, 94, 176), width: 1), // 테두리 색상과 두께
+          side: BorderSide(color: optiloBlue, width: 1), // 테두리 색상과 두께
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10), // 모서리 둥글기 조절
           )),
-      // style: TextButton.styleFrom(
-      //     foregroundColor: Colors.black,
-      //     textStyle: TextStyle(
-      //       fontSize: 15.0,
-      //     )),
     );
   }
 }
@@ -718,9 +687,7 @@ class FilterCenter extends StatelessWidget {
 
   Color textColor(BuildContext context, Filter filter) {
     final currentFilter = context.watch<DeviceFilterProvider>().state.filter;
-    return currentFilter == filter
-        ? Color.fromARGB(255, 38, 94, 176)
-        : Colors.grey;
+    return currentFilter == filter ? optiloBlue : Colors.grey;
   }
 }
 
@@ -732,31 +699,6 @@ class ShowDevices extends StatefulWidget {
 }
 
 class _ShowDevicesState extends State<ShowDevices> {
-  // late Timer updateTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    // startUpdateTimer();
-  }
-
-  @override
-  void dispose() {
-    // updateTimer.cancel();
-    super.dispose();
-  }
-
-  // startUpdateTimer() {
-  //   updateTimer = Timer.periodic(
-  //     Duration(minutes: 5),
-  //     (timer) async {
-  //       await context
-  //           .read<CenterListProvider>()
-  //           .getCenterList(phoneNumber: 'phoneNumber');
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final filteredCenterList =
@@ -776,7 +718,6 @@ class _ShowDevicesState extends State<ShowDevices> {
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(
                 height: 40,
-                // color: Colors.grey,
               );
             },
             itemBuilder: (BuildContext context, int index) {
@@ -792,13 +733,13 @@ class DeviceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+    return greyBorderConatiner(
+      Column(
         children: [
           Container(
               decoration: BoxDecoration(
                 color: Color.fromRGBO(254, 246, 255, 1),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.white70,
@@ -819,16 +760,6 @@ class DeviceItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Expanded(
-                  //     flex: 5,
-                  //     child: Container(
-                  //         decoration: BoxDecoration(
-                  //             color: Color.fromARGB(255, 38, 94, 176),
-                  //             borderRadius: const BorderRadius.only(
-                  //                 topLeft: Radius.circular(10),
-                  //                 topRight: Radius.circular(10))),
-                  //         width: MediaQuery.of(context).size.width * 1,
-                  //         height: MediaQuery.of(context).size.height / 80)),
                   Expanded(
                     flex: 2,
                     child: Row(
@@ -849,114 +780,6 @@ class DeviceItem extends StatelessWidget {
                               maxLines: 1,
                               softWrap: false,
                             ),
-
-                            //  ElevatedButton(
-                            //   onPressed: () {
-                            //     showDialog(
-                            //       context: context,
-                            //       barrierDismissible: false,
-                            //       builder: (context) {
-                            //         return AlertDialog(
-                            //           title: Text(
-                            //             'centerInfo',
-                            //             style: Locate(context),
-                            //             overflow: TextOverflow.ellipsis,
-                            //             maxLines: 1,
-                            //             softWrap: false,
-                            //           ).tr(),
-                            //           content: Container(
-                            //             width: 200,
-                            //             height: 200,
-                            //             child: Column(
-                            //               children: [
-                            //                 Row(
-                            //                   children: [
-                            //                     Text(
-                            //                       'center',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     ).tr(),
-                            //                     Text(
-                            //                       ': ${device.deName}',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     )
-                            //                   ],
-                            //                 ),
-                            //                 Row(
-                            //                   children: [
-                            //                     Text(
-                            //                       'deviceInfo',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     ).tr(),
-                            //                     Text(
-                            //                       ': ${device.deNumber}',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     )
-                            //                   ],
-                            //                 ),
-                            //                 Row(
-                            //                   children: [
-                            //                     Text(
-                            //                       'description',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     ).tr(),
-                            //                     Text(
-                            //                       ': ${device.description}',
-                            //                       style: End(context),
-                            //                       overflow:
-                            //                           TextOverflow.ellipsis,
-                            //                     )
-                            //                   ],
-                            //                 )
-                            //               ],
-                            //             ),
-                            //           ),
-                            //           // Text(
-                            //           //   '센터 : ${device.deName}\n기기 정보 : ${device.deNumber} \n설명 : ${device.description}',
-                            //           //   style: End(context),
-                            //           //   overflow: TextOverflow.ellipsis,
-                            //           // ),
-                            //           actions: [
-                            //             TextButton(
-                            //               onPressed: () {
-                            //                 Navigator.pop(context);
-                            //               },
-                            //               child: Text(
-                            //                 'ok',
-                            //                 style: TextStyle(
-                            //                   color: Color.fromARGB(
-                            //                       255, 38, 94, 176),
-                            //                 ),
-                            //               ).tr(),
-                            //             ),
-                            //           ],
-                            //         );
-                            //       },
-                            //     );
-                            //   },
-                            //   child: Text(
-                            //     '${device.centerNm} - ${device.deName}',
-                            //     style: TextStyle(
-                            //       color: Color.fromRGBO(0, 54, 92, 1),
-                            //       fontSize:
-                            //           MediaQuery.of(context).size.width / 30,
-                            //       fontWeight: FontWeight.w700,
-                            //       fontFamily: 'pretend',
-                            //     ),
-                            //     overflow: TextOverflow.ellipsis,
-                            //     maxLines: 1,
-                            //     softWrap: false,
-                            //   ),
-                            // ),
                           ),
                         ),
                         Expanded(
@@ -969,8 +792,7 @@ class DeviceItem extends StatelessWidget {
                                 style: TextStyle(color: Colors.white),
                               ).tr(),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 38, 94, 176),
+                                backgroundColor: optiloBlue,
                                 foregroundColor: Colors.white,
                                 textStyle: TextStyle(
                                   fontSize: 13.0,
@@ -1040,8 +862,7 @@ class DeviceItem extends StatelessWidget {
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               side: BorderSide(
-                                                  color: Color.fromARGB(
-                                                      255, 38, 94, 176),
+                                                  color: optiloBlue,
                                                   width: 1), // 테두리 색상과 두께
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -1084,8 +905,7 @@ class DeviceItem extends StatelessWidget {
                                           child: Text(
                                             'yes',
                                             style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 38, 94, 176),
+                                              color: optiloBlue,
                                             ),
                                           ).tr(),
                                         ),

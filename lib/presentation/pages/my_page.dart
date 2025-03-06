@@ -147,7 +147,7 @@ class CenterImage extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
               color: Colors.black26, // 아래쪽 어두운 그림자
@@ -164,7 +164,7 @@ class CenterImage extends StatelessWidget {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(10.0),
           child: Image.memory(
             base64Decode(imageBase64),
             fit: BoxFit.fill,
@@ -190,7 +190,7 @@ class CenterInfomation extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Color.fromRGBO(254, 246, 255, 1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: Colors.white70,

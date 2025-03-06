@@ -225,11 +225,11 @@ TextStyle graphSubtitle(BuildContext context) {
   );
 }
 
-TextStyle graphContent(BuildContext context) {
+TextStyle serialNoStyle(BuildContext context) {
   return TextStyle(
     color: Color.fromRGBO(51, 51, 51, 1),
-    fontSize: MediaQuery.of(context).size.width / 30,
-    fontWeight: FontWeight.w500,
+    fontSize: MediaQuery.of(context).size.width / 15,
+    fontWeight: FontWeight.w800,
     fontFamily: 'pretend',
   );
 }
@@ -527,3 +527,8 @@ TextStyle stateStyle(BuildContext context, String input) {
     return state_end_gray(context);
   }
 }
+
+
+final optiloBlue = Color.fromARGB(255, 38, 94, 176);
+final optiloSky = Color.fromARGB(255, 229, 255, 255);
+final optiloGrey = Color.fromARGB(255, 179, 185, 191);

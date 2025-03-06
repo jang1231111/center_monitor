@@ -100,7 +100,7 @@ centerButton(BuildContext context, CenterInfo center) {
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 38, 94, 176),
+        color: optiloBlue,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [mainbox()],
       ),

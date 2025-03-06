@@ -1,4 +1,5 @@
 import 'package:center_monitor/config/constants/constants.dart';
+import 'package:center_monitor/config/constants/style.dart';
 import 'package:center_monitor/domain/entities/error/custom_error.dart';
 import 'package:center_monitor/presentation/pages/navigation_page.dart';
 import 'package:center_monitor/presentation/providers/center_list/center_list_provider.dart';
@@ -6,10 +7,10 @@ import 'package:center_monitor/presentation/providers/center_list/center_list_st
 import 'package:center_monitor/presentation/providers/device_list/device_list_provider.dart';
 import 'package:center_monitor/presentation/providers/device_list/device_list_state.dart';
 import 'package:center_monitor/presentation/providers/version/version_provider.dart';
-import 'package:center_monitor/presentation/widgets/version_check_dialog.dart';
-import 'package:center_monitor/presentation/widgets/webPageButton.dart';
-import 'package:center_monitor/presentation/widgets/center_choice_dialog.dart';
-import 'package:center_monitor/presentation/widgets/error_dialog.dart';
+import 'package:center_monitor/presentation/widgets/dialog/version_check_dialog.dart';
+import 'package:center_monitor/presentation/widgets/button/webPageButton.dart';
+import 'package:center_monitor/presentation/widgets/dialog/center_choice_dialog.dart';
+import 'package:center_monitor/presentation/widgets/dialog/error_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -104,7 +105,7 @@ class _SigninPageState extends State<SigninPage> {
                       shrinkWrap: true,
                       children: [
                         SizedBox(
-                          height: 190.0,
+                          height: 150.0,
                         ),
                         Image.asset(
                           'assets/images/optilo_logo.png',
@@ -126,91 +127,108 @@ class _SigninPageState extends State<SigninPage> {
                         SizedBox(
                           height: 30.0,
                         ),
-                        TextFormField(
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          keyboardType: TextInputType.visiblePassword,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 38, 94, 176),
-                                  width: 2.0), // 포커스 시 테두리 색상
+                        Align(
+                          child: SizedBox(
+                            width: 350,
+                            child: TextFormField(
+                              scrollPadding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              keyboardType: TextInputType.visiblePassword,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: optiloBlue,
+                                      width: 2.0), // 포커스 시 테두리 색상
+                                ),
+                                filled: true,
+                                labelText: 'id'.tr(),
+                                prefixIcon: Icon(Icons.login),
+                              ),
+                              validator: (String? value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'input id'.tr();
+                                }
+                                // if (value.trim().length < 11)
+                                //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
+                                return null;
+                              },
+                              onSaved: (String? inputID) {
+                                _ID = inputID;
+                                // _ID = 'health';
+                              },
                             ),
-                            filled: true,
-                            labelText: 'id'.tr(),
-                            prefixIcon: Icon(Icons.login),
                           ),
-                          validator: (String? value) {
-                            // if (value == null || value.trim().isEmpty) {
-                            //   return 'input id'.tr();
-                            // }
-                            // if (value.trim().length < 11)
-                            //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
-                            return null;
-                          },
-                          onSaved: (String? inputID) {
-                            _ID = inputID;
-                            _ID = 'health';
-                          },
-                        ),
-                        TextFormField(
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          keyboardType: TextInputType.visiblePassword,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 38, 94, 176),
-                                  width: 2.0), // 포커스 시 테두리 색상
-                            ),
-                            filled: true,
-                            labelText: 'password'.tr(),
-                            prefixIcon: Icon(Icons.password),
-                          ),
-                          validator: (String? value) {
-                            // if (value == null || value.trim().isEmpty) {
-                            //   return 'input password'.tr();
-                            // }
-                            // if (value.trim().length < 11)
-                            //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
-                            // return null;
-                          },
-                          onSaved: (String? inputPassword) {
-                            _Password = inputPassword;
-                            _Password = 'health123';
-                          },
                         ),
                         SizedBox(
-                          height: 10.0,
+                          height: 10,
+                        ),
+                        Align(
+                          child: SizedBox(
+                            width: 350,
+                            child: TextFormField(
+                              scrollPadding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              keyboardType: TextInputType.visiblePassword,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: optiloBlue,
+                                      width: 2.0), // 포커스 시 테두리 색상
+                                ),
+                                filled: true,
+                                labelText: 'password'.tr(),
+                                prefixIcon: Icon(Icons.password),
+                              ),
+                              validator: (String? value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'input password'.tr();
+                                }
+                                // if (value.trim().length < 11)
+                                //   return '로그인 번호는 11자리 전체를 입력해야 합니다.';
+                                // return null;
+                              },
+                              onSaved: (String? inputPassword) {
+                                _Password = inputPassword;
+                                // _Password = 'health123';
+                              },
+                            ),
+                          ),
                         ),
                         SizedBox(
-                          height: 30.0,
+                          height: 40.0,
                         ),
-                        ElevatedButton(
-                          onPressed: centerListState.centerListStatus ==
-                                  CenterListStatus.submitting
-                              ? null
-                              : _submit,
-                          child: Text(centerListState.centerListStatus ==
+                        Align(
+                          child: SizedBox(
+                            width: 350,
+                            child: ElevatedButton(
+                              onPressed: centerListState.centerListStatus ==
                                       CenterListStatus.submitting
-                                  ? 'loading'
-                                  : 'sign in')
-                              .tr(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 38, 94, 176),
-                            foregroundColor: Colors.white,
-                            textStyle: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(4)), // 네모난 모양으로 만들기
+                                  ? null
+                                  : _submit,
+                              child: Text(centerListState.centerListStatus ==
+                                          CenterListStatus.submitting
+                                      ? 'loading'
+                                      : 'sign in')
+                                  .tr(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: optiloBlue,
+                                foregroundColor: Colors.white,
+                                textStyle: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4)), // 네모난 모양으로 만들기
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -223,11 +241,6 @@ class _SigninPageState extends State<SigninPage> {
                               url: kforgotPasswordUri,
                               color: Colors.grey[700]!,
                             ),
-                            // WebPageButton(
-                            //   text: '아이디 찾기',
-                            //   url: kforgotIdUri,
-                            //   color: Colors.grey[700]!,
-                            // ),
                             WebPageButton(
                               text: '회원 가입',
                               url: ksignUpUri,

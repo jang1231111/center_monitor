@@ -88,7 +88,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 // 회원가입 폼
                 Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   elevation: 5,
                   child: Padding(
@@ -136,7 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     horizontal: 50, vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.circular(12), // 둥근 모서리
+                                      BorderRadius.circular(10), // 둥근 모서리
                                 ),
                                 elevation: 8, // 그림자 효과 추가
                                 shadowColor:

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:center_monitor/presentation/widgets/custom_container.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:excel/excel.dart' as ex;
 import 'package:center_monitor/config/constants/style.dart';
@@ -10,7 +11,7 @@ import 'package:center_monitor/presentation/providers/device_log_data/device_log
 import 'package:center_monitor/presentation/providers/device_log_data/device_log_data_state.dart';
 import 'package:center_monitor/presentation/providers/device_report/device_report_provider.dart';
 import 'package:center_monitor/presentation/providers/device_report/device_report_state.dart';
-import 'package:center_monitor/presentation/widgets/error_dialog.dart';
+import 'package:center_monitor/presentation/widgets/dialog/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class DetailPage extends StatelessWidget {
           child: Scaffold(
             body: Padding(
               padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: 20.0,
+                horizontal: 15.0,
                 vertical: 10.0,
               ),
               child: Column(
@@ -43,29 +44,17 @@ class DetailPage extends StatelessWidget {
                     ),
                     height: 20,
                   ),
-                  Text(
-                    '온도 그래프',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[900],
-                    ),
-                  ),
-
                   dataChart(),
-
                   SizedBox(
                     height: 10,
                   ),
                   Expanded(
-                    flex: 5,
                     child: logInformation(),
                   ),
                   SizedBox(
                     child: Divider(height: 5),
                     height: 20,
                   ),
-                  // Expanded(flex: 1, child: OptiloInfo()),
                 ],
               ),
             ),
@@ -86,31 +75,17 @@ class DetailHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios),
-              padding: EdgeInsets.zero, // 내부 패딩 없애기
-            ),
-            Text(
-              'detailInfo',
-              style: TextStyle(fontSize: 25.0),
-            ).tr(),
-          ],
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+          padding: EdgeInsets.zero, // 내부 패딩 없애기
         ),
-
-        // Text(
-        //   'detailInfo',
-        //   style: TextStyle(fontSize: 25.0),
-        // ).tr(),
         Text(
           '${device.centerNm} - ${device.deName}',
           style: TextStyle(
-            fontSize: 15.0,
-            color: Color.fromARGB(255, 241, 140, 31),
+            fontSize: 20.0,
           ),
         )
       ],
@@ -127,7 +102,7 @@ class dataChart extends StatelessWidget {
     DeviceLogDataState centerDataProv =
         context.watch<DeviceLogDataProvider>().state;
 
-    return SfCartesianChart(
+    return blueBorderConatiner(SfCartesianChart(
       primaryYAxis: NumericAxis(
           maximum: device.tempHigh + 10,
           interval: 5,
@@ -179,7 +154,7 @@ class dataChart extends StatelessWidget {
           name: '온도 데이터',
         )
       ],
-    );
+    ));
   }
 }
 
@@ -196,18 +171,6 @@ class _logInformationState extends State<logInformation> {
   late DateTime endDateTime = device.timeStamp.toLocal();
 
   @override
-  void initState() {
-    super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     // device = ModalRoute.of(context)!.settings.arguments as A10;
-    //     startDateTime = device.startTime;
-    //     endDateTime = device.timeStamp;
-    //   },
-    // );
-  }
-
-  @override
   Widget build(BuildContext context) {
     DeviceReportState centerReportState =
         context.watch<DeviceReportProvider>().state;
@@ -221,339 +184,447 @@ class _logInformationState extends State<logInformation> {
         : Column(
             children: [
               Expanded(
-                flex: 6,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 254, 246, 255),
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 211, 210, 205),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 254, 246, 255),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white70,
-                                    offset: Offset(-8, -8),
-                                    blurRadius: 16,
-                                    spreadRadius: 2,
-                                  ),
-                                  BoxShadow(
-                                    color: Colors.black26, // 아래쪽 어두운 그림자
-                                    offset: Offset(8, 8),
-                                    blurRadius: 16,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Colors.blue,
-                                              Colors.red
-                                            ], // 바깥쪽 테두리 색상 (그라디언트)
+                  flex: 6,
+                  child: blueBorderConatiner(
+                    Container(
+                      decoration: BoxDecoration(
+                        color: optiloGrey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: centerReportState.tempHigh == -999
+                                ? Center(
+                                    child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'noData',
+                                        style: TextStyle(
+                                          color: Colors.red[600],
+                                        ),
+                                      ).tr(),
+                                      Text(
+                                        'timeCheckMsg',
+                                        style: TextStyle(
+                                          color: Colors.red[600],
+                                        ),
+                                      ).tr(),
+                                    ],
+                                  ))
+                                : greyBorderNoShadowConatiner(
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.blue,
+                                                    Colors.red,
+                                                  ], // 바깥쪽 테두리 색상 (그라디언트)
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(6.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Color.fromARGB(
+                                                        255, 254, 246, 255),
+                                                    shape: BoxShape.circle,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.white70,
+                                                        offset: Offset(-8, -8),
+                                                        blurRadius: 16,
+                                                        spreadRadius: 2,
+                                                      ),
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .black26, // 아래쪽 어두운 그림자
+                                                        offset: Offset(8, 8),
+                                                        blurRadius: 16,
+                                                        spreadRadius: 2,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          'Temperature',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Image(
+                                                          image: AssetImage(
+                                                              'assets/images/temp_ic.png'),
+                                                          fit: BoxFit.contain,
+                                                          width: 25,
+                                                          height: 25,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          '${centerReportState.tempHigh}°',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        Text(
+                                                          '${centerReportState.tempLow}°',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.blue),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 254, 246, 255),
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.white70,
-                                                  offset: Offset(-8, -8),
-                                                  blurRadius: 16,
-                                                  spreadRadius: 2,
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.blue,
+                                                    Colors.red
+                                                  ], // 바깥쪽 테두리 색상 (그라디언트)
                                                 ),
-                                                BoxShadow(
-                                                  color: Colors
-                                                      .black26, // 아래쪽 어두운 그림자
-                                                  offset: Offset(8, 8),
-                                                  blurRadius: 16,
-                                                  spreadRadius: 2,
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(6.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Color.fromARGB(
+                                                        255, 254, 246, 255),
+                                                    shape: BoxShape.circle,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.white70,
+                                                        offset: Offset(-8, -8),
+                                                        blurRadius: 16,
+                                                        spreadRadius: 2,
+                                                      ),
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .black26, // 아래쪽 어두운 그림자
+                                                        offset: Offset(8, 8),
+                                                        blurRadius: 16,
+                                                        spreadRadius: 2,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          'Humidity',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Image(
+                                                          image: AssetImage(
+                                                              'assets/images/ic_humidity.png'),
+                                                          fit: BoxFit.contain,
+                                                          width: 25,
+                                                          height: 25,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          '${centerReportState.humHigh}%',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        Text(
+                                                          '${centerReportState.humLow}%',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.blue),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
-                                              ],
+                                              ),
                                             ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: greyBorderNoShadowConatiner(
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Text(
+                                            'Serial No',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromRGBO(51, 51, 51, 1),
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  25,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'pretend',
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${device.deNumber}',
+                                          textAlign: TextAlign.center,
+                                          style: serialNoStyle(context),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  dividerColumnContainer(),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
                                             child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
+                                                Text(
+                                                  'startTime',
+                                                  textAlign: TextAlign.start,
+                                                  style: graphSubtitle(context),
+                                                ).tr(),
+                                                SizedBox(
+                                                  height: 3,
+                                                ),
                                                 Expanded(
                                                     flex: 1,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10),
+                                                    child: ElevatedButton(
+                                                      onPressed: () async {
+                                                        await showDatePicker(
+                                                          context: context,
+                                                          initialDate:
+                                                              startDateTime,
+                                                          firstDate: DateTime
+                                                                  .now()
+                                                              .subtract(
+                                                                  Duration(
+                                                                      days:
+                                                                          30)),
+                                                          lastDate:
+                                                              DateTime.now(),
+                                                        ).then(
+                                                          (DateTime?
+                                                              startDate) {
+                                                            if (startDate !=
+                                                                null) {
+                                                              startDateTime =
+                                                                  startDate;
+                                                            }
+                                                          },
+                                                        );
+
+                                                        await showTimePicker(
+                                                          context: context,
+                                                          initialTime: TimeOfDay(
+                                                              hour:
+                                                                  startDateTime
+                                                                      .hour,
+                                                              minute:
+                                                                  startDateTime
+                                                                      .minute),
+                                                        ).then(
+                                                          (TimeOfDay?
+                                                              startTime) {
+                                                            if (startTime !=
+                                                                null) {
+                                                              final newStartTime = DateTime(
+                                                                  startDateTime
+                                                                      .year,
+                                                                  startDateTime
+                                                                      .month,
+                                                                  startDateTime
+                                                                      .day,
+                                                                  startTime
+                                                                      .hour,
+                                                                  startTime
+                                                                      .minute);
+
+                                                              startDateTime =
+                                                                  newStartTime;
+                                                            }
+                                                            setState(() {});
+                                                          },
+                                                        );
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              side: BorderSide(
+                                                                  color:
+                                                                      optiloBlue,
+                                                                  width:
+                                                                      1), // 테두리 색상과 두께
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10), // 모서리 둥글기 조절
+                                                              )),
                                                       child: Text(
-                                                        'Serial No',
+                                                        DateFormat(
+                                                                "MM-dd HH:mm")
+                                                            .format(
+                                                                startDateTime),
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style: graphSubtitle(
-                                                            context),
+                                                        style: TextStyle(
+                                                            color: optiloBlue),
                                                       ),
                                                     )),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      '${device.deNumber}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          graphContent(context),
-                                                    ))
                                               ],
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: double.infinity, // 조금 더 두껍게
-                                      width: 1,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFDDDDDD), // 살짝 어두운 배경색
-                                        borderRadius: BorderRadius.circular(1),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.white, // 위쪽 하이라이트 효과
-                                            offset: Offset(-1, -1),
-                                            blurRadius: 1,
-                                          ),
-                                          BoxShadow(
-                                            color: Colors.black
-                                                .withOpacity(0.3), // 아래쪽 그림자
-                                            offset: Offset(1, 1),
-                                            blurRadius: 1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5.0),
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        'startTime',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: graphSubtitle(
-                                                            context),
-                                                      ).tr(),
-                                                    ),
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: ElevatedButton(
-                                                          onPressed: () async {
-                                                            await showDatePicker(
-                                                              context: context,
-                                                              initialDate:
-                                                                  startDateTime,
-                                                              firstDate: DateTime
-                                                                      .now()
-                                                                  .subtract(
-                                                                      Duration(
-                                                                          days:
-                                                                              30)),
-                                                              lastDate: DateTime
-                                                                  .now(),
-                                                            ).then(
-                                                              (DateTime?
-                                                                  startDate) {
-                                                                if (startDate !=
-                                                                    null) {
-                                                                  startDateTime =
-                                                                      startDate;
-                                                                }
-                                                              },
-                                                            );
-
-                                                            await showTimePicker(
-                                                              context: context,
-                                                              initialTime: TimeOfDay(
-                                                                  hour:
-                                                                      startDateTime
-                                                                          .hour,
-                                                                  minute:
-                                                                      startDateTime
-                                                                          .minute),
-                                                            ).then(
-                                                              (TimeOfDay?
-                                                                  startTime) {
-                                                                if (startTime !=
-                                                                    null) {
-                                                                  final newStartTime = DateTime(
-                                                                      startDateTime
-                                                                          .year,
-                                                                      startDateTime
-                                                                          .month,
-                                                                      startDateTime
-                                                                          .day,
-                                                                      startTime
-                                                                          .hour,
-                                                                      startTime
-                                                                          .minute);
-
-                                                                  startDateTime =
-                                                                      newStartTime;
-                                                                }
-                                                                setState(() {});
-                                                              },
-                                                            );
-                                                          },
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  side: BorderSide(
-                                                                      color: Color.fromARGB(
-                                                                          255,
-                                                                          38,
-                                                                          94,
-                                                                          176),
-                                                                      width:
-                                                                          1), // 테두리 색상과 두께
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10), // 모서리 둥글기 조절
-                                                                  )),
-                                                          child: Text(
-                                                            DateFormat(
-                                                                    "MM-dd HH:mm")
-                                                                .format(
-                                                                    startDateTime),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        38,
-                                                                        94,
-                                                                        176)),
-                                                          ),
-                                                        )),
-                                                  ],
+                                        dividerRowContainer(),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'endTime',
+                                                  textAlign: TextAlign.start,
+                                                  style: graphSubtitle(context),
+                                                ).tr(),
+                                                SizedBox(
+                                                  height: 3,
                                                 ),
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 1, // 조금 더 두껍게
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Color(
-                                                    0xFFDDDDDD), // 살짝 어두운 배경색
-                                                borderRadius:
-                                                    BorderRadius.circular(1),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors
-                                                        .white, // 위쪽 하이라이트 효과
-                                                    offset: Offset(-1, -1),
-                                                    blurRadius: 1,
-                                                  ),
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(
-                                                            0.3), // 아래쪽 그림자
-                                                    offset: Offset(1, 1),
-                                                    blurRadius: 1,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          'endTime',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: graphSubtitle(
-                                                              context),
-                                                        ).tr()),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          await showDatePicker(
-                                                            context: context,
-                                                            initialDate:
-                                                                endDateTime,
-                                                            firstDate: DateTime
-                                                                    .now()
-                                                                .subtract(
-                                                                    Duration(
-                                                                        days:
-                                                                            30)),
-                                                            lastDate:
-                                                                DateTime.now(),
-                                                          ).then(
-                                                            (DateTime?
-                                                                endDate) {
-                                                              if (endDate !=
-                                                                  null) {
-                                                                endDateTime =
-                                                                    endDate;
-                                                              }
-                                                            },
-                                                          );
+                                                Expanded(
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      await showDatePicker(
+                                                        context: context,
+                                                        initialDate:
+                                                            endDateTime,
+                                                        firstDate: DateTime
+                                                                .now()
+                                                            .subtract(Duration(
+                                                                days: 30)),
+                                                        lastDate:
+                                                            DateTime.now(),
+                                                      ).then(
+                                                        (DateTime? endDate) {
+                                                          if (endDate != null) {
+                                                            endDateTime =
+                                                                endDate;
+                                                          }
+                                                        },
+                                                      );
 
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime:
-                                                                TimeOfDay(
-                                                                    hour: 22,
-                                                                    minute: 10),
-                                                          ).then(
-                                                            (TimeOfDay?
-                                                                endDate) {
-                                                              if (endDate !=
-                                                                  null) {
-                                                                final newEndTime = DateTime(
+                                                      await showTimePicker(
+                                                        context: context,
+                                                        initialTime: TimeOfDay(
+                                                            hour: 22,
+                                                            minute: 10),
+                                                      ).then(
+                                                        (TimeOfDay? endDate) {
+                                                          if (endDate != null) {
+                                                            final newEndTime =
+                                                                DateTime(
                                                                     endDateTime
                                                                         .year,
                                                                     endDateTime
@@ -565,280 +636,52 @@ class _logInformationState extends State<logInformation> {
                                                                     endDate
                                                                         .minute);
 
-                                                                endDateTime =
-                                                                    newEndTime;
-                                                              }
-                                                              setState(() {});
-                                                            },
-                                                          );
+                                                            endDateTime =
+                                                                newEndTime;
+                                                          }
+                                                          setState(() {});
                                                         },
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                                side: BorderSide(
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            38,
-                                                                            94,
-                                                                            176),
-                                                                    width:
-                                                                        1), // 테두리 색상과 두께
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10), // 모서리 둥글기 조절
-                                                                )),
-                                                        child: Text(
-                                                          DateFormat(
-                                                                  "MM-dd HH:mm")
-                                                              .format(
-                                                                  endDateTime),
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: TextStyle(
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      38,
-                                                                      94,
-                                                                      176)),
-                                                        ),
-                                                      ),
+                                                      );
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            side: BorderSide(
+                                                                color:
+                                                                    optiloBlue,
+                                                                width:
+                                                                    1), // 테두리 색상과 두께
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8), // 모서리 둥글기 조절
+                                                            )),
+                                                    child: Text(
+                                                      DateFormat("MM-dd HH:mm")
+                                                          .format(endDateTime),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color: optiloBlue),
                                                     ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      Expanded(
-                          flex: 1,
-                          child: centerReportState.tempHigh == -999
-                              ? Center(
-                                  child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'noData',
-                                      style: TextStyle(
-                                        color: Colors.red[600],
-                                      ),
-                                    ).tr(),
-                                    Text(
-                                      'timeCheckMsg',
-                                      style: TextStyle(
-                                        color: Colors.red[600],
-                                      ),
-                                    ).tr(),
-                                  ],
-                                ))
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Color.fromARGB(255, 211, 210, 205),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.white70,
-                                        offset: Offset(-8, -8),
-                                        blurRadius: 16,
-                                        spreadRadius: 2,
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.black26, // 아래쪽 어두운 그림자
-                                        offset: Offset(8, 8),
-                                        blurRadius: 16,
-                                        spreadRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color:
-                                            Color.fromARGB(255, 254, 246, 255),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                        'assets/images/temp_ic.png'),
-                                                    fit: BoxFit.contain,
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 1, // 조금 더 두껍게
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(
-                                                        0xFFDDDDDD), // 살짝 어두운 배경색
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors
-                                                            .white, // 위쪽 하이라이트 효과
-                                                        offset: Offset(-1, -1),
-                                                        blurRadius: 1,
-                                                      ),
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(
-                                                                0.3), // 아래쪽 그림자
-                                                        offset: Offset(1, 1),
-                                                        blurRadius: 1,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      'Max: ${centerReportState.tempHigh}°C',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 194, 46, 46),
-                                                      ),
-                                                    )),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      'Min: ${centerReportState.tempLow}°C',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 63, 100, 228),
-                                                      ),
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            height: double.infinity, // 조금 더 두껍게
-                                            width: 1,
-                                            decoration: BoxDecoration(
-                                              color: Color(
-                                                  0xFFDDDDDD), // 살짝 어두운 배경색
-                                              borderRadius:
-                                                  BorderRadius.circular(1),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors
-                                                      .white, // 위쪽 하이라이트 효과
-                                                  offset: Offset(-1, -1),
-                                                  blurRadius: 1,
-                                                ),
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(
-                                                          0.3), // 아래쪽 그림자
-                                                  offset: Offset(1, 1),
-                                                  blurRadius: 1,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                        'assets/images/ic_humidity.png'),
-                                                    fit: BoxFit.contain,
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 1, // 조금 더 두껍게
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(
-                                                        0xFFDDDDDD), // 살짝 어두운 배경색
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors
-                                                            .white, // 위쪽 하이라이트 효과
-                                                        offset: Offset(-1, -1),
-                                                        blurRadius: 1,
-                                                      ),
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(
-                                                                0.3), // 아래쪽 그림자
-                                                        offset: Offset(1, 1),
-                                                        blurRadius: 1,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      'Max: ${centerReportState.humHigh}%',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 63, 100, 228),
-                                                      ),
-                                                    )),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      'Min: ${centerReportState.humLow}%',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 63, 100, 228),
-                                                      ),
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  )),
               SizedBox(
                 height: 10,
               ),
@@ -848,47 +691,6 @@ class _logInformationState extends State<logInformation> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Row(
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: double.infinity,
-                            child: ElevatedButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor:
-                                        Color.fromARGB(255, 38, 94, 176),
-                                    textStyle: TextStyle(
-                                      fontSize: 15.0,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    )),
-                                onPressed: () {
-                                  final selectedCenterInfo = context
-                                      .read<CenterListProvider>()
-                                      .state
-                                      .loginInfo;
-
-                                  try {
-                                    A10 newDevice = device.copyWith(
-                                        startTime: startDateTime.toUtc(),
-                                        timeStamp: endDateTime.toUtc());
-
-                                    context
-                                        .read<DeviceLogDataProvider>()
-                                        .getDeviceLogData(
-                                            device: newDevice,
-                                            token: selectedCenterInfo.token,
-                                            company:
-                                                selectedCenterInfo.company);
-                                  } on CustomError catch (e) {
-                                    errorDialog(context, e.toString());
-                                  }
-                                },
-                                child: Text('select').tr()),
-                          ),
-                        ),
-                        SizedBox(width: 5),
                         Expanded(
                           flex: 1,
                           child: Container(
@@ -951,6 +753,46 @@ class _logInformationState extends State<logInformation> {
                                       text: 'Excel');
                                 },
                                 child: Text('excel').tr()),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: double.infinity,
+                            child: ElevatedButton(
+                                style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: optiloBlue,
+                                    textStyle: TextStyle(
+                                      fontSize: 15.0,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    )),
+                                onPressed: () {
+                                  final selectedCenterInfo = context
+                                      .read<CenterListProvider>()
+                                      .state
+                                      .loginInfo;
+
+                                  try {
+                                    A10 newDevice = device.copyWith(
+                                        startTime: startDateTime.toUtc(),
+                                        timeStamp: endDateTime.toUtc());
+
+                                    context
+                                        .read<DeviceLogDataProvider>()
+                                        .getDeviceLogData(
+                                            device: newDevice,
+                                            token: selectedCenterInfo.token,
+                                            company:
+                                                selectedCenterInfo.company);
+                                  } on CustomError catch (e) {
+                                    errorDialog(context, e.toString());
+                                  }
+                                },
+                                child: Text('select').tr()),
                           ),
                         ),
                       ],
