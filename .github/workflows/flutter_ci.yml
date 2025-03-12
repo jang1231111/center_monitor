@@ -55,6 +55,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install jq (JSON Processor)
+        run: |
+          if ! command -v jq &> /dev/null
+          then
+            brew install jq || sudo apt-get update && sudo apt-get install -y jq
+          fi
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
