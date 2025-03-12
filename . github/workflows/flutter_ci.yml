@@ -1,0 +1,77 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 기본 빌드 환경 (Android 전용)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.28.0-0.1.pre"
+          channel : "beta"
+
+      - name: Clean Project
+        run: flutter clean
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Restore Keystore & Create `key.properties`
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
+          echo "storeFile=keystore.jks" > android/key.properties 
+          echo "storePassword=$KEYSTORE_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+
+      - name: Build APK
+        run: flutter build apk --release
+      
+      - name: Deploy to Play Store
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd android
+          fastlane deploy
+
+  ios-build:
+    runs-on: macos-latest  # iOS 빌드 환경
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.28.0-0.1.pre"
+          channel : "beta"
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build iOS App
+        run: flutter build ipa --release
+
+      - name: Export Secrets as Environment Variables
+        run: |
+          echo "APP_STORE_PASSWORD=${{ secrets.APP_STORE_PASSWORD }}
+
+      - name: Deploy to App Store
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd ios
+          bundle exec fastlane deploy

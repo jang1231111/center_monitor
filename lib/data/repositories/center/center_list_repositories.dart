@@ -15,7 +15,6 @@ class CenterListRepositories {
       String company;
       String token;
       List<CenterInfo> centerList;
-
       company = await apiServices.intergrationLogin(ID, Password);
       // print('IntergrationLogin Center Test $company');
 
@@ -23,7 +22,7 @@ class CenterListRepositories {
       // print('login Token Test $token');
 
       centerList = await apiServices.getCenterList(token, company);
-      // print('getCenterList deviceList Test $centerList');
+      print('getCenterList deviceList Test $centerList');
 
       CenterListInfo centerListInfo = CenterListInfo(centers: centerList);
 

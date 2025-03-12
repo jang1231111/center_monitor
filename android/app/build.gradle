@@ -23,12 +23,6 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
- def keystoreProperties = new Properties()
-   def keystorePropertiesFile = rootProject.file('app/key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
-
 android {
     namespace = "net.optilo.warehouse"
     compileSdk = flutter.compileSdkVersion
@@ -52,10 +46,16 @@ android {
 
    signingConfigs {
        release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
+            def keystorePropertiesFile = rootProject.file('app/key.properties')
+            def keystoreProperties = new Properties()
+            // if (keystorePropertiesFile.exists()) {
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            // }
+
            storeFile file(keystoreProperties['storeFile'])
            storePassword keystoreProperties['storePassword']
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
        }
    }
    

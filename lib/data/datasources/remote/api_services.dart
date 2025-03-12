@@ -51,7 +51,7 @@ class ApiServices {
       }
 
       final responseBody = response.body;
-      print('intergrationLogin Response : $responseBody');
+      // print('intergrationLogin Response : $responseBody');
       final center = responseBody.toString();
 
       // if (strResponse == '{msg: No Data In MANAGER_INFO, notice: []}') {
@@ -67,14 +67,13 @@ class ApiServices {
 
   Future<String> login(String ID, String Password, String center) async {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-
     data['userId'] = ID;
     data["password"] = Password;
 
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kLoginUri');
 
-    print('Login Uri ${uri}');
+    // print('Login Uri ${uri}');
 
     try {
       final http.Response response = await client.post(uri,
@@ -86,6 +85,7 @@ class ApiServices {
       }
 
       final responseBody = json.decode(response.body);
+      // print('login Response : $responseBody');
       final token = responseBody['token'];
 
       // if (strResponse == '{msg: No Data In MANAGER_INFO, notice: []}') {
@@ -104,7 +104,7 @@ class ApiServices {
     var client = http.Client();
     var uri = Uri.parse('$khttpUri$center$kcenterListUri');
 
-    print('centerList Uri $uri');
+    // print('centerList Uri $uri');
 
     try {
       final http.Response response = await client.post(uri, headers: {
