@@ -3,11 +3,12 @@ name: Flutter CI/CD
 on:
   push:
     branches:
-      - dev
+      - '*'
 
 jobs:
   build:
-    runs-on: self-hosted  # 기본 빌드 환경 (Android 전용)
+    runs-on: [self-hosted, macOS, ARM64]
+
 
     steps:
       - name: Checkout Repository
@@ -48,7 +49,7 @@ jobs:
           fastlane deploy
 
   ios-build:
-    runs-on: self-hosted  # iOS 빌드 환경
+    runs-on: [self-hosted, macOS, ARM64]
 
     steps:
       - name: Checkout Repository
