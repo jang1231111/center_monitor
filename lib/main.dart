@@ -85,6 +85,7 @@ class MyApp extends StatelessWidget {
             color: optiloBlue,
           ), // 포커스 시 라벨 색상
         ),
+        
       ),
       title: 'Center_Monitoring',
       debugShowCheckedModeBanner: false,
