@@ -36,7 +36,7 @@ platform :ios do
       skip_metadata: true      # 메타데이터 업로드 생략 (선택 사항)
     )
   end
-
+  
   lane :beta do
     upload_to_testflight(
       username: ENV['APPLE_ID'],
