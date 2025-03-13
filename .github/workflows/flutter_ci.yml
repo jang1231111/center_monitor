@@ -56,7 +56,7 @@ jobs:
         if: github.ref == 'refs/heads/dev'
         run: |
           cd android
-          fastlane beta
+          fastlane beta --verbose
 
       # iOS Build & Deployment
       - name: Build iOS App
