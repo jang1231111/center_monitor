@@ -45,7 +45,9 @@ jobs:
       - name: Create `local.properties`
         run: |
           echo "flutter.sdk=$HOME/flutter" > android/local.properties
-          echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties 
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
+          echo "flutterVersionCode=456" >> android/local.properties
+          echo "flutterVersionName=1.2.3" >> android/local.properties
 
       - name: Build APK
         run: flutter build appbundle --release
