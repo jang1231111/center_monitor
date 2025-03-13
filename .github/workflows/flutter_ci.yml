@@ -49,6 +49,8 @@ jobs:
 
       - name: Create `local.properties`
         run: |
+          rm -rf android/local.properties
+          rm -rf android/.gradle
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
           echo "flutter.sdk=$HOME/desktop/Devolop/flutter" >> android/local.properties
           echo "flutter.versionCode=13" >> android/local.properties
@@ -59,7 +61,7 @@ jobs:
       #   run: rm android/local.properties
 
       - name: Build APK
-        run: flutter build appbundle --release --no-version-check
+        run: flutter build appbundle --release
       
       - name: Show `local.properties` File
         run: cat android/local.properties
