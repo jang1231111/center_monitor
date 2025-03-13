@@ -47,7 +47,8 @@ jobs:
       - name: Deploy to Play Store (Android)
         if: github.ref == 'refs/heads/dev'
         run: |
-          fastlane android beta
+          cd android
+          fastlane beta
 
       # iOS Build & Deployment
       - name: Build iOS App
@@ -60,4 +61,5 @@ jobs:
       - name: Deploy to App Store (iOS)
         if: github.ref == 'refs/heads/dev'
         run: |
+          cd ios
           fastlane ios beta
