@@ -16,6 +16,11 @@ jobs:
         with:
           path: center_monitor  # 추가: 폴더 경로 지정
 
+      - name: gradlew clean
+        run: |
+          cd android
+          ./gradlew clean
+
       - name: Clean Project
         run: flutter clean
 
@@ -52,8 +57,8 @@ jobs:
       - name: Show `local.properties` File
         run: cat android/local.properties
 
-      - name: List Build Outputs
-        run: ls -R build/app/outputs/bundle/release/app-release.aab
+      # - name: List Build Outputs
+      #   run: ls -R build/app/outputs/bundle/release/app-release.aab
 
       - name: Deploy to Play Store (Android)
         if: github.ref == 'refs/heads/dev'
