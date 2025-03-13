@@ -59,7 +59,7 @@ jobs:
       #   run: rm android/local.properties
 
       - name: Build APK
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --no-version-check
       
       - name: Show `local.properties` File
         run: cat android/local.properties
