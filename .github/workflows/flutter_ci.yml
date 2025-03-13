@@ -28,11 +28,17 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
+          mkdir -p android/app
           echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
-          echo "storeFile=keystore.jks" > android/key.properties 
-          echo "storePassword=$KEYSTORE_PASSWORD" >> android/key.properties
-          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+          echo "storeFile=app/keystore.jks" > android/app/key.properties
+          echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
+
+      # - name: Create `local.properties`
+      #   run: |
+      #     echo "flutter.sdk=$HOME/flutter" > android/local.properties
+      #     echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
 
       - name: Build APK
         run: flutter build apk --release
@@ -53,5 +59,4 @@ jobs:
       - name: Deploy to App Store (iOS)
         if: github.ref == 'refs/heads/main'
         run: |
-          cd ios
           fastlane ios beta
