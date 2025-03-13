@@ -35,6 +35,7 @@ jobs:
           echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
           echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
           echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
+          echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
 
       # - name: Create `local.properties`
       #   run: |
