@@ -1,6 +1,7 @@
 name: Flutter CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - '*'
@@ -12,12 +13,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.28.0-0.1.pre"
-          channel : "beta"
 
       - name: Clean Project
         run: flutter clean
@@ -53,19 +48,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Install jq (JSON Processor)
-        run: |
-          if ! command -v jq &> /dev/null
-          then
-            brew install jq || sudo apt-get update && sudo apt-get install -y jq
-          fi
-
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.28.0-0.1.pre"
-          channel : "beta"
 
       - name: Install Dependencies
         run: flutter pub get
