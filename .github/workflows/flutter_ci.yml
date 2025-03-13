@@ -53,6 +53,10 @@ jobs:
           echo "flutter.sdk=$HOME/desktop/Devolop/flutter" >> android/local.properties
           echo "flutter.versionCode=13" >> android/local.properties
           echo "flutter.versionName=2.2.8" >> android/local.properties
+          cat android/local.properties
+
+      # - name: delete local.properties
+      #   run: rm android/local.properties
 
       - name: Build APK
         run: flutter build appbundle --release
