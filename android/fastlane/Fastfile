@@ -24,7 +24,7 @@ platform :android do
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "clean bundleRelease") # APK 대신 AAB 빌드
-    upload_to_play_store(
+    upload_to_play_store(  
       json_key_data: "play-store-api.json",
       track: "internal",
       aab: "../build/app/outputs/bundle/release/app-release.aab"
