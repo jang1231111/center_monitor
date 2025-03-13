@@ -45,7 +45,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Deploy to Play Store (Android)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/dev'
         run: |
           fastlane android beta
 
@@ -58,6 +58,6 @@ jobs:
           echo "APP_STORE_PASSWORD=${{ secrets.APP_STORE_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Deploy to App Store (iOS)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/dev'
         run: |
           fastlane ios beta
