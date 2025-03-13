@@ -48,6 +48,9 @@ jobs:
       #     echo "flutter.sdk=$HOME/desktop/Devolop/flutter" >> android/local.properties
       - name: Build APK
         run: flutter build appbundle --release
+      
+      - name: Show `local.properties` File
+        run: cat android/local.properties
 
       - name: List Build Outputs
         run: ls -R build/app/outputs/bundle/release/app-release.aab
