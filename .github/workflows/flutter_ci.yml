@@ -51,7 +51,7 @@ jobs:
         run: flutter build appbundle --release
 
       - name: List Build Outputs
-        run: ls -R android/app/build/outputs
+        run: ls -R build/app/outputs/bundle/release/app-release.aab
 
       - name: Deploy to Play Store (Android)
         if: github.ref == 'refs/heads/dev'
@@ -71,4 +71,4 @@ jobs:
         if: github.ref == 'refs/heads/dev'
         run: |
           cd ios
-          fastlane ios beta
+          fastlane beta

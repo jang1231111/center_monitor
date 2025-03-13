@@ -27,8 +27,8 @@ platform :android do
     upload_to_play_store(
       json_key_data: "./play-store-api.json",
       track: "internal",
-      # aab: "../build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
-      aab: "/Users/jang-yuncheol/Desktop/Devolop/center_monitor/build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
+      aab: "../build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
+      # aab: "/Users/jang-yuncheol/Desktop/Devolop/center_monitor/build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
     )
   end
 
