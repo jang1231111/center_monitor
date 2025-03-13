@@ -37,6 +37,8 @@ jobs:
           echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
           
       - name: Create Play Store API JSON
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
 
@@ -46,7 +48,7 @@ jobs:
       #     echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build appbundle --release
 
       - name: Deploy to Play Store (Android)
         if: github.ref == 'refs/heads/dev'
