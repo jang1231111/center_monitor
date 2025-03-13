@@ -7,7 +7,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: [self-hosted, macOS, ARM64]
 
     steps:
@@ -20,6 +20,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      # Android Build & Deployment
       - name: Restore Keystore & Create `key.properties`
         env:
           KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
@@ -35,32 +36,22 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
-      
-      - name: Deploy to Play Store
+
+      - name: Deploy to Play Store (Android)
         if: github.ref == 'refs/heads/main'
         run: |
-          cd android
-          fastlane deploy
+          fastlane android beta
 
-  ios-build:
-    runs-on: [self-hosted, macOS, ARM64]
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: flutter pub get
-
+      # iOS Build & Deployment
       - name: Build iOS App
         run: flutter build ipa --release
 
       - name: Export Secrets as Environment Variables
         run: |
-          echo "APP_STORE_PASSWORD=${{ secrets.APP_STORE_PASSWORD }}
+          echo "APP_STORE_PASSWORD=${{ secrets.APP_STORE_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Deploy to App Store
+      - name: Deploy to App Store (iOS)
         if: github.ref == 'refs/heads/main'
         run: |
           cd ios
-          bundle exec fastlane deploy
+          fastlane ios beta
