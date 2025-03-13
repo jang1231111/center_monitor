@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          path: center_monitor  # 추가: 폴더 경로 지정
 
       - name: Clean Project
         run: flutter clean
@@ -28,7 +30,6 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          mkdir -p android/app
           echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
           echo "storeFile=app/keystore.jks" > android/app/key.properties
           echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
