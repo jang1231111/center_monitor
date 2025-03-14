@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android) 
 
 platform :android do
@@ -21,26 +6,23 @@ platform :android do
     gradle(task: "test")
   end  
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    # gradle(task: "clean bundleRelease") # APK 대신 AAB 빌드
+  desc "Production Distribution"
+  lane :deploy do
+    # gradle(task: "clean bundleRelease") 
     upload_to_play_store(  
       json_key: "play-store-api.json",
-      track: "internal",
+      track: "production",
       aab: "../build/app/outputs/bundle/release/app-release.aab"
-      
-      # aab: "/Users/jang-yuncheol/Desktop/Devolop/center_monitor/build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
-      # aab: "../build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
     )
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean bundleRelease") # APK 대신 AAB 빌드
+  desc "Inner Distribution"
+  lane :beta do
+    # gradle(task: "clean bundleRelease") 
     upload_to_play_store(
       json_key: "./play-store-api.json",
       track: "internal",
-      aab: "/Users/jang-yuncheol/Desktop/Devolop/center_monitor/build/app/outputs/bundle/release/app-release.aab" # ✅ 절대 경로 사용
+      aab: "../build/app/outputs/bundle/release/app-release.aab"
     )
   end
 end
