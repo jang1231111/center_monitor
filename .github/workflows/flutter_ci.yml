@@ -56,6 +56,7 @@ jobs:
           echo "flutter.versionCode=13" >> android/local.properties
           echo "flutter.versionName=2.2.8" >> android/local.properties
           cat android/local.properties
+          cat android/gradle.properties
 
       # - name: delete local.properties
       #   run: rm android/local.properties
