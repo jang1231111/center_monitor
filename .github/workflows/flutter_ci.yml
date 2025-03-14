@@ -60,23 +60,17 @@ jobs:
           echo "flutter.versionName=2.2.8" >> android/local.properties
           cat android/local.properties
 
-      # - name: delete local.properties
-      #   run: rm android/local.properties
-
-      - name: Build APK
-        run: flutter build appbundle --release
+      # - name: Build APK
+      #   run: flutter build appbundle --release
       
-      - name: Show `local.properties` File
-        run: cat android/local.properties
+      # - name: Show `local.properties` File
+      #   run: cat android/local.properties
 
-      # - name: List Build Outputs
-      #   run: ls -R build/app/outputs/bundle/release/app-release.aab
-
-      - name: Deploy to Play Store (Android)
-        if: github.ref == 'refs/heads/dev'
-        run: |
-          cd android
-          fastlane beta --verbose
+      # - name: Deploy to Play Store (Android)
+      #   if: github.ref == 'refs/heads/dev'
+      #   run: |
+      #     cd android
+      #     fastlane beta --verbose
 
       # iOS Build & Deployment
       - name: Build iOS App
