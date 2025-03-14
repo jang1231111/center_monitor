@@ -25,7 +25,9 @@ jobs:
         run: flutter clean
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: |
+          rm -f pubspec.lock
+          flutter pub get
 
       # Android Build & Deployment
       - name: Restore Keystore & Create `key.properties`
