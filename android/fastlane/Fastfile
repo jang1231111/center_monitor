@@ -25,7 +25,7 @@ platform :android do
   lane :beta do
     # gradle(task: "clean bundleRelease") # APK 대신 AAB 빌드
     upload_to_play_store(  
-      json_key_data: "play-store-api.json",
+      json_key_file: "play-store-api.json",
       track: "internal",
       aab: "../build/app/outputs/bundle/release/app-release.aab"
       
