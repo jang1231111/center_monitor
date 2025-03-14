@@ -52,7 +52,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd android
-          fastlane beta 
+          fastlane release 
 
       # iOS Build & Deployment
       - name: Build iOS App
@@ -66,4 +66,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd ios
-          fastlane beta
+          fastlane release
