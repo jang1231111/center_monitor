@@ -18,6 +18,7 @@ jobs:
       APP_STORE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
       DEVELOPER_APP_ID: ${{ secrets.DEVELOPER_APP_ID }}
       ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
+      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
     steps:
       - name: Checkout Repository
