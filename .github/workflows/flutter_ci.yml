@@ -9,16 +9,6 @@ on:
 jobs:
   build_and_deploy:
     runs-on: [self-hosted, macOS, ARM64]
-    env:
-      KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
-      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APP_STORE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
-      DEVELOPER_APP_ID: ${{ secrets.DEVELOPER_APP_ID }}
-      ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
-      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
     steps:
       - name: Checkout Repository
@@ -35,11 +25,11 @@ jobs:
 
       - name: Restore Keystore & Create `key.properties`
         run: |
-          echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
           echo "storeFile=keystore.jks" > android/app/key.properties
-          echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
-          echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/app/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/app/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/app/key.properties
 
       - name: Create Play Store API JSON
         run: |
@@ -60,7 +50,15 @@ jobs:
 
       - name: Export Secrets as Environment Variables
         run: |
-          echo "APP_STORE_PASSWORD=${{ secrets.APP_STORE_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Export Secrets as Environment Variables
+        run: |
+          echo "DEVELOPER_APP_ID=${{ secrets.DEVELOPER_APP_ID }}" >> $GITHUB_ENV
+          echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
+          echo "ITC_TEAM_ID=${{ secrets.ITC_TEAM_ID }}" >> $GITHUB_ENV
+          echo "TEAM_ID=${{ secrets.TEAM_ID }}" >> $GITHUB_ENV
+          echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}"
+
 
       - name: Deploy to App Store (iOS)
         if: github.ref == 'refs/heads/main'
