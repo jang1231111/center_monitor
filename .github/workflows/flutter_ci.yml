@@ -24,22 +24,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Debug Git Status
-        run: |
-          git status
-          git log -1 --pretty=oneline  # ✅ 현재 HEAD 확인
-
       - name: Clean and Get Dependencies
         run: |
           flutter clean
-          rm -f pubspec.lock
           flutter pub get
 
-      - name: Show Pubspec File
-        run: |
-          cat pubspec.yaml  # ✅ pubspec.yaml 내용 출력
+      # - name: Show Pubspec File
+      #   run: |
+      #     cat pubspec.yaml  # ✅ pubspec.yaml 내용 출력
 
-      # Android Build & Deployment
       - name: Restore Keystore & Create `key.properties`
         run: |
           echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
@@ -51,29 +44,15 @@ jobs:
       - name: Create Play Store API JSON
         run: |
           echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
-          cat android/play-store-api.json
 
-      - name: Create `local.properties`
+      - name: Build APK
+        run: flutter build appbundle --release
+
+      - name: Deploy to Play Store (Android)
+        if: github.ref == 'refs/heads/dev'
         run: |
-          rm -rf android/local.properties
-          rm -rf android/.gradle
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
-          echo "flutter.sdk=$HOME/desktop/Devolop/flutter" >> android/local.properties
-          echo "flutter.versionCode=13" >> android/local.properties
-          echo "flutter.versionName=2.2.8" >> android/local.properties
-          cat android/local.properties
-
-      # - name: Build APK
-      #   run: flutter build appbundle --release
-
-      # - name: Show `local.properties` File
-      #   run: cat android/local.properties
-
-      # - name: Deploy to Play Store (Android)
-      #   if: github.ref == 'refs/heads/dev'
-      #   run: |
-      #     cd android
-      #     fastlane beta --verbose
+          cd android
+          fastlane beta 
 
       # iOS Build & Deployment
       - name: Build iOS App
