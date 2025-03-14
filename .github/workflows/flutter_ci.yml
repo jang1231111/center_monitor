@@ -15,33 +15,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: center_monitor  # 추가: 폴더 경로 지정
+          fetch-depth: 0  # 최신 코드 가져오기
 
-      - name: gradlew clean
+      - name: Clean and Get Dependencies
         run: |
-          cd android
-          ./gradlew clean
-
-      - name: Clean Project
-        run: flutter clean
-
-      - name: Install Dependencies
-        run: |
+          flutter clean
           rm -f pubspec.lock
           flutter pub get
+      
+      - name: Show Pubspec File
+        run: cat pubspec.yaml  # 변경사항 확인
 
       # Android Build & Deployment
-      - name: Restore Keystore & Create `key.properties`
-        env:
-          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
-          echo "storeFile=keystore.jks" > android/app/key.properties
-          echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
-          echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
+      # - name: Restore Keystore & Create `key.properties`
+      #   env:
+      #     KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+      #     KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      #   run: |
+      #     echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
+      #     echo "storeFile=keystore.jks" > android/app/key.properties
+      #     echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
+      #     echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
+      #     echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
           
       - name: Create Play Store API JSON
         env:
@@ -58,7 +55,6 @@ jobs:
           echo "flutter.versionCode=13" >> android/local.properties
           echo "flutter.versionName=2.2.8" >> android/local.properties
           cat android/local.properties
-          cat pubspec.yaml
 
       # - name: delete local.properties
       #   run: rm android/local.properties
