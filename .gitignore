@@ -46,3 +46,6 @@ app.*.map.json
 
 # 🔒 민감한 파일 제외
 android/play-store-api.json
+
+# CI/CD
+actions-runner/
