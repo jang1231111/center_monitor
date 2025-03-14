@@ -30,18 +30,18 @@ jobs:
           cat pubspec.yaml  # ✅ pubspec.yaml 내용 출력
 
       # Android Build & Deployment
-      # - name: Restore Keystore & Create `key.properties`
-      #   env:
-      #     KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
-      #     KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-      #     KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-      #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      #   run: |
-      #     echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
-      #     echo "storeFile=keystore.jks" > android/app/key.properties
-      #     echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
-      #     echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
-      #     echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
+      - name: Restore Keystore & Create `key.properties`
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_FILE" | base64 --decode > android/app/keystore.jks
+          echo "storeFile=keystore.jks" > android/app/key.properties
+          echo "storePassword=$KEYSTORE_PASSWORD" >> android/app/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/app/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/app/key.properties
           
       - name: Create Play Store API JSON
         env:
