@@ -15,7 +15,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: center_monitor  # 추가: 폴더 경로 지정
-          fetch-depth: 0  # 최신 코드 가져오기
+
+      - name: Debug Git Status
+        run: |
+          git status
+          git log -1 --pretty=oneline  # ✅ 현재 HEAD 확인
 
       - name: Clean and Get Dependencies
         run: |
@@ -24,7 +28,9 @@ jobs:
           flutter pub get
       
       - name: Show Pubspec File
-        run: cat pubspec.yaml  # 변경사항 확인
+        run: |
+          ls -al  # 현재 디렉토리 확인
+          cat pubspec.yaml  # ✅ pubspec.yaml 내용 출력
 
       # Android Build & Deployment
       # - name: Restore Keystore & Create `key.properties`
