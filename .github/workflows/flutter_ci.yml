@@ -48,6 +48,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
+          cat android/play-store-api.json
 
       - name: Create `local.properties`
         run: |
