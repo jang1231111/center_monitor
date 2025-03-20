@@ -19,30 +19,26 @@ jobs:
           flutter clean
           flutter pub get
 
-      # - name: Show Pubspec File
+      # - name: Restore Keystore & Create `key.properties`
       #   run: |
-      #     cat pubspec.yaml  # ✅ pubspec.yaml 내용 출력
+      #     echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
+      #     echo "storeFile=keystore.jks" > android/app/key.properties
+      #     echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/app/key.properties
+      #     echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/app/key.properties
+      #     echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/app/key.properties
 
-      - name: Restore Keystore & Create `key.properties`
-        run: |
-          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
-          echo "storeFile=keystore.jks" > android/app/key.properties
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/app/key.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/app/key.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/app/key.properties
+      # - name: Create Play Store API JSON
+      #   run: |
+      #     echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
 
-      - name: Create Play Store API JSON
-        run: |
-          echo "${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}" | base64 --decode > android/play-store-api.json
+      # - name: Build APK
+      #   run: flutter build appbundle --release
 
-      - name: Build APK
-        run: flutter build appbundle --release
-
-      - name: Deploy to Play Store (Android)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd android
-          fastlane deploy 
+      # - name: Deploy to Play Store (Android)
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     cd android
+      #     fastlane deploy 
 
       # iOS Build & Deployment
       - name: Build iOS App
@@ -64,4 +60,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd ios
-          fastlane deploy
+          fastlane beta
