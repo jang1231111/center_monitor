@@ -53,7 +53,7 @@ jobs:
           echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
           echo "ITC_TEAM_ID=${{ secrets.ITC_TEAM_ID }}" >> $GITHUB_ENV
           echo "TEAM_ID=${{ secrets.TEAM_ID }}" >> $GITHUB_ENV
-          echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}"
+          echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}" >> $GITHUB_ENV
 
 
       - name: Deploy to App Store (iOS)
